@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-cadastro',
-  templateUrl: './cadastro.component.html',
-  styleUrls: ['./cadastro.component.scss']
+  selector: 'app-redefinir-senha',
+  templateUrl: './redefinir-senha.component.html',
+  styleUrls: ['./redefinir-senha.component.scss']
 })
-export class CadastroComponent implements OnInit {
+export class RedefinirSenhaComponent implements OnInit {
   constructor(
     private router: Router
   ) {

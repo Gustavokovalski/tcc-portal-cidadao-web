@@ -7,33 +7,18 @@
           <a href="#" class="h1"><b>Portal</b>Cidadão</a>
         </div>
         <div class="card-body">
-          <p class="login-box-msg">Digite os dados abaixo para se registrar no sistema</p>
+          <p class="login-box-msg">Digite o e-mail cadastrado para enviar o link de recuperação.</p>
     
           <form action="home" method="get">
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Nome Completo">
-              <div class="input-group-append">
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="CPF">
-              <div class="input-group-append">
-              </div>
-            </div>
-            <div class="input-group mb-3">
                 <input type="email" class="form-control" placeholder="Email">
-                <div class="input-group-append">
-                </div>
-            </div>
-            <div class="input-group mb-3">
-                <input type="password" class="form-control" placeholder="Senha">
                 <div class="input-group-append">
                 </div>
             </div>
             <div class="row">
               <!-- /.col -->
               <div class="col-12">
-                <button (click)="enviarEmailConfirmacao()" type="button" class="btn btn-primary btn-block">Salvar</button>
+                <button (click)="enviarEmailRecuperacao()" type="button" class="btn btn-primary btn-block">Enviar</button>
               </div>
               <!-- /.col -->
             </div>
