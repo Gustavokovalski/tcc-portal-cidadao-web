@@ -4,6 +4,7 @@ import { HomeComponent } from './page/home.component';
 
 import { HomeRoutingModule } from './home.routing';
 import { GoogleMapsModule } from '@angular/google-maps';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
   ],
   imports: [
     HomeRoutingModule, 
-    GoogleMapsModule
+    GoogleMapsModule,
+    MatButtonModule
   ],
   exports: [],
   providers: []
