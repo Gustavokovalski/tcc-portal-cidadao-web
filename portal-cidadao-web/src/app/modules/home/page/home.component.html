@@ -32,6 +32,15 @@
             height="75vh"
             [options]="options"
             >
+                <map-marker
+                    *ngFor="let marker of markers"
+                    [position]="marker.position"
+                    [label]="marker.label"
+                    [title]="marker.title"
+                    [options]="marker.options"
+                >
+                </map-marker>
+
                 <div class="map-content">
                     <button (click)="abrirModalCriarPostagem()" mat-raised-button color="primary" class="btn-criar-postagem">Criar postagem</button>
                 </div>
