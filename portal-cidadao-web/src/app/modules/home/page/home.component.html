@@ -33,7 +33,7 @@
             [options]="options"
             >
                 <div class="map-content">
-                    <button mat-raised-button color="primary" class="btn-criar-postagem">Criar postagem</button>
+                    <button (click)="abrirModalCriarPostagem()" mat-raised-button color="primary" class="btn-criar-postagem">Criar postagem</button>
                 </div>
             </google-map>
         </div>

@@ -9,6 +9,8 @@ import { NavComponent } from './layout/nav/nav.component';
 import { AuthModule } from './modules/auth/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { MatButtonModule } from '@angular/material/button';
     AppRoutingModule,
     AuthModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule,
+    NgxAutocomPlaceModule
   ],
   providers: [],
   bootstrap: [AppComponent]
