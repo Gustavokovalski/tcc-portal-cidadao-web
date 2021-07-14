@@ -6,10 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./modal-criar-postagem.component.scss']
 })
 export class ModalCriarPostagemComponent {
+  public value = '';
+
   constructor(
   ) {}
 
   public placeChangedCallback(event: any) {
-    console.log(event);
+    this.value = event.formatted_address;
   }
 }

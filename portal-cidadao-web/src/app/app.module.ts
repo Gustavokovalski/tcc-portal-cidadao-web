@@ -11,6 +11,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
+import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -20,13 +24,17 @@ import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
     ContentLayoutComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     AuthModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatDialogModule,
-    NgxAutocomPlaceModule
+    MatInputModule,
+    MatIconModule,
+    NgxAutocomPlaceModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

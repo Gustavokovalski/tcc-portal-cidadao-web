@@ -8,6 +8,10 @@ import {MatButtonModule} from '@angular/material/button';
 import { ModalCriarPostagemComponent } from './page/modal-criar-postagem/modal-criar-postagem.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -15,11 +19,15 @@ import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
     ModalCriarPostagemComponent
   ],
   imports: [
+    CommonModule,
     HomeRoutingModule, 
     GoogleMapsModule,
     MatButtonModule,
     MatDialogModule,
-    NgxAutocomPlaceModule
+    MatInputModule,
+    MatIconModule,
+    NgxAutocomPlaceModule,
+    FormsModule
   ],
   exports: [],
   providers: []
