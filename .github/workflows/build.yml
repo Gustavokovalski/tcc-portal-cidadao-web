@@ -1,0 +1,24 @@
+name: Build
+on:
+  push:
+    branches: [main, dev]
+env:
+  NODE_VERSION: "12"
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.Js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install Dependencies
+        working-directory: ./portal-cidadao-web
+        run: npm install
+      - name: Build
+        working-directory: ./portal-cidadao-web
+        run: npm run build
