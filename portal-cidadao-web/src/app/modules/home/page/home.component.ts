@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { PostagemService } from 'src/app/service/postagem.service';
 import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-postagem.component';
 
 @Component({
@@ -25,7 +26,8 @@ export class HomeComponent implements OnInit {
   public markers = [] as any;
 
   constructor(
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    public postagemService: PostagemService
   ) {
 
   }
@@ -38,84 +40,37 @@ export class HomeComponent implements OnInit {
         lng: position.coords.longitude,
       }
 
-      this.markers.push({
-        position: {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        },
-        label: {
-          color: 'red',
-          text: ' ' + (this.markers.length + 1),
-        },
-        title: ' ' + (this.markers.length + 1),
-        options: { animation: google.maps.Animation.DROP },
+      this.novoMarcador(this.center.lat, this.center.lng);
+    });
+
+    this.postagemService.listarTodos()
+      .then((res) => {
+        console.log(res);
+        if (res.dados) {
+          res.dados.forEach((postagem) => {
+            this.novoMarcador(postagem.latitude, postagem.longitude);
+          })
+        }
       });
-    })
 
-    this.markers.push({
-      position: {
-        lat: -25.443514,
-        lng: -49.275537,
-      },
-      label: {
-        color: 'red',
-        text: ' ' + (this.markers.length + 1),
-      },
-      title: ' ' + (this.markers.length + 1),
-      options: { animation: google.maps.Animation.DROP },
-    });
 
-    this.markers.push({
-      position: {
-        lat: -25.446550, 
-        lng: -49.248012,
-      },
-      label: {
-        color: 'red',
-        text: ' ' + (this.markers.length + 1),
-      },
-      title: ' ' + (this.markers.length + 1),
-      options: { animation: google.maps.Animation.DROP },
-    });
+      // markers fake
+      /*this.novoMarcador(
+        -25.443514,
+        -49.275537);
 
-    this.markers.push({
-      position: {
-        lat: -25.529905, 
-        lng: -49.249702
-      },
-      label: {
-        color: 'red',
-        text: ' ' + (this.markers.length + 1),
-      },
-      title: ' ' + (this.markers.length + 1),
-      options: { animation: google.maps.Animation.DROP },
-    });
+      this.novoMarcador(-25.446550, 
+         -49.248012);
 
-    this.markers.push({
-      position: {
-        lat: -25.391994, 
-        lng: -49.272613
-      },
-      label: {
-        color: 'red',
-        text: ' ' + (this.markers.length + 1),
-      },
-      title: ' ' + (this.markers.length + 1),
-      options: { animation: google.maps.Animation.DROP },
-    });
+      this.novoMarcador(-25.529905, 
+         -49.249702);
 
-    this.markers.push({
-      position: {
-        lat: -25.412127, 
-        lng: -49.226749,
-      },
-      label: {
-        color: 'red',
-        text: ' ' + (this.markers.length + 1),
-      },
-      title: ' ' + (this.markers.length + 1),
-      options: { animation: google.maps.Animation.DROP },
-    });
+      this.novoMarcador(-25.391994, 
+         -49.272613);
+
+      this.novoMarcador(-25.412127, 
+         -49.226749);*/
+
   }
 
   abrirModalCriarPostagem() {
@@ -126,6 +81,21 @@ export class HomeComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.data = null;
     const modal = this.matDialog.open(ModalCriarPostagemComponent, dialogConfig);
+  }
+
+  private novoMarcador(lat: number, lng: number): void {
+    this.markers.push({
+      position: {
+        lat: lat, 
+        lng: lng,
+      },
+      label: {
+        color: 'white',
+        text: ' ',
+      },
+      title: ' ',
+      options: { animation: google.maps.Animation.DROP },
+    });
   }
 
 }
