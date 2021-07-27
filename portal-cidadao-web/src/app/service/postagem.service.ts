@@ -17,5 +17,11 @@ export class PostagemService extends BaseService {
         .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem`)
         .toPromise();
     }
+
+    public async inserir(postagemModel: IPostagemModel): Promise<IBaseModel<void>> {
+      return this.httpClient
+        .post<IBaseModel<void>>(`${this.apiBaseUrl}/postagem`, postagemModel)
+        .toPromise();
+    }
     
 }

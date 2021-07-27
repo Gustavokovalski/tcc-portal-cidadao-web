@@ -9,6 +9,7 @@ import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  public position = {};
   public center = {lat: -25.4372, lng: -49.2700};
   public options: google.maps.MapOptions = {
     center: this.center,
@@ -34,7 +35,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position);
+      this.position = position;
       this.center = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -43,16 +44,7 @@ export class HomeComponent implements OnInit {
       this.novoMarcador(this.center.lat, this.center.lng);
     });
 
-    this.postagemService.listarTodos()
-      .then((res) => {
-        console.log(res);
-        if (res.dados) {
-          res.dados.forEach((postagem) => {
-            this.novoMarcador(postagem.latitude, postagem.longitude);
-          })
-        }
-      });
-
+    this.iniciarPagina();
 
       // markers fake
       /*this.novoMarcador(
@@ -79,8 +71,12 @@ export class HomeComponent implements OnInit {
     dialogConfig.width = '30vw';
     dialogConfig.hasBackdrop = true;
     dialogConfig.disableClose = true;
-    dialogConfig.data = null;
+
+    dialogConfig.data = this.position;
     const modal = this.matDialog.open(ModalCriarPostagemComponent, dialogConfig);
+    modal.afterClosed().subscribe(() => {
+      this.iniciarPagina();
+    })
   }
 
   private novoMarcador(lat: number, lng: number): void {
@@ -96,6 +92,18 @@ export class HomeComponent implements OnInit {
       title: ' ',
       options: { animation: google.maps.Animation.DROP },
     });
+  }
+
+  private iniciarPagina() {
+    
+    this.postagemService.listarTodos()
+      .then((res) => {
+        if (res.dados) {
+          res.dados.forEach((postagem) => {
+            this.novoMarcador(postagem.latitude, postagem.longitude);
+          })
+        }
+      });
   }
 
 }

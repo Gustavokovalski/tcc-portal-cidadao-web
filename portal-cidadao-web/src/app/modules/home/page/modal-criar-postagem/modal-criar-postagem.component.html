@@ -3,14 +3,14 @@
 
     <mat-form-field class="local-form-field" appearance="fill">
         <mat-label>Local</mat-label>
-        <input matInput type="text" [(ngModel)]="value" ngxAutocomPlace (selectedPlace)="placeChangedCallback($event)">
-        <button *ngIf="value" matSuffix mat-icon-button aria-label="" (click)="value=''">
+        <input matInput type="text" [(ngModel)]="enderecoAtual" ngxAutocomPlace (selectedPlace)="onChangeLocalPostagem($event)">
+        <button *ngIf="enderecoAtual" matSuffix mat-icon-button aria-label="" (click)="enderecoAtual=''; objEnderecoAtual = null">
           <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
 
     <mat-dialog-actions align="end">
-        <button mat-raised-button [mat-dialog-close]="true" mat-dialog-close>Salvar</button>
+        <button (click)="inserir()" mat-raised-button [mat-dialog-close]="true" mat-dialog-close>Salvar</button>
         <button mat-button mat-dialog-close>Voltar</button>
     </mat-dialog-actions>
 </div>
