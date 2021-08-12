@@ -6,17 +6,11 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
+
   constructor(
     public matDialog: MatDialog,
   ) {
 
   }
-
-  ngOnInit(): void {
-
-  }
-
-
-
 }

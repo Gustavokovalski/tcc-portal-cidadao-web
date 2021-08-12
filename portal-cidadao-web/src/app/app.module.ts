@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     NgxAutocomPlaceModule,
     FormsModule,
     HttpClientModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
