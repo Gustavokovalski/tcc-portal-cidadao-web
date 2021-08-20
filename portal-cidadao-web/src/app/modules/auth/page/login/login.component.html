@@ -1,4 +1,5 @@
-<div class="login-page" data-new-gr-c-s-check-loaded="14.988.0" data-gr-ext-installed="" style="min-height: 466px;">
+<body>
+  <div class="login-page" data-new-gr-c-s-check-loaded="14.988.0" data-gr-ext-installed="" style="min-height: 466px;">
     <div class="login-box">
       <!-- /.login-logo -->
       <div class="card card-outline card-primary">
@@ -9,6 +10,7 @@
         <div class="card-body">
           <p class="login-box-msg">Faça login para acessar a ferramenta</p>
     
+          <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()" class="text-center"> -->
           <form action="home" method="get">
             <div class="input-group mb-3">
               <input type="email" class="form-control" placeholder="E-mail ou CPF">
@@ -50,9 +52,9 @@
           </div> -->
           <!-- /.social-auth-links -->
     
-          <p class="mb-1">
+          <!-- <p class="mb-1">
             <a routerLink="/esqueci-senha">Esqueci minha senha</a>
-          </p>
+          </p> -->
           <p class="mb-0">
             <a routerLink="/cadastro" class="text-center">Novo cadastro</a>
           </p>
@@ -72,3 +74,4 @@
     
     
 </div>
+</body>

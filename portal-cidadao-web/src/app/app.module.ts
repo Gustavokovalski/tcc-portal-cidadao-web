@@ -18,6 +18,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FormsModule,
     HttpClientModule,
     NgApexchartsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      enableHtml: true
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

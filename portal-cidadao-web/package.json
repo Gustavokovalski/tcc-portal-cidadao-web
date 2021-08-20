@@ -26,6 +26,7 @@
     "apexcharts": "^3.27.3",
     "ng-apexcharts": "^1.5.12",
     "ngx-autocom-place": "^1.0.6",
+    "ngx-toastr": "^14.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
