@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,12 +13,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ToastrModule } from 'ngx-toastr';
+import { LoginComponent } from './modules/auth/page/login/login.component';
+import { ErrorInterceptor } from './core/http/error.interceptor';
+import { JwtInterceptor } from './core/http/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,11 @@ import { ToastrModule } from 'ngx-toastr';
       enableHtml: true
     }),
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

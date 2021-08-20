@@ -10,22 +10,29 @@
         <div class="card-body">
           <p class="login-box-msg">Faça login para acessar a ferramenta</p>
     
-          <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()" class="text-center"> -->
-          <form action="home" method="get">
+          <form [formGroup]="form" #f="ngForm" (ngSubmit)="login()" (keydown.enter)="$event.preventDefault()" action="home" class="text-center">
             <div class="input-group mb-3">
-              <input type="email" class="form-control" placeholder="E-mail ou CPF">
+              <input type="text" class="form-control" placeholder="E-mail ou CPF" formControlName="login"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['login'].invalid }">
               <div class="input-group-append">
                 <div class="input-group-text">
                   <span class="fas fa-envelope"></span>
                 </div>
               </div>
+              <div *ngIf="f.submitted && form.controls['login'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['login'].errors?.required">Campo obrigatório</div>
+              </div>
             </div>
             <div class="input-group mb-3">
-              <input type="password" class="form-control" placeholder="Senha">
+              <input type="password" class="form-control" placeholder="Senha" formControlName="senha"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['login'].invalid }">
               <div class="input-group-append">
                 <div class="input-group-text">
                   <span class="fas fa-lock"></span>
                 </div>
+              </div>
+              <div *ngIf="f.submitted && form.controls['senha'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['senha'].errors?.required">Campo obrigatório</div>
               </div>
             </div>
             <div class="row">

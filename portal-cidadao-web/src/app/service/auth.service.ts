@@ -31,10 +31,12 @@ export class AuthService extends BaseService {
         // }
     }
 
-    public login(email: string, senha: string) {
-        return this.httpClient.post<any>(`${this.apiBaseUrl}/usuario/login`, { email, senha })
+    public login(login: string, senha: string) {
+        debugger
+        return this.httpClient.post<any>(`${this.apiBaseUrl}/Usuario/login`, { login, senha })
             .pipe(map(user => {
                 if (user.sucesso) {
+                    debugger
                     localStorage.setItem('currentUser', JSON.stringify(user.dados));
                     this.currentUserSubject.next(user.dados);
                 }
