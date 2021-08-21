@@ -14,10 +14,9 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    debugger
     const currentUser = this.authService.currentUserValue;
     const perfisRota = next.data.perfis;
-
+    debugger
     if (currentUser) {
       if (perfisRota) {
         if (!perfisRota.includes(currentUser.perfil?.nome)) {

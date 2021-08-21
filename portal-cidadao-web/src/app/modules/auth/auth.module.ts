@@ -11,6 +11,7 @@ import { EnvioEmailRecuperacaoComponent } from './page/envio-email-recuperacao/e
 import { RedefinirSenhaComponent } from './page/redefinir-senha/redefinir-senha.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CommonModule } from '@angular/common';
     AuthRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    NgxMaskModule.forRoot()
   ]
 })
 export class AuthModule {}

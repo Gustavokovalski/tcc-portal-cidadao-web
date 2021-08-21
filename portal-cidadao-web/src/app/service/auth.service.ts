@@ -26,9 +26,13 @@ export class AuthService extends BaseService {
     }
 
     public get currentUserValue(): IUsuarioModel {
-        // if (this.currentUserSubject) {
+        debugger
+        if (this.currentUserSubject) {
             return this.currentUserSubject.value;
-        // }
+        }else{
+            const user: IUsuarioModel = {} as IUsuarioModel;
+            return user;
+        }
     }
 
     public login(login: string, senha: string) {

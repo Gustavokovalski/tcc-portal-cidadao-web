@@ -22,6 +22,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { LoginComponent } from './modules/auth/page/login/login.component';
 import { ErrorInterceptor } from './core/http/error.interceptor';
 import { JwtInterceptor } from './core/http/jwt.interceptor';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
+
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
 
 @NgModule({
   declarations: [
@@ -51,6 +56,7 @@ import { JwtInterceptor } from './core/http/jwt.interceptor';
       preventDuplicates: true,
       enableHtml: true
     }),
+    NgxMaskModule.forRoot(maskConfig)
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },
