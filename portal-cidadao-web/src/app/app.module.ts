@@ -11,8 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
-import {MatInputModule} from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -23,6 +23,8 @@ import { LoginComponent } from './modules/auth/page/login/login.component';
 import { ErrorInterceptor } from './core/http/error.interceptor';
 import { JwtInterceptor } from './core/http/jwt.interceptor';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldControl } from '@angular/material/form-field';
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -50,6 +52,7 @@ const maskConfig: Partial<IConfig> = {
     HttpClientModule,
     NgApexchartsModule,
     FlexLayoutModule,
+    MatSelectModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-top-right',

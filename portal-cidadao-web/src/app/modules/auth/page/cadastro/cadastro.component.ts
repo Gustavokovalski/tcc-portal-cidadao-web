@@ -50,17 +50,16 @@ export class CadastroComponent implements OnInit {
       res = await this.usuarioService.inserir(this.model);
 
       if (res.sucesso) {
-      this.toastr.success('Registro salvo com sucesso! Realize o login', 'Sucesso');
-      this.router.navigate(['/login']);
+        this.toastr.success('Registro salvo com sucesso! Realize o login', 'Sucesso');
+        this.router.navigate(['/login']);
       } else {
         // res.mensagens.forEach(mensagem => {
         //   this.toastr.warning(mensagem.descricao, 'Atenção');
         // });
       }
-  } catch (err) {
+    } catch (err) {
       this.toastr.error(err, 'Atenção');
-  }
-
+    }
   }
 
   enviarEmailConfirmacao() {

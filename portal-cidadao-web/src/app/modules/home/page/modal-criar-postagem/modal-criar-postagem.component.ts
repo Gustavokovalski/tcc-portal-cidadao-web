@@ -1,5 +1,9 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { ICategoriaModel } from 'src/app/models/categoria.model';
+import { IEnumModel } from 'src/app/models/enum.model';
 import { IPostagemModel } from 'src/app/models/postagem.model';
 import { PostagemService } from 'src/app/service/postagem.service';
 
@@ -8,15 +12,33 @@ import { PostagemService } from 'src/app/service/postagem.service';
   templateUrl: './modal-criar-postagem.component.html',
   styleUrls: ['./modal-criar-postagem.component.scss']
 })
-export class ModalCriarPostagemComponent {
+export class ModalCriarPostagemComponent implements OnInit {
+  public model : IPostagemModel = {} as IPostagemModel;
   public enderecoAtual = '';
   public objEnderecoAtual: any;
+  public categorias!: ICategoriaModel[];
+  public subcategorias!: IEnumModel[];
+
+  public form = new FormGroup({
+    descricao: new FormControl('', Validators.required),
+    endereco: new FormControl('', Validators.required),
+    categoriaId: new FormControl('', Validators.required),
+    subcategoria: new FormControl('', Validators.required),
+  });
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private postagemService: PostagemService
-    ) {
+    private postagemService: PostagemService,
+    private toastr: ToastrService,
+    public dialog: MatDialog
+  ) 
+  {
     this.setarEnderecoAtual(data);
+  }
+
+  ngOnInit(): void {
+    this.listarCategorias();
+    this.listarSubcategorias();
   }
 
   public onChangeLocalPostagem(event: any): void {
@@ -24,23 +46,54 @@ export class ModalCriarPostagemComponent {
     this.objEnderecoAtual = event;
   }
 
-  public inserir(): void {
-    let model = {
-      subcategoria: { codigo: 1, nome: 'Reclamacao', descricao: 'Reclamacao'},
-      categoriaId: 1,
-      titulo: 'teste',
-      descricao: 'teste teste',
-      imagemUrl: 'string',
-      latitude: this.objEnderecoAtual.geometry.location.lat(),
-      longitude: this.objEnderecoAtual.geometry.location.lng(),
-      bairro: 'teste',
-      resolvido: false
-    } as IPostagemModel;
+  public async inserir() {
+    
+    if (this.form.invalid) {
+      this.toastr.warning('Formulário inválido!', 'Atenção');
+      return;
+    }
 
-    this.postagemService.inserir(model)
-      .then((res) => {
-        console.log(res);
-      })
+    this.atualizarModel(this.form.value);
+    this.model.latitude = this.objEnderecoAtual.geometry.location.lat();
+    this.model.longitude = this.objEnderecoAtual.geometry.location.lng();
+    this.model.resolvido = false;
+
+      try {
+        const res = await this.postagemService.inserir(this.model);
+
+        if (res.sucesso) {
+          this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
+          this.dialog.closeAll();
+        } else {
+          // res.mensagens.forEach(mensagem => {
+          //   this.toastr.warning(mensagem.descricao, 'Atenção');
+          // });
+        }
+      } catch (err) {
+        this.toastr.error(err, 'Atenção');
+      }
+
+  }
+
+  public listarCategorias(): void {
+    debugger
+    this.postagemService.listarCategorias()
+    .then((res) => {
+        this.categorias = res.dados;
+    })
+    .catch((err) => {
+        this.toastr.error(err.mensagem.descricao, 'Atenção');
+    })
+  }
+
+  public listarSubcategorias(): void {
+    this.postagemService.listarSubcategorias()
+    .then((res) => {
+        this.subcategorias = res.dados;
+    })
+    .catch((err) => {
+        this.toastr.error(err.mensagem.descricao, 'Atenção');
+    })
   }
 
   private setarEnderecoAtual(data: any): void {
@@ -60,5 +113,9 @@ export class ModalCriarPostagemComponent {
         }
       }
     });
+  }
+
+  private atualizarModel(values: any) {
+    Object.assign(this.model, values);
   }
 }
