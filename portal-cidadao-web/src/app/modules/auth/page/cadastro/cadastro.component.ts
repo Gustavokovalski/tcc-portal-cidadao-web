@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { IBaseModel } from 'src/app/models/base.model';
 import { IEnumModel } from 'src/app/models/enum.model';
@@ -29,7 +29,6 @@ export class CadastroComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private toastr: ToastrService,
     private usuarioService: UsuarioService
   ) { }
@@ -53,9 +52,7 @@ export class CadastroComponent implements OnInit {
         this.toastr.success('Registro salvo com sucesso! Realize o login', 'Sucesso');
         this.router.navigate(['/login']);
       } else {
-        // res.mensagens.forEach(mensagem => {
-        //   this.toastr.warning(mensagem.descricao, 'Atenção');
-        // });
+        this.toastr.warning(res.mensagem.descricao, 'Atenção');
       }
     } catch (err) {
       this.toastr.error(err, 'Atenção');

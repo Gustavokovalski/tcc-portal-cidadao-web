@@ -14,4 +14,5 @@ export interface IPostagemModel {
     bairro: string;
     dataCadastro: Date;
     resolvido: boolean;
+    usuarioId: number;
 }

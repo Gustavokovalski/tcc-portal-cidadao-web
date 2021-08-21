@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ICategoriaModel } from 'src/app/models/categoria.model';
 import { IEnumModel } from 'src/app/models/enum.model';
 import { IPostagemModel } from 'src/app/models/postagem.model';
+import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class ModalCriarPostagemComponent implements OnInit {
   public subcategorias!: IEnumModel[];
 
   public form = new FormGroup({
+    titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     descricao: new FormControl('', Validators.required),
     endereco: new FormControl('', Validators.required),
     categoriaId: new FormControl('', Validators.required),
@@ -30,6 +32,7 @@ export class ModalCriarPostagemComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
     private toastr: ToastrService,
+    private authService: AuthService,
     public dialog: MatDialog
   ) 
   {
@@ -58,6 +61,9 @@ export class ModalCriarPostagemComponent implements OnInit {
     this.model.longitude = this.objEnderecoAtual.geometry.location.lng();
     this.model.resolvido = false;
 
+    debugger
+    this.model.usuarioId = this.authService.currentUserValue.id;
+
       try {
         const res = await this.postagemService.inserir(this.model);
 
@@ -65,34 +71,30 @@ export class ModalCriarPostagemComponent implements OnInit {
           this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
           this.dialog.closeAll();
         } else {
-          // res.mensagens.forEach(mensagem => {
-          //   this.toastr.warning(mensagem.descricao, 'Atenção');
-          // });
+          this.toastr.warning(res.mensagem.descricao, 'Atenção');
         }
       } catch (err) {
         this.toastr.error(err, 'Atenção');
       }
-
   }
 
   public listarCategorias(): void {
-    debugger
     this.postagemService.listarCategorias()
     .then((res) => {
-        this.categorias = res.dados;
+      this.categorias = res.dados;
     })
     .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
     })
   }
 
   public listarSubcategorias(): void {
     this.postagemService.listarSubcategorias()
     .then((res) => {
-        this.subcategorias = res.dados;
+      this.subcategorias = res.dados;
     })
     .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
     })
   }
 
