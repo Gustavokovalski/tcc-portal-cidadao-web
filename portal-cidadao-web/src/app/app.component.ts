@@ -8,5 +8,5 @@ import { IUsuarioModel } from './models/usuario.model';
 })
 export class AppComponent {
   title = 'portal-cidadao';
-  public currentUser!: IUsuarioModel;
+  public currentUser: IUsuarioModel = {} as IUsuarioModel;
 }

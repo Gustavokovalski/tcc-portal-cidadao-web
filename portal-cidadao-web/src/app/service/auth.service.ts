@@ -16,8 +16,9 @@ export class AuthService extends BaseService {
         super(httpClient);
         try {
             const currentUser = localStorage.getItem('currentUser');
-            if(currentUser)
+            if(currentUser){
                 this.currentUserSubject = new BehaviorSubject<IUsuarioModel>(JSON.parse(currentUser));
+            }
             this.currentUser = this.currentUserSubject.asObservable();
         } catch {
             this.logout();
@@ -25,13 +26,9 @@ export class AuthService extends BaseService {
 
     }
 
-    public get currentUserValue(): IUsuarioModel {
-        debugger
+    public get currentUserValue(): any {
         if (this.currentUserSubject) {
             return this.currentUserSubject.value;
-        }else{
-            const user: IUsuarioModel = {} as IUsuarioModel;
-            return user;
         }
     }
 
@@ -54,6 +51,13 @@ export class AuthService extends BaseService {
             const user: IUsuarioModel = {} as IUsuarioModel;
             this.currentUserSubject.next(user);
         }
+        
+        // this.router.navigate(['/login']);
+        // localStorage.removeItem('currentUser');
+        // if (this.currentUserSubject) {
+        //     const user: IUsuarioModel = {cpf: '', nome:'', email:'', id:'', perfilId: -1, senha: '', token:''} as IUsuarioModel;
+        //     this.currentUserSubject.next(user);
+        // }
         
         this.router.navigate(['/login']);
     }

@@ -48,9 +48,7 @@ export class LoginComponent implements OnInit {
             if (_data.sucesso) {
                 this.router.navigate(["/home"]);
             } else {
-                // _data.mensagens.forEach(mensagem => {
-                //     this.toastr.warning(mensagem.descricao, 'Atenção');
-                // });
+                this.toastr.warning(_data.mensagem.descricao, 'Atenção');
             }
         },
         error => {
