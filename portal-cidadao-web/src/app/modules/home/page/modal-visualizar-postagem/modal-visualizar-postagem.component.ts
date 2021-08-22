@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { ICategoriaModel } from 'src/app/models/categoria.model';
 import { IEnumModel } from 'src/app/models/enum.model';
 import { IPostagemModel } from 'src/app/models/postagem.model';
-import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 
 @Component({
@@ -49,11 +48,9 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
     private toastr: ToastrService,
-    private authService: AuthService,
     public dialog: MatDialog
   ) 
   {
-    debugger
     this.buscarPostagem();
   }
 
@@ -69,14 +66,10 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   }
 
   public buscarPostagem(): void {
-    debugger
     this.postagemService.buscarPostagem(this.data)
     .then((res) => {
-      debugger
       this.model = res.dados;
       this.setarEnderecoAtual(this.model.latitude, this.model.longitude);
-
-      // this.options.center = {lat: this.model.latitude, lng: this.model.longitude};
 
       navigator.geolocation.getCurrentPosition((position) => {
         this.center = {
