@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ContentLayoutComponent } from './layout/content-layout/content-layout.component';
 import { LoginComponent } from './modules/auth/page/login/login.component';
+import { DashboardComponent } from './modules/dashboard/page/dashboard.component';
 import { HomeComponent } from './modules/home/page/home.component';
 
 const routes: Routes = [
@@ -19,6 +20,12 @@ const routes: Routes = [
         component: HomeComponent,
         loadChildren: () =>
           import('./modules/home/home.module').then(m => m.HomeModule)
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        loadChildren: () =>
+          import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
       }
     ]
   },

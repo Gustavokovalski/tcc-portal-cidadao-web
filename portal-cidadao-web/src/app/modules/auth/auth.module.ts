@@ -9,10 +9,13 @@ import { ConfirmacaoEmailComponent } from './page/confirmacao-email/confirmacao-
 import { EsqueciSenhaComponent } from './page/esqueci-senha/esqueci-senha.component';
 import { EnvioEmailRecuperacaoComponent } from './page/envio-email-recuperacao/envio-email-recuperacao.component';
 import { RedefinirSenhaComponent } from './page/redefinir-senha/redefinir-senha.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [
-    LoginComponent, 
+    LoginComponent,
     CadastroComponent, 
     EnvioEmailComponent, 
     ConfirmacaoEmailComponent,
@@ -20,6 +23,12 @@ import { RedefinirSenhaComponent } from './page/redefinir-senha/redefinir-senha.
     EnvioEmailRecuperacaoComponent,
     RedefinirSenhaComponent
   ],
-  imports: [AuthRoutingModule]
+  imports: [
+    AuthRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    CommonModule,
+    NgxMaskModule.forRoot()
+  ]
 })
 export class AuthModule {}

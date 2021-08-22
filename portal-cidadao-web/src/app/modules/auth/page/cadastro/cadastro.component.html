@@ -1,57 +1,71 @@
 <div class="login-page" data-new-gr-c-s-check-loaded="14.988.0" data-gr-ext-installed="" style="min-height: 466px;">
-    <div class="login-box">
-      <!-- /.login-logo -->
-      <div class="card card-outline card-primary">
-        <div class="card-header text-center">
-            <img src="../../../../../assets/images/logo.png">
-          <a href="#" class="h1"><b>Portal</b>Cidadão</a>
-        </div>
-        <div class="card-body">
-          <p class="login-box-msg">Digite os dados abaixo para se registrar no sistema</p>
-    
-          <form action="home" method="get">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Nome Completo">
-              <div class="input-group-append">
-              </div>
+  <div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <img src="../../../../../assets/images/logo.png">
+        <a href="#" class="h1"><b>Portal</b>Cidadão</a>
+      </div>
+      <div class="card-body">
+        <p class="login-box-msg">Digite os dados abaixo para se registrar no sistema</p>
+
+        <form [formGroup]="form" #f="ngForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Nome Completo" formControlName="nome"
+              [ngClass]="{ 'is-invalid': f.submitted && form.controls['nome'].invalid }">
+            <div class="input-group-append"></div>
+            <div *ngIf="f.submitted && form.controls['nome'].invalid" class="invalid-feedback">
+              <div *ngIf="form.controls['nome'].errors?.required">Campo obrigatório</div>
             </div>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="CPF">
-              <div class="input-group-append">
-              </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="CPF" formControlName="cpf"
+              [dropSpecialCharacters]="true" mask="000.000.000-00" maxlength="14"
+              [ngClass]="{ 'is-invalid': f.submitted && form.controls['cpf'].invalid }">
+            <div class="input-group-append"></div>
+            <div *ngIf="f.submitted && form.controls['cpf'].invalid" class="invalid-feedback">
+              <div *ngIf="form.controls['cpf'].errors?.required">Campo obrigatório</div>
+              <div *ngIf="form.controls['cpf'].errors?.minlength">Informe um CPF válido</div>
             </div>
-            <div class="input-group mb-3">
-                <input type="email" class="form-control" placeholder="Email">
-                <div class="input-group-append">
-                </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Email" formControlName="email"
+              [ngClass]="{ 'is-invalid': f.submitted && form.controls['email'].invalid }">
+            <div class="input-group-append"></div>
+            <div *ngIf="f.submitted && form.controls['email'].invalid" class="invalid-feedback">
+              <div *ngIf="form.controls['email'].errors?.required">Campo obrigatório</div>
             </div>
-            <div class="input-group mb-3">
-                <input type="password" class="form-control" placeholder="Senha">
-                <div class="input-group-append">
-                </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Senha" formControlName="senha"
+              [ngClass]="{ 'is-invalid': f.submitted && form.controls['senha'].invalid }">
+            <div class="input-group-append"></div>
+            <div *ngIf="f.submitted && form.controls['senha'].invalid" class="invalid-feedback">
+              <div *ngIf="form.controls['senha'].errors?.required">Campo obrigatório</div>
             </div>
-            <div class="row">
-              <!-- /.col -->
-              <div class="col-12">
-                <button (click)="enviarEmailConfirmacao()" type="button" class="btn btn-primary btn-block">Salvar</button>
-              </div>
-              <!-- /.col -->
+          </div>
+          <div class="row">
+            <!-- /.col -->
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Salvar</button>
             </div>
-          </form>
-    
-          <!--<div class="social-auth-links text-center mt-2 mb-3">
+            <!-- /.col -->
+          </div>
+        </form>
+
+        <!--<div class="social-auth-links text-center mt-2 mb-3">
             <a href="#" class="btn btn-block btn-primary">
               <i class="fab fa-facebook mr-2"></i> Login usando Facebook
             </a>
           </div> -->
-          <!-- /.social-auth-links -->
-    
-        </div>
-        <!-- /.card-body -->
+        <!-- /.social-auth-links -->
+
       </div>
-      <!-- /.card -->
+      <!-- /.card-body -->
     </div>
-    <!-- /.login-box -->
-    
-    
+    <!-- /.card -->
+  </div>
+  <!-- /.login-box -->
+
+
 </div>

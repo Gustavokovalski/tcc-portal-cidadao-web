@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
-
 import { HomeComponent } from './page/home.component';
-
 import { HomeRoutingModule } from './home.routing';
 import { GoogleMapsModule } from '@angular/google-maps';
 import {MatButtonModule} from '@angular/material/button';
@@ -10,13 +8,17 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { NgxAutocomPlaceModule } from 'ngx-autocom-place';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { ModalFiltrarPostagemComponent } from './page/modal-filtrar-postagem/modal-filtrar-postagem.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
-    ModalCriarPostagemComponent
+    ModalCriarPostagemComponent,
+    ModalFiltrarPostagemComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,10 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatIconModule,
     NgxAutocomPlaceModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    MatSelectModule
   ],
   exports: [],
   providers: []

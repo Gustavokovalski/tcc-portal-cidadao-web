@@ -1,16 +1,68 @@
-<div style="background: white;">
-    <h3 class="text-center my-3">Nova Postagem</h3>
+<form [formGroup]="form" #f="ngForm" (ngSubmit)="inserir()" (keydown.enter)="$event.preventDefault()">
+    <div style="background: white;">
+        <h3 class="text-center my-3">Nova Postagem</h3>
 
-    <mat-form-field class="local-form-field" appearance="fill">
-        <mat-label>Local</mat-label>
-        <input matInput type="text" [(ngModel)]="enderecoAtual" ngxAutocomPlace (selectedPlace)="onChangeLocalPostagem($event)">
-        <button *ngIf="enderecoAtual" matSuffix mat-icon-button aria-label="" (click)="enderecoAtual=''; objEnderecoAtual = null">
-          <mat-icon>close</mat-icon>
-        </button>
-    </mat-form-field>
+        <mat-form-field class="form-full-width" appearance="fill">
+            <mat-label>Título</mat-label>
+            <input type="text" matInput formControlName="titulo"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['titulo'].invalid }" />
+            <div *ngIf="f.submitted && form.controls['titulo'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['titulo'].errors?.required">Campo obrigatório</div>
+            </div>
+        </mat-form-field>
 
-    <mat-dialog-actions align="end">
-        <button (click)="inserir()" mat-raised-button [mat-dialog-close]="true" mat-dialog-close>Salvar</button>
-        <button mat-button mat-dialog-close>Voltar</button>
-    </mat-dialog-actions>
-</div>
+        <mat-form-field class="local-form-field" appearance="fill">
+            <mat-label>Local</mat-label>
+            <input matInput type="text" [(ngModel)]="enderecoAtual" ngxAutocomPlace formControlName="endereco"
+                (selectedPlace)="onChangeLocalPostagem($event)"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['endereco'].invalid }">
+            <button *ngIf="enderecoAtual" matSuffix mat-icon-button aria-label=""
+                (click)="enderecoAtual=''; objEnderecoAtual = null">
+                <mat-icon>close</mat-icon>
+            </button>
+            <div *ngIf="f.submitted && form.controls['endereco'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['endereco'].errors?.required">Campo obrigatório</div>
+            </div>
+        </mat-form-field>
+
+        <mat-form-field class="local-form-field" appearance="fill">
+            <mat-label>Categoria</mat-label>
+            <mat-select formControlName="categoriaId"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['categoriaId'].invalid }">
+                <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
+                    {{categoria.nome}}
+                </mat-option>
+            </mat-select>
+            <div *ngIf="f.submitted && form.controls['categoriaId'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['categoriaId'].errors?.required">Campo obrigatório</div>
+            </div>
+        </mat-form-field>
+
+        <mat-form-field class="local-form-field" appearance="fill">
+            <mat-label>Subcategoria</mat-label>
+            <mat-select formControlName="subcategoria"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['subcategoria'].invalid }">
+                <mat-option *ngFor="let subcategoria of subcategorias" [value]="subcategoria">
+                    {{subcategoria.descricao}}
+                </mat-option>
+            </mat-select>
+            <div *ngIf="f.submitted && form.controls['subcategoria'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['subcategoria'].errors?.required">Campo obrigatório</div>
+            </div>
+        </mat-form-field>
+
+        <mat-form-field class="form-full-width" appearance="fill">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput formControlName="descricao"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }"></textarea>
+            <div *ngIf="f.submitted && form.controls['descricao'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['descricao'].errors?.required">Campo obrigatório</div>
+            </div>
+        </mat-form-field>
+
+        <mat-dialog-actions align="end">
+            <button type="submit" mat-raised-button>Salvar</button>
+            <button mat-button mat-dialog-close>Voltar</button>
+        </mat-dialog-actions>
+    </div>
+</form>
