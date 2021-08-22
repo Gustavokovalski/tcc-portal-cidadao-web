@@ -13,12 +13,14 @@ import { CommonModule } from '@angular/common';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ModalFiltrarPostagemComponent } from './page/modal-filtrar-postagem/modal-filtrar-postagem.component';
+import { ModalVisualizarPostagemComponent } from './page/modal-visualizar-postagem/modal-visualizar-postagem.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ModalCriarPostagemComponent,
-    ModalFiltrarPostagemComponent
+    ModalFiltrarPostagemComponent,
+    ModalVisualizarPostagemComponent
   ],
   imports: [
     CommonModule,

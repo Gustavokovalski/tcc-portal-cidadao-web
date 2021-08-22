@@ -5,15 +5,30 @@ import { ToastrService } from 'ngx-toastr';
 import { ICategoriaModel } from 'src/app/models/categoria.model';
 import { IEnumModel } from 'src/app/models/enum.model';
 import { IPostagemModel } from 'src/app/models/postagem.model';
-import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 
 @Component({
-  selector: 'app-modal-criar-postagem',
-  templateUrl: './modal-criar-postagem.component.html',
-  styleUrls: ['./modal-criar-postagem.component.scss']
+  selector: 'app-modal-visualizar-postagem',
+  templateUrl: './modal-visualizar-postagem.component.html',
+  styleUrls: ['./modal-visualizar-postagem.component.scss']
 })
-export class ModalCriarPostagemComponent implements OnInit {
+export class ModalVisualizarPostagemComponent implements OnInit {
+  public position = {};
+  public center = {lat: -25.4372, lng: -49.2700};
+  public options: google.maps.MapOptions = { };
+
+  public marker: any = {
+    position: {  
+      lat: this.center.lat, 
+      lng: this.center.lng, 
+    },
+    label: {
+      color: 'white',
+      text: ' ',
+    },
+    title: ' ',
+  };
+
   public model : IPostagemModel = {} as IPostagemModel;
   public enderecoAtual = '';
   public objEnderecoAtual: any;
@@ -22,8 +37,8 @@ export class ModalCriarPostagemComponent implements OnInit {
   public subcategorias!: IEnumModel[];
 
   public form = new FormGroup({
-    titulo: new FormControl('', [Validators.required, Validators.maxLength(60)]),
-    descricao: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    descricao: new FormControl('', Validators.required),
     endereco: new FormControl('', Validators.required),
     categoriaId: new FormControl('', Validators.required),
     subcategoria: new FormControl('', Validators.required),
@@ -33,11 +48,10 @@ export class ModalCriarPostagemComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
     private toastr: ToastrService,
-    private authService: AuthService,
     public dialog: MatDialog
   ) 
   {
-    this.setarEnderecoAtual(data);
+    this.buscarPostagem();
   }
 
   ngOnInit(): void {
@@ -51,32 +65,56 @@ export class ModalCriarPostagemComponent implements OnInit {
     this.obterBairroAtual();
   }
 
-  public async inserir() {
-    
-    if (this.form.invalid) {
-      this.toastr.warning('Formulário inválido!', 'Atenção');
-      return;
+  public buscarPostagem(): void {
+    this.postagemService.buscarPostagem(this.data)
+    .then((res) => {
+      this.model = res.dados;
+      this.setarEnderecoAtual(this.model.latitude, this.model.longitude);
+
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.center = {
+          lat: this.model.latitude,
+          lng: this.model.longitude,
+        }
+      })
+
+      this.options = {
+        center: new google.maps.LatLng(this.model.latitude, this.model.longitude),
+        draggable: false,
+        zoom: 13,
+        fullscreenControl: false,
+        streetViewControl: false,
+        panControl: false,
+        mapTypeControl: false,
+        zoomControl: false,
+        styles: [
+          {
+            featureType: "poi",
+            stylers: [
+             { visibility: "off" }
+            ]   
+           }
+       ],
+       draggableCursor: "default"
+      };
+
+      this.marker = {
+      position: {
+        lat: this.model.latitude, 
+        lng: this.model.longitude,
+      },
+      label: {
+        color: 'white',
+        text: ' ',
+      },
+      title: ' ',
+      icon: this.definirTipoMarcador(this.model.subcategoria.codigo)
     }
 
-    this.atualizarModel(this.form.value);
-    this.model.latitude = this.objEnderecoAtual.geometry.location.lat();
-    this.model.longitude = this.objEnderecoAtual.geometry.location.lng();
-    this.model.resolvido = false;
-    this.model.bairro = this.bairroAtual;
-    this.model.usuarioId = this.authService.currentUserValue.id;
-
-    try {
-      const res = await this.postagemService.inserir(this.model);
-
-      if (res.sucesso) {
-        this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
-        this.dialog.closeAll();
-      } else {
-        this.toastr.warning(res.mensagem.descricao, 'Atenção');
-      }
-    } catch (err) {
-      this.toastr.error(err, 'Atenção');
-    }
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    })
   }
 
   public listarCategorias(): void {
@@ -99,9 +137,9 @@ export class ModalCriarPostagemComponent implements OnInit {
     })
   }
 
-  private setarEnderecoAtual(data: any): void {
+  private setarEnderecoAtual(lat: any, lon: any): void {
     let geocoder = new google.maps.Geocoder();
-    let latlng = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
+    let latlng = new google.maps.LatLng(lat, lon);
     let request = {
       location: latlng
     };
@@ -125,6 +163,30 @@ export class ModalCriarPostagemComponent implements OnInit {
       if(x.types.includes('sublocality'))
          this.bairroAtual =  x.long_name;
     })
+  }
+
+  private definirTipoMarcador(subcategoriaId: number): string {
+    var result = '';
+
+    switch(subcategoriaId) { 
+      case 1: { 
+        result = '../../../../../assets/images/red-dot.png';
+        break; 
+      } 
+      case 2: { 
+        result = '../../../../../assets/images/green-dot.png';
+        break; 
+      } 
+      case 3: {
+        result = '../../../../../assets/images/blue-dot.png';
+        break;
+      }
+      default: { 
+        result = '../../../../../assets/images/yellow-dot.png';
+        break; 
+      } 
+    } 
+    return result;
   }
 
   private atualizarModel(values: any) {

@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { IPostagemModel } from 'src/app/models/postagem.model';
 
 @Component({
   selector: 'app-modal-filtrar-postagem',
@@ -29,7 +28,6 @@ export class ModalFiltrarPostagemComponent implements OnInit {
   ngOnInit(): void { }
 
   public async filtrar() {
-    debugger
     if (this.form.invalid) {
       this.toastr.warning('Formulário inválido!', 'Atenção');
       return;
