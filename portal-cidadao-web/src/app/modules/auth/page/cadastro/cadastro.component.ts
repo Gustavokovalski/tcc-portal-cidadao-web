@@ -17,7 +17,8 @@ export class CadastroComponent implements OnInit {
   public senhasNaoConferem = false;
   public perfilSelecionado = 1;
   public listaPerfis!: IEnumModel[];
- 
+  public cpfValido = true;
+
   public form = new FormGroup({
     nome: new FormControl('', Validators.required),
     cpf: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]),
@@ -38,6 +39,11 @@ export class CadastroComponent implements OnInit {
   async onSubmit(){
     if (this.form.invalid) {
       this.toastr.warning('Formulário inválido!', 'Atenção');
+      return;
+    }
+
+    if(!this.validarCpf()){
+      this.toastr.error('CPF inválido', 'Atenção');
       return;
     }
 
@@ -68,4 +74,68 @@ export class CadastroComponent implements OnInit {
     Object.assign(this.model, values);
   }
 
+  public validarCpf() : boolean  {
+    const cpf = this.form.get('cpf')?.value;
+
+    if (cpf.Length > 11) {
+      this.cpfValido = false;
+      return false;
+    }
+
+    let igual = true;
+    for (let i = 1; i < 11 && igual; i++) {
+      if (cpf[i] !== cpf[0]) {
+        igual = false;
+      }
+    }
+
+    if (igual || cpf === '12345678909') {
+      this.cpfValido = false;
+      return false; 
+    }
+
+    const numeros = new Array(11);
+
+    for (let i = 0; i < 11; i++) {
+      numeros[i] = parseInt(cpf[i], 10);
+    }
+
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+      soma += (10 - i) * numeros[i];
+    }
+
+    let resultado = soma % 11;
+
+    if (resultado === 1 || resultado === 0) {
+      if (numeros[9] !== 0) {
+        this.cpfValido = false;
+        return false;
+      }
+    }
+
+    else if (numeros[9] !== 11 - resultado) {
+      this.cpfValido = false;
+      return false;
+    }
+
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+      soma += (11 - i) * numeros[i];
+    }
+    resultado = soma % 11;
+
+    if (resultado === 1 || resultado === 0) {
+      if (numeros[10] !== 0) {
+        this.cpfValido = false;
+        return false;
+      }
+    }
+    else if (numeros[10] !== 11 - resultado) {
+      this.cpfValido = false;
+      return false;
+    }
+    this.cpfValido = true;
+    return true;
+  }
 }
