@@ -12,13 +12,16 @@
             </div>
         </mat-form-field>
 
-        <h5 class="text-left my-3">{{model.categoria.nome }} - {{model.subcategoria.descricao}}</h5>
+        <div
+            [ngClass]="{'text-reclamacao': model?.subcategoria?.codigo === 1, 'text-elogio': model?.subcategoria?.codigo === 2, 'text-sugestao': model?.subcategoria?.codigo === 3}">
+            <h5 class="text-left my-3">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
+        </div>
+
         <google-map width="100%" height="15vh" [options]="options">
             <map-marker [position]="marker.position" [label]="marker.label" [title]="marker.title"
                 [options]="marker.options" [icon]="marker.icon" [clickable]="false">
             </map-marker>
         </google-map>
-
         <br />
         <mat-form-field class="form-full-width" appearance="fill">
             <mat-label>Descrição</mat-label>

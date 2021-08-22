@@ -36,17 +36,19 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.preencheMarcadorPosicaoAtual();
+    this.iniciarPagina('');
+  }
+
+  preencheMarcadorPosicaoAtual(): void {
     navigator.geolocation.getCurrentPosition((position) => {
       this.position = position;
       this.center = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       }
-
       this.novoMarcador(0, 0, this.center.lat, this.center.lng);
     });
-
-    this.iniciarPagina('');
   }
 
   abrirModalCriarPostagem() {
@@ -78,32 +80,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  private definirTipoMarcador(subcategoriaId: number): string {
-    var result = '';
-
-    switch(subcategoriaId) { 
-      case 1: { 
-        result = '../../../../assets/images/red-dot.png';
-        break; 
-      } 
-      case 2: { 
-        result = '../../../../assets/images/green-dot.png';
-        break; 
-      } 
-      case 3: {
-        result = '../../../../assets/images/blue-dot.png';
-        break;
-      }
-      default: { 
-        result = '../../../../assets/images/current-location.png';
-        break; 
-      } 
-    } 
-    return result;
-  }
-
   private iniciarPagina(bairro: string) {
-    this.markers = [];
+    this.markers.length = 0;
+    this.preencheMarcadorPosicaoAtual()
     this.postagemService.listarTodos(bairro)
       .then((res) => {
         if (res.dados) {
@@ -161,4 +140,27 @@ export class HomeComponent implements OnInit {
     }
   }
  
+  private definirTipoMarcador(subcategoriaId: number): string {
+    var result = '';
+
+    switch(subcategoriaId) { 
+      case 1: { 
+        result = '../../../../assets/images/red-dot.png';
+        break; 
+      } 
+      case 2: { 
+        result = '../../../../assets/images/green-dot.png';
+        break; 
+      } 
+      case 3: {
+        result = '../../../../assets/images/blue-dot.png';
+        break;
+      }
+      default: { 
+        result = '../../../../assets/images/current-location.png';
+        break; 
+      } 
+    } 
+    return result;
+  }
 }

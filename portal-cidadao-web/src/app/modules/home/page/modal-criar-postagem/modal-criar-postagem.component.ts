@@ -22,8 +22,8 @@ export class ModalCriarPostagemComponent implements OnInit {
   public subcategorias!: IEnumModel[];
 
   public form = new FormGroup({
-    titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-    descricao: new FormControl('', Validators.required),
+    titulo: new FormControl('', [Validators.required, Validators.maxLength(60)]),
+    descricao: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     endereco: new FormControl('', Validators.required),
     categoriaId: new FormControl('', Validators.required),
     subcategoria: new FormControl('', Validators.required),
