@@ -2,15 +2,6 @@
     <div style="background: white;">
         <h3 class="text-center my-3">Nova Postagem</h3>
 
-        <mat-form-field class="form-full-width" appearance="fill">
-            <mat-label>Título</mat-label>
-            <input type="text" matInput formControlName="titulo"
-                [ngClass]="{ 'is-invalid': f.submitted && form.controls['titulo'].invalid }" />
-            <div *ngIf="f.submitted && form.controls['titulo'].invalid" class="invalid-feedback">
-                <div *ngIf="form.controls['titulo'].errors?.required">Campo obrigatório</div>
-            </div>
-        </mat-form-field>
-
         <mat-form-field class="local-form-field" appearance="fill">
             <mat-label>Local</mat-label>
             <input matInput type="text" [(ngModel)]="enderecoAtual" ngxAutocomPlace formControlName="endereco"
@@ -24,6 +15,17 @@
                 <div *ngIf="form.controls['endereco'].errors?.required">Campo obrigatório</div>
             </div>
         </mat-form-field>
+
+        <mat-form-field class="form-full-width" appearance="fill">
+            <mat-label>Título</mat-label>
+            <input type="text" matInput formControlName="titulo"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['titulo'].invalid }" />
+            <div *ngIf="f.submitted && form.controls['titulo'].invalid" class="invalid-feedback">
+                <div *ngIf="form.controls['titulo'].errors?.required">Campo obrigatório</div>
+            </div>
+        </mat-form-field>
+
+
 
         <mat-form-field class="local-form-field" appearance="fill">
             <mat-label>Categoria</mat-label>

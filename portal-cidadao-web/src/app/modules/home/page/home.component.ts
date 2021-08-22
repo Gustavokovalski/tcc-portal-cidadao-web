@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { IPostagemModel } from 'src/app/models/postagem.model';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-postagem.component';
 import { ModalFiltrarPostagemComponent } from './modal-filtrar-postagem/modal-filtrar-postagem.component';
+import { ModalVisualizarPostagemComponent } from './modal-visualizar-postagem/modal-visualizar-postagem.component';
 
 @Component({
   selector: 'app-home',
@@ -43,28 +43,10 @@ export class HomeComponent implements OnInit {
         lng: position.coords.longitude,
       }
 
-      this.novoMarcador(this.center.lat, this.center.lng);
+      this.novoMarcador(0, 0, this.center.lat, this.center.lng);
     });
 
     this.iniciarPagina('');
-
-      // markers fake
-      /*this.novoMarcador(
-        -25.443514,
-        -49.275537);
-
-      this.novoMarcador(-25.446550, 
-         -49.248012);
-
-      this.novoMarcador(-25.529905, 
-         -49.249702);
-
-      this.novoMarcador(-25.391994, 
-         -49.272613);
-
-      this.novoMarcador(-25.412127, 
-         -49.226749);*/
-
   }
 
   abrirModalCriarPostagem() {
@@ -81,7 +63,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  private novoMarcador(lat: number, lng: number): void {
+  private novoMarcador(id: number, subcategoriaId: number, lat: number, lng: number): void {
     this.markers.push({
       position: {
         lat: lat, 
@@ -89,11 +71,35 @@ export class HomeComponent implements OnInit {
       },
       label: {
         color: 'white',
-        text: ' ',
       },
-      title: ' ',
-      options: { animation: google.maps.Animation.DROP },
+      title: '',
+      icon: this.definirTipoMarcador(subcategoriaId),
+      options: { store_id: id, cursor: 'pointer', animation: google.maps.Animation.DROP },
     });
+  }
+
+  private definirTipoMarcador(subcategoriaId: number): string {
+    var result = '';
+
+    switch(subcategoriaId) { 
+      case 1: { 
+        result = '../../../../assets/images/red-dot.png';
+        break; 
+      } 
+      case 2: { 
+        result = '../../../../assets/images/green-dot.png';
+        break; 
+      } 
+      case 3: {
+        result = '../../../../assets/images/blue-dot.png';
+        break;
+      }
+      default: { 
+        result = '../../../../assets/images/current-location.png';
+        break; 
+      } 
+    } 
+    return result;
   }
 
   private iniciarPagina(bairro: string) {
@@ -102,7 +108,7 @@ export class HomeComponent implements OnInit {
       .then((res) => {
         if (res.dados) {
           res.dados.forEach((postagem) => {
-            this.novoMarcador(postagem.latitude, postagem.longitude);
+            this.novoMarcador(postagem.id, postagem.subcategoria.codigo, postagem.latitude, postagem.longitude);
           })
         }
       });
@@ -137,6 +143,22 @@ export class HomeComponent implements OnInit {
         this.iniciarPagina(res);
       }
     })
+  }
+
+  public abrirModalVisualizarPostagem(id: any) {
+    if(id !== 0){
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.id = 'modal-component';
+      dialogConfig.width = '30vw';
+      dialogConfig.hasBackdrop = true;
+      dialogConfig.disableClose = true;
+  
+      dialogConfig.data = id;
+      const modal = this.matDialog.open(ModalVisualizarPostagemComponent, dialogConfig);
+      modal.afterClosed().subscribe(() => {
+        this.iniciarPagina('');
+      })
+    }
   }
  
 }
