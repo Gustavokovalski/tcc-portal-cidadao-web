@@ -12,11 +12,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { ModalFiltrarPostagemComponent } from './page/modal-filtrar-postagem/modal-filtrar-postagem.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
-    ModalCriarPostagemComponent
+    ModalCriarPostagemComponent,
+    ModalFiltrarPostagemComponent
   ],
   imports: [
     CommonModule,

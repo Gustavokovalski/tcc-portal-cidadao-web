@@ -17,6 +17,7 @@ export class ModalCriarPostagemComponent implements OnInit {
   public model : IPostagemModel = {} as IPostagemModel;
   public enderecoAtual = '';
   public objEnderecoAtual: any;
+  public bairroAtual = '';
   public categorias!: ICategoriaModel[];
   public subcategorias!: IEnumModel[];
 
@@ -47,6 +48,7 @@ export class ModalCriarPostagemComponent implements OnInit {
   public onChangeLocalPostagem(event: any): void {
     this.enderecoAtual = event.formatted_address;
     this.objEnderecoAtual = event;
+    this.obterBairroAtual();
   }
 
   public async inserir() {
@@ -60,22 +62,21 @@ export class ModalCriarPostagemComponent implements OnInit {
     this.model.latitude = this.objEnderecoAtual.geometry.location.lat();
     this.model.longitude = this.objEnderecoAtual.geometry.location.lng();
     this.model.resolvido = false;
-
-    debugger
+    this.model.bairro = this.bairroAtual;
     this.model.usuarioId = this.authService.currentUserValue.id;
 
-      try {
-        const res = await this.postagemService.inserir(this.model);
+    try {
+      const res = await this.postagemService.inserir(this.model);
 
-        if (res.sucesso) {
-          this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
-          this.dialog.closeAll();
-        } else {
-          this.toastr.warning(res.mensagem.descricao, 'Atenção');
-        }
-      } catch (err) {
-        this.toastr.error(err, 'Atenção');
+      if (res.sucesso) {
+        this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
+        this.dialog.closeAll();
+      } else {
+        this.toastr.warning(res.mensagem.descricao, 'Atenção');
       }
+    } catch (err) {
+      this.toastr.error(err, 'Atenção');
+    }
   }
 
   public listarCategorias(): void {
@@ -110,11 +111,20 @@ export class ModalCriarPostagemComponent implements OnInit {
         if (results[0]) {
           this.enderecoAtual = results[0].formatted_address;
           this.objEnderecoAtual = results[0];
+          
+          this.obterBairroAtual();
         } else {
           alert("No address available");
         }
       }
     });
+  }
+
+  private obterBairroAtual() : void {
+    this.objEnderecoAtual.address_components.forEach((x: any) => {            
+      if(x.types.includes('sublocality'))
+         this.bairroAtual =  x.long_name;
+    })
   }
 
   private atualizarModel(values: any) {

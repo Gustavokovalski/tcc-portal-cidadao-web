@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { IPostagemModel } from 'src/app/models/postagem.model';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-postagem.component';
+import { ModalFiltrarPostagemComponent } from './modal-filtrar-postagem/modal-filtrar-postagem.component';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +27,7 @@ export class HomeComponent implements OnInit {
    ]
   };
   public markers = [] as any;
-
+  public comboBairros = [] as any;
   constructor(
     public matDialog: MatDialog,
     public postagemService: PostagemService
@@ -44,7 +46,7 @@ export class HomeComponent implements OnInit {
       this.novoMarcador(this.center.lat, this.center.lng);
     });
 
-    this.iniciarPagina();
+    this.iniciarPagina('');
 
       // markers fake
       /*this.novoMarcador(
@@ -75,7 +77,7 @@ export class HomeComponent implements OnInit {
     dialogConfig.data = this.position;
     const modal = this.matDialog.open(ModalCriarPostagemComponent, dialogConfig);
     modal.afterClosed().subscribe(() => {
-      this.iniciarPagina();
+      this.iniciarPagina('');
     })
   }
 
@@ -94,9 +96,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  private iniciarPagina() {
-    
-    this.postagemService.listarTodos()
+  private iniciarPagina(bairro: string) {
+    this.markers = [];
+    this.postagemService.listarTodos(bairro)
       .then((res) => {
         if (res.dados) {
           res.dados.forEach((postagem) => {
@@ -106,4 +108,35 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  private preencheComboFiltroBairros(): void {
+    this.comboBairros = [];
+    this.postagemService.listarBairros()
+      .then((res) => {
+        if (res.dados) {
+          res.dados.forEach((x) => {
+            this.comboBairros.push(x)
+          })
+        }
+      });
+  }
+
+
+  public abrirModalFiltro() {
+    this.preencheComboFiltroBairros();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.id = 'modal-component';
+    dialogConfig.width = '30vw';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.disableClose = true;
+
+    dialogConfig.data = this.comboBairros;
+    const modal = this.matDialog.open(ModalFiltrarPostagemComponent, dialogConfig);
+    modal.afterClosed().subscribe((bairro) => {
+      if(bairro){
+        const res = bairro == 'todos' ? '' : bairro;
+        this.iniciarPagina(res);
+      }
+    })
+  }
+ 
 }

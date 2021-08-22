@@ -1,15 +1,27 @@
 .map-content {
-    width: 400px;
-    position: absolute;
-    bottom: 15px;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-
+  width: 400px;
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn-criar-postagem {
-    width: 400px!important;
-    min-width: unset!important;
+  width: 400px !important;
+  min-width: unset !important;
+}
+
+.btn-filtrar-postagem {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+.btn-filtrar-postagem button:focus {
+  outline: none;
 }

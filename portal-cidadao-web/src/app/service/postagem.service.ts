@@ -14,9 +14,9 @@ export class PostagemService extends BaseService {
         super(httpClient);
     }
 
-    public async listarTodos(): Promise<IBaseModel<IPostagemModel[]>> {
+    public async listarTodos(bairro: string): Promise<IBaseModel<IPostagemModel[]>> {
       return this.httpClient
-        .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem`)
+        .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem?bairro=${bairro}`)
         .toPromise();
     }
 
@@ -37,5 +37,12 @@ export class PostagemService extends BaseService {
         .get<IBaseModel<IEnumModel[]>>(`${this.apiBaseUrl}/postagem/subcategorias`)
         .toPromise();
     }
+
+    public async listarBairros(): Promise<IBaseModel<string[]>> {
+      return this.httpClient
+        .get<IBaseModel<string[]>>(`${this.apiBaseUrl}/postagem/bairros`)
+        .toPromise();
+    }
+    
     
 }
