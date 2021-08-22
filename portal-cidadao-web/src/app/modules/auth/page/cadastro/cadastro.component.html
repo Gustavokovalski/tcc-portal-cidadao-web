@@ -19,14 +19,15 @@
             </div>
           </div>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="CPF" formControlName="cpf"
-              [dropSpecialCharacters]="true" mask="000.000.000-00" maxlength="14"
-              [ngClass]="{ 'is-invalid': f.submitted && form.controls['cpf'].invalid }">
+            <input type="text" class="form-control" placeholder="CPF" formControlName="cpf" [(ngModel)]="model.cpf"
+              (blur)="validarCpf()" [dropSpecialCharacters]="true" mask="000.000.000-00" maxlength="14"
+              [ngClass]="{ 'is-invalid': f.submitted && form.controls['cpf'].invalid  || this.cpfValido == false}">
             <div class="input-group-append"></div>
             <div *ngIf="f.submitted && form.controls['cpf'].invalid" class="invalid-feedback">
               <div *ngIf="form.controls['cpf'].errors?.required">Campo obrigatório</div>
               <div *ngIf="form.controls['cpf'].errors?.minlength">Informe um CPF válido</div>
             </div>
+            <div class="invalid-feedback" *ngIf="this.cpfValido == false">CPF inválido *</div>
           </div>
           <div class="input-group mb-3">
             <input type="email" class="form-control" placeholder="Email" formControlName="email"
