@@ -20,6 +20,9 @@ export class ModalCriarPostagemComponent implements OnInit {
   public bairroAtual = '';
   public categorias!: ICategoriaModel[];
   public subcategorias!: IEnumModel[];
+  public autocompleteOptions = {
+    types: ["geocode", "establishment"]
+  }
 
   public form = new FormGroup({
     titulo: new FormControl('', [Validators.required, Validators.maxLength(60)]),
@@ -100,6 +103,8 @@ export class ModalCriarPostagemComponent implements OnInit {
   }
 
   private setarEnderecoAtual(data: any): void {
+    if (!data)
+      return;
     let geocoder = new google.maps.Geocoder();
     let latlng = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
     let request = {

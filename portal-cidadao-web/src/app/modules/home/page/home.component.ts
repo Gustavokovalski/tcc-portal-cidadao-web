@@ -11,7 +11,8 @@ import { ModalVisualizarPostagemComponent } from './modal-visualizar-postagem/mo
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public position = {};
+  private maxDistance = 200;
+  public position: object | undefined;
   public center = {lat: -25.4372, lng: -49.2700};
   public options: google.maps.MapOptions = {
     center: this.center,
@@ -42,6 +43,11 @@ export class HomeComponent implements OnInit {
 
   preencheMarcadorPosicaoAtual(): void {
     navigator.geolocation.getCurrentPosition((position) => {
+      if (position.coords.accuracy > this.maxDistance) {
+        this.position = undefined;
+        return;
+      }
+        
       this.position = position;
       this.center = {
         lat: position.coords.latitude,
