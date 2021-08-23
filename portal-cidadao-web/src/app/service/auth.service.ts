@@ -36,7 +36,7 @@ export class AuthService extends BaseService {
             .pipe(map(user => {
                 if (user.sucesso) {
                     localStorage.setItem('currentUser', JSON.stringify(user.dados));
-                    this.currentUserSubject.next(user.dados);
+                    this.currentUserSubject = new BehaviorSubject<IUsuarioModel>(user.dados);
                 }
                 return user;
             }));
