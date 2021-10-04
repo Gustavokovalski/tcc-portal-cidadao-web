@@ -63,6 +63,11 @@
             </div>
         </mat-form-field>
 
+        <mat-form-field class="form-full-width" appearance="fill">
+            <ngx-mat-file-input [formControl]="fileControl" [multiple]="false" [accept]="accept" [color]="color" placeholder="Adicionar mídia">
+            </ngx-mat-file-input>
+         </mat-form-field>
+
         <mat-dialog-actions align="end">
             <button type="submit" mat-raised-button>Salvar</button>
             <button mat-button mat-dialog-close>Voltar</button>
