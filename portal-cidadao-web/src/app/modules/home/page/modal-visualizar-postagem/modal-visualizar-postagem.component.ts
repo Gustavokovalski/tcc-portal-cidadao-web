@@ -17,24 +17,13 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   public center = {lat: -25.4372, lng: -49.2700};
   public options: google.maps.MapOptions = { };
 
-  public marker: any = {
-    position: {  
-      lat: this.center.lat, 
-      lng: this.center.lng, 
-    },
-    label: {
-      color: 'white',
-      text: ' ',
-    },
-    title: ' ',
-  };
-
   public model : IPostagemModel = {} as IPostagemModel;
   public enderecoAtual = '';
   public objEnderecoAtual: any;
   public bairroAtual = '';
   public categorias!: ICategoriaModel[];
   public subcategorias!: IEnumModel[];
+  public midiaPostagem = '';
 
   public form = new FormGroup({
     titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
@@ -71,50 +60,20 @@ export class ModalVisualizarPostagemComponent implements OnInit {
       this.model = res.dados;
       this.setarEnderecoAtual(this.model.latitude, this.model.longitude);
 
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.center = {
-          lat: this.model.latitude,
-          lng: this.model.longitude,
-        }
-      })
-
-      this.options = {
-        center: new google.maps.LatLng(this.model.latitude, this.model.longitude),
-        draggable: false,
-        zoom: 13,
-        fullscreenControl: false,
-        streetViewControl: false,
-        panControl: false,
-        mapTypeControl: false,
-        zoomControl: false,
-        styles: [
-          {
-            featureType: "poi",
-            stylers: [
-             { visibility: "off" }
-            ]   
-           }
-       ],
-       draggableCursor: "default"
-      };
-
-      this.marker = {
-      position: {
-        lat: this.model.latitude, 
-        lng: this.model.longitude,
-      },
-      label: {
-        color: 'white',
-        text: ' ',
-      },
-      title: ' ',
-      icon: this.definirTipoMarcador(this.model.subcategoria.codigo)
-    }
-
+      this.buscarMidiaPostagem(res.dados.imagemUrl);
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
     })
+  }
+
+  public buscarMidiaPostagem(nomeArquivo: string): void {
+    this.postagemService.buscarMidiaPostagem(nomeArquivo)
+    .then((res) => {
+      console.log(res);
+      console.log(typeof(res));
+      this.midiaPostagem = res.fileContents;
+    });
   }
 
   public listarCategorias(): void {
@@ -163,30 +122,6 @@ export class ModalVisualizarPostagemComponent implements OnInit {
       if(x.types.includes('sublocality'))
          this.bairroAtual =  x.long_name;
     })
-  }
-
-  private definirTipoMarcador(subcategoriaId: number): string {
-    var result = '';
-
-    switch(subcategoriaId) { 
-      case 1: { 
-        result = '../../../../../assets/images/red-dot.png';
-        break; 
-      } 
-      case 2: { 
-        result = '../../../../../assets/images/green-dot.png';
-        break; 
-      } 
-      case 3: {
-        result = '../../../../../assets/images/blue-dot.png';
-        break;
-      }
-      default: { 
-        result = '../../../../../assets/images/yellow-dot.png';
-        break; 
-      } 
-    } 
-    return result;
   }
 
   private atualizarModel(values: any) {
