@@ -14,6 +14,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ModalFiltrarPostagemComponent } from './page/modal-filtrar-postagem/modal-filtrar-postagem.component';
 import { ModalVisualizarPostagemComponent } from './page/modal-visualizar-postagem/modal-visualizar-postagem.component';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ModalVisualizarPostagemComponent } from './page/modal-visualizar-postag
     FormsModule,
     ReactiveFormsModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    NgxMatFileInputModule
   ],
   exports: [],
   providers: []

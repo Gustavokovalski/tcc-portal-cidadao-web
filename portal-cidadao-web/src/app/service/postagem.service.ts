@@ -26,9 +26,19 @@ export class PostagemService extends BaseService {
         .toPromise();
     }
 
-    public async inserir(postagemModel: IPostagemModel): Promise<IBaseModel<IPostagemModel>> {
+    public async buscarMidiaPostagem(nomeArquivo: string): Promise<any> {
       return this.httpClient
-        .post<IBaseModel<IPostagemModel>>(`${this.apiBaseUrl}/postagem`, postagemModel)
+        .get<any>(`${this.apiBaseUrl}/arquivo/${nomeArquivo}`)
+        .toPromise();
+    }
+
+    public async inserir(postagemModel: IPostagemModel, arquivo: File): Promise<IBaseModel<IPostagemModel>> {
+      const formData = new FormData();
+      formData.append('file', arquivo);
+      formData.append('model', JSON.stringify(postagemModel));
+
+      return this.httpClient
+        .post<IBaseModel<IPostagemModel>>(`${this.apiBaseUrl}/postagem`, formData)
         .toPromise();
     }
 
