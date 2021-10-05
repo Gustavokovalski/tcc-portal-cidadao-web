@@ -117,6 +117,10 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     })
   }
 
+ public darLike(): void {
+   
+ }
+
   public listarCategorias(): void {
     this.postagemService.listarCategorias()
     .then((res) => {

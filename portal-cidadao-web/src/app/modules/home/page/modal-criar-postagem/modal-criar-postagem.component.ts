@@ -78,7 +78,7 @@ export class ModalCriarPostagemComponent implements OnInit {
         this.toastr.warning(res.mensagem.descricao, 'Atenção');
       }
     } catch (err) {
-      this.toastr.error(err, 'Atenção');
+      this.toastr.error('Atenção, erro! ');
     }
   }
 
