@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ICategoriaModel } from 'src/app/models/categoria.model';
@@ -24,12 +25,16 @@ export class ModalCriarPostagemComponent implements OnInit {
     types: ["geocode", "establishment"]
   }
 
+  public fileControl = new FormControl(null);
+  public accept = '';
+  public color: ThemePalette = 'primary';
+
   public form = new FormGroup({
     titulo: new FormControl('', [Validators.required, Validators.maxLength(60)]),
     descricao: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     endereco: new FormControl('', Validators.required),
     categoriaId: new FormControl('', Validators.required),
-    subcategoria: new FormControl('', Validators.required),
+    subcategoria: new FormControl('', Validators.required)
   });
 
   constructor(
@@ -69,8 +74,8 @@ export class ModalCriarPostagemComponent implements OnInit {
     this.model.usuarioId = this.authService.currentUserValue.id;
 
     try {
-      const res = await this.postagemService.inserir(this.model);
-
+      const res = await this.postagemService.inserir(this.model, this.fileControl.value as File);
+      console.log(res);
       if (res.sucesso) {
         this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
         this.dialog.closeAll();

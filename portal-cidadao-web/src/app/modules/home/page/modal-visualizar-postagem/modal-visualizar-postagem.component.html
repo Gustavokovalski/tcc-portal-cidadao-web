@@ -14,14 +14,17 @@
 
         <div
             [ngClass]="{'text-reclamacao': model?.subcategoria?.codigo === 1, 'text-elogio': model?.subcategoria?.codigo === 2, 'text-sugestao': model?.subcategoria?.codigo === 3}">
-            <h5 class="text-left my-3">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
+            <h5 class="text-center my-3">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
         </div>
 
-        <google-map width="100%" height="15vh" [options]="options">
+       <!-- <google-map width="100%" height="15vh" [options]="options">
             <map-marker [position]="marker.position" [label]="marker.label" [title]="marker.title"
                 [options]="marker.options" [icon]="marker.icon" [clickable]="false">
             </map-marker>
-        </google-map>
+        </google-map> -->
+
+        <img mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
+
         <br />
         <mat-form-field class="form-full-width" appearance="fill">
             <mat-label>Descrição</mat-label>
