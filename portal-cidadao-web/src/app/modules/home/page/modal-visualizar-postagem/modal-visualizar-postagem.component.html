@@ -35,9 +35,20 @@
             </div>
         </mat-form-field>
 
+        <div>
+            <div style="float:left;">
+
         <mat-dialog-actions align="start">
-        <button (click) = "darLike()" mat-button><mat-icon>thumb_up</mat-icon></button>
+        <button (click)="clickedLike = !clickedLike"(click) = "like()" [class.like]="clickedLike" mat-button><mat-icon>thumb_up</mat-icon></button>
         </mat-dialog-actions>
+    </div>
+
+    <div style="float:left;">
+        <mat-dialog-actions align="start">
+            <button clas = "2" (click)="clickedDislike = !clickedDislike" (click) = "dislike()" [class.dislike]="clickedDislike"mat-button><mat-icon>thumb_down</mat-icon></button>
+            </mat-dialog-actions>
+        </div>
+        </div>
 
         <mat-dialog-actions align="end">
             <!-- <button type="submit" mat-raised-button>Salvar</button> -->

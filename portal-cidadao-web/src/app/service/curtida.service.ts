@@ -14,9 +14,28 @@ import { ICurtidaModel } from '../models/curtida.model';
         super(httpClient);
     }
 
-    public async inserir(data: ICurtidaModel): Promise<IBaseModel<ICurtidaModel>> {
-        return this.httpClient
-          .post<IBaseModel<ICurtidaModel>>(`${this.apiBaseUrl}/curtida`, data)
-          .toPromise();
-      }
+    public async obterLike(usuarioId: number, postagemId: number): Promise<IBaseModel<ICurtidaModel>> {
+      return this.httpClient
+        .get<IBaseModel<ICurtidaModel>>(`${this.apiBaseUrl}/curtida/${postagemId}/${usuarioId}`)
+        .toPromise();
     }
+
+    public async inserir(curtidaModel: ICurtidaModel): Promise<IBaseModel<ICurtidaModel>> {
+      console.log(curtidaModel)
+      return this.httpClient
+        .post<IBaseModel<ICurtidaModel>>(`${this.apiBaseUrl}/curtida`, curtidaModel)
+        .toPromise();    
+    }
+
+    public async atualizarCurtida(id: number, Acao: boolean): Promise<IBaseModel<ICurtidaModel>> {
+      return this.httpClient
+        .put<IBaseModel<ICurtidaModel>>(`${this.apiBaseUrl}/curtida/${id}/${Acao}`, id)
+        .toPromise();    
+    }
+
+    public async removerCurtida(curtidaId:number): Promise<IBaseModel<ICurtidaModel>> {
+      return this.httpClient
+        .delete<IBaseModel<ICurtidaModel>>(`${this.apiBaseUrl}/curtida/${curtidaId}`)
+        .toPromise();    
+    }
+  }
