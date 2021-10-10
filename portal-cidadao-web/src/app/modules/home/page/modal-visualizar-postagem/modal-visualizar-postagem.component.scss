@@ -5,12 +5,27 @@
 .form-full-width {
   width: 100%;
 }
+.dislike{
+  color : red;
+}
+
+.like{
+  color : blue;
+}
 
 .text-reclamacao {
   font-weight: bold;
   color: red;
 }
-
+.btn-curtir-postagem {
+  width: 14px;
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
 .text-sugestao {
   font-weight: bold;
   color: blue;
@@ -26,3 +41,6 @@ img{
   max-width: 100%; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
   max-height: 30vh;
 }
+
+
+

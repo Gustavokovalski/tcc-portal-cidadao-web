@@ -5,6 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { ICategoriaModel } from 'src/app/models/categoria.model';
 import { IEnumModel } from 'src/app/models/enum.model';
 import { IPostagemModel } from 'src/app/models/postagem.model';
+import { ICurtidaModel } from 'src/app/models/curtida.model';
+import { CurtidaService } from 'src/app/service/curtida.service';
+import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 
 @Component({
@@ -18,12 +21,16 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   public options: google.maps.MapOptions = { };
 
   public model : IPostagemModel = {} as IPostagemModel;
+  public curtidaModel : ICurtidaModel = {} as ICurtidaModel;
   public enderecoAtual = '';
   public objEnderecoAtual: any;
   public bairroAtual = '';
   public categorias!: ICategoriaModel[];
   public subcategorias!: IEnumModel[];
   public midiaPostagem = '';
+  public clickedDislike = false;
+  public clickedLike = false;
+  public curtida!: ICurtidaModel[];
 
   public form = new FormGroup({
     titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
@@ -36,8 +43,10 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
+    private curtidaService: CurtidaService,
     private toastr: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService: AuthService
   ) 
   {
     this.buscarPostagem();
@@ -46,9 +55,11 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   ngOnInit(): void {
     this.listarCategorias();
     this.listarSubcategorias();
+    this.buscarLike();   
+    
   }
 
-  public onChangeLocalPostagem(event: any): void {
+   public onChangeLocalPostagem(event: any): void {
     this.enderecoAtual = event.formatted_address;
     this.objEnderecoAtual = event;
     this.obterBairroAtual();
@@ -67,6 +78,91 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     })
   }
 
+ public like(): void {
+  this.curtidaModel.postagemId = this.model.id;
+  this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
+  console.log(this.authService.currentUserValue)
+  this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)
+  .then((res) => {
+    console.log(res);
+      if(res.dados){
+        const curtida = res.dados;
+        if(curtida != null && curtida.acao == false){        
+        this.curtidaService.atualizarCurtida(curtida.id, true);     
+        this.clickedDislike = false;  
+      }
+      else if(curtida != null && curtida.acao == true){       
+        this.curtidaService.removerCurtida(curtida.id);
+      }
+    }
+      else{
+      this.curtidaModel.acao = true;
+      this.toastr.show('Else');
+
+      this.curtidaService.inserir(this.curtidaModel);
+      }
+    
+  })
+  .catch((err) => {
+    console.log(err);
+    this.toastr.error(err.mensagem.descricao, 'Atenção');
+  }) 
+ 
+ }
+
+public dislike(): void {
+  this.curtidaModel.postagemId = this.model.id;
+  this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
+  this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)
+  .then((res) => {
+
+    console.log(res);
+      if(res.dados){
+        const curtida = res.dados;
+        if(curtida != null && curtida.acao == false){   
+     
+        this.curtidaService.removerCurtida(curtida.id);       
+      }
+      else if(curtida != null && curtida.acao == true){    
+        this.clickedLike = false;
+
+        this.curtidaService.atualizarCurtida(curtida.id, false);       
+      }
+    }
+      else{
+        this.toastr.show('Else2');
+        this.curtidaModel.acao = false;
+      this.curtidaService.inserir(this.curtidaModel);
+    }      
+  })
+  .catch((err) => {
+    this.toastr.error(err.mensagem.descricao, 'Atenção');
+  }) 
+}
+  
+
+public buscarLike() : void{
+  this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
+  this.curtidaModel.postagemId = this.model.id;
+  this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)
+  .then((res) => {
+    if(res.dados){
+      const curtida = res.dados;
+    console.log(res);
+      if(curtida != null && curtida.acao == false){        
+        this.clickedDislike = true;
+      }
+      if(curtida != null && curtida.acao == true){       
+        this.clickedLike = true;
+      }
+    }    
+  })
+  .catch((err) => {
+    console.log(err);
+    //this.toastr.error(err.mensagem.descricao, 'Atenção');
+  })
+  
+}
   public buscarMidiaPostagem(nomeArquivo: string): void {
     this.postagemService.buscarMidiaPostagem(nomeArquivo)
     .then((res) => {
@@ -79,7 +175,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   public listarCategorias(): void {
     this.postagemService.listarCategorias()
     .then((res) => {
-      this.categorias = res.dados;
+      this.categorias = res.dados;      
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
