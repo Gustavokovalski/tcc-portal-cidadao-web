@@ -81,23 +81,24 @@ export class ModalVisualizarPostagemComponent implements OnInit {
  public like(): void {
   this.curtidaModel.postagemId = this.model.id;
   this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
-  console.log(this.authService.currentUserValue)
   this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)
   .then((res) => {
-    console.log(res);
       if(res.dados){
         const curtida = res.dados;
         if(curtida != null && curtida.acao == false){        
         this.curtidaService.atualizarCurtida(curtida.id, true);     
         this.clickedDislike = false;  
+        this.model.curtidas ++;
+        this.model.descurtidas--;
       }
       else if(curtida != null && curtida.acao == true){       
         this.curtidaService.removerCurtida(curtida.id);
+        this.model.curtidas--;
       }
     }
       else{
+        this.model.curtidas++;
       this.curtidaModel.acao = true;
-      this.toastr.show('Else');
 
       this.curtidaService.inserir(this.curtidaModel);
       }
@@ -115,23 +116,20 @@ public dislike(): void {
   this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
   this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)
   .then((res) => {
-
-    console.log(res);
-      if(res.dados){
-        const curtida = res.dados;
-        if(curtida != null && curtida.acao == false){   
-     
-        this.curtidaService.removerCurtida(curtida.id);       
-      }
-      else if(curtida != null && curtida.acao == true){    
+    if (res.dados) {
+      const curtida = res.dados;
+      if (curtida != null && curtida.acao == false) {   
+        this.curtidaService.removerCurtida(curtida.id); 
+        this.model.descurtidas--;      
+      } else if (curtida != null && curtida.acao == true) {    
         this.clickedLike = false;
-
-        this.curtidaService.atualizarCurtida(curtida.id, false);       
+        this.curtidaService.atualizarCurtida(curtida.id, false);    
+        this.model.descurtidas++;
+        this.model.curtidas--;   
       }
-    }
-      else{
-        this.toastr.show('Else2');
-        this.curtidaModel.acao = false;
+    } else {
+      this.model.descurtidas++;
+      this.curtidaModel.acao = false;
       this.curtidaService.inserir(this.curtidaModel);
     }      
   })
@@ -146,13 +144,13 @@ public buscarLike() : void{
   this.curtidaModel.postagemId = this.model.id;
   this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)
   .then((res) => {
-    if(res.dados){
+    if (res.dados){
       const curtida = res.dados;
-    console.log(res);
-      if(curtida != null && curtida.acao == false){        
+      if (curtida != null && curtida.acao == false){        
         this.clickedDislike = true;
       }
-      if(curtida != null && curtida.acao == true){       
+
+      if (curtida != null && curtida.acao == true){       
         this.clickedLike = true;
       }
     }    
@@ -166,8 +164,6 @@ public buscarLike() : void{
   public buscarMidiaPostagem(nomeArquivo: string): void {
     this.postagemService.buscarMidiaPostagem(nomeArquivo)
     .then((res) => {
-      console.log(res);
-      console.log(typeof(res));
       this.midiaPostagem = res.fileContents;
     });
   }

@@ -72,18 +72,18 @@ export class HomeComponent implements OnInit {
   }
 
   private novoMarcador(id: number, subcategoriaId: number, lat: number, lng: number): void {
-    this.markers.push({
+    const marker = {
       position: {
         lat: lat, 
         lng: lng,
       },
-      label: {
-        color: 'white',
-      },
+      label: '',
       title: '',
       icon: this.definirTipoMarcador(subcategoriaId),
       options: { store_id: id, cursor: 'pointer', animation: google.maps.Animation.DROP },
-    });
+    };
+    console.log(marker);
+    this.markers.push(marker);
   }
 
   private iniciarPagina(bairro: string) {
