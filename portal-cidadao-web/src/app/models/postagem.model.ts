@@ -15,4 +15,6 @@ export interface IPostagemModel {
     dataCadastro: Date;
     resolvido: boolean;
     usuarioId: number;
+    curtidas: number;
+    descurtidas: number;
 }
