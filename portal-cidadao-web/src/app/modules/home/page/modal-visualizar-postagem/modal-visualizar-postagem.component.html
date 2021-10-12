@@ -45,10 +45,25 @@
 
     <div style="float:left;">
         <mat-dialog-actions align="start">
-            <button clas = "2" (click)="clickedDislike = !clickedDislike" (click) = "dislike()" [class.dislike]="clickedDislike"mat-button><mat-icon>thumb_down</mat-icon></button>
+            <button (click)="clickedDislike = !clickedDislike" (click) = "dislike()" [class.dislike]="clickedDislike"mat-button><mat-icon>thumb_down</mat-icon></button>
             </mat-dialog-actions>
         </div>
         </div>
+
+    <div class="container">
+    <hr/>
+    <div class="form-group">
+        <br>
+        <h6 class="text-left my-3">Deixe um comentário</h6>
+        <mat-form-field class="local-form-field" appearance="fill">
+            <textarea class="form-control" rows="2" ng-model="cmtName" placeholder="Seu comentário"></textarea>
+            <br/>
+            <button class="btn btn-success btn-md pull-right" ng-click='comentar();'><mat-icon>send</mat-icon></button>
+            <br/>
+            <hr/>
+                    </mat-form-field>
+    </div>
+</div>
 
         <mat-dialog-actions align="end">
             <!-- <button type="submit" mat-raised-button>Salvar</button> -->
