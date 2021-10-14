@@ -6,9 +6,11 @@ import { ICategoriaModel } from 'src/app/models/categoria.model';
 import { IEnumModel } from 'src/app/models/enum.model';
 import { IPostagemModel } from 'src/app/models/postagem.model';
 import { ICurtidaModel } from 'src/app/models/curtida.model';
+import { IComentarioModel } from 'src/app/models/comentario.model';
 import { CurtidaService } from 'src/app/service/curtida.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
+import { ComentarioService } from 'src/app/service/comentario.service';
 
 @Component({
   selector: 'app-modal-visualizar-postagem',
@@ -22,6 +24,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
 
   public model : IPostagemModel = {} as IPostagemModel;
   public curtidaModel : ICurtidaModel = {} as ICurtidaModel;
+  public comentarioModel: IComentarioModel = {} as IComentarioModel;
   public enderecoAtual = '';
   public objEnderecoAtual: any;
   public bairroAtual = '';
@@ -31,6 +34,10 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   public clickedDislike = false;
   public clickedLike = false;
   public curtida!: ICurtidaModel[];
+  public fileControl = new FormControl(null);
+  public comentarios:  any = [];
+
+
 
   public form = new FormGroup({
     titulo: new FormControl('', [Validators.required, Validators.maxLength(50)]),
@@ -38,12 +45,14 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     endereco: new FormControl('', Validators.required),
     categoriaId: new FormControl('', Validators.required),
     subcategoria: new FormControl('', Validators.required),
+    comentario: new FormControl('', [Validators.maxLength(500), Validators.minLength(10)]),
   });
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
     private curtidaService: CurtidaService,
+    private comentarioService: ComentarioService,
     private toastr: ToastrService,
     public dialog: MatDialog,
     private authService: AuthService
@@ -56,7 +65,8 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     this.listarCategorias();
     this.listarSubcategorias();
     this.buscarLike();   
-    
+    this.listarComentarios();
+
   }
 
    public onChangeLocalPostagem(event: any): void {
@@ -76,6 +86,18 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
     })
+  }
+public listarComentarios() : void {
+  this.comentarioService.ListarTodos(this.data)
+    .then((res) => {
+      console.log(res);
+      this.comentarios = res.dados;
+      console.log(this.comentarios);
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    })
+    
   }
 
  public like(): void {
@@ -109,6 +131,16 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     this.toastr.error(err.mensagem.descricao, 'Atenção');
   }) 
  
+ }
+
+ public comentar(): void {
+   this.comentarioModel.descricao = this.form.value["comentario"];
+   let today = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log(today);
+  this.comentarioModel.dataCadastro = new Date(today);
+  this.comentarioModel.usuarioId = this.authService.currentUserValue.id;
+  this.comentarioModel.postagemId = this.model.id;  
+  this.comentarioService.inserir(this.comentarioModel);
  }
 
 public dislike(): void {
@@ -217,6 +249,6 @@ public buscarLike() : void{
   }
 
   private atualizarModel(values: any) {
-    Object.assign(this.model, values);
+    Object.assign(this.comentarioModel.descricao, values);
   }
 }
