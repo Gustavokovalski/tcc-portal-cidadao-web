@@ -1,5 +1,6 @@
-<form [formGroup]="form" #f="ngForm" (keydown.enter)="$event.preventDefault()">
-    <div style="background: white;">
+    <form style ="overflow-y: auto !important;" [formGroup]="form" #f="ngForm" (keydown.enter)="$event.preventDefault()">
+
+        <div style="background: white; height: 515px">
         <h3 class="text-left my-3">{{model.titulo}}</h3>
 
         <mat-form-field class="local-form-field" appearance="fill">
@@ -38,22 +39,45 @@
             </div>
         </mat-form-field>
 
-        <div>
-            <div style="float:left;">
+        <div style="float:left;">
 
         <mat-dialog-actions align="start">
         <button (click)="clickedLike = !clickedLike"(click) = "like()" [class.like]="clickedLike" mat-button><mat-icon>thumb_up</mat-icon></button>
         <span class="mr-3">{{model?.curtidas}}</span>
         </mat-dialog-actions>
-    </div>
+        </div>
 
-    <div style="float:left;">
+        <div style="float:left;">
         <mat-dialog-actions align="start">
-            <button class= "2" (click)="clickedDislike = !clickedDislike" (click) = "dislike()" [class.dislike]="clickedDislike"mat-button><mat-icon>thumb_down</mat-icon></button>
+            <button (click)="clickedDislike = !clickedDislike" (click) = "dislike()" [class.dislike]="clickedDislike"mat-button><mat-icon>thumb_down</mat-icon></button>
             <span class="mr-3">{{model?.descurtidas}}</span>
         </mat-dialog-actions>
         </div>
-        </div>
+    
+
+    <div class="container">
+    <hr/>
+    <div class="form-group" >
+        <br>
+        <h6 class="text-left my-3">Deixe um comentário</h6>
+        <mat-form-field class="local-form-field" appearance="fill">
+            <textarea matInput formControlName="comentario" rows="2" ng-model="cmtName" placeholder="Seu comentário"
+            [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }"
+            maxlength="500"></textarea>
+        <div *ngIf="f.submitted && form.controls['comentario'].invalid" class="invalid-feedback"></div>
+            <br/>
+            <button class="btn btn-success btn-md pull-right" (click)="comentar()"><mat-icon>send</mat-icon></button>
+            <br/>
+            <hr/>
+            <ul class="list-group"  >  
+                <li class="list-group-item" *ngFor="let c of comentarios" >{{c.descricao}}  
+                </li>  
+            </ul> 
+            </mat-form-field>
+    </div>
+    </div>
+
+    
 
         <mat-dialog-actions align="end">
             <!-- <button type="submit" mat-raised-button>Salvar</button> -->

@@ -1,4 +1,5 @@
 import { ICategoriaModel } from "./categoria.model";
+import { IComentarioModel } from "./comentario.model";
 import { IEnumModel } from "./enum.model";
 
 export interface IPostagemModel {
@@ -17,4 +18,5 @@ export interface IPostagemModel {
     usuarioId: number;
     curtidas: number;
     descurtidas: number;
+    comentarios: IComentarioModel[];
 }
