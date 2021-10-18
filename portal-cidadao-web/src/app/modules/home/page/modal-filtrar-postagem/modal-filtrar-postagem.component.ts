@@ -11,9 +11,11 @@ import { ToastrService } from 'ngx-toastr';
 
 export class ModalFiltrarPostagemComponent implements OnInit {
   public bairros!: any[];
+  public categorias!: any[];
 
   public form = new FormGroup({
-    bairro: new FormControl('', Validators.required),
+    bairro: new FormControl(''),
+    categoria: new FormControl('')
   });
 
   constructor(
@@ -22,7 +24,8 @@ export class ModalFiltrarPostagemComponent implements OnInit {
     private dialogRef: MatDialogRef<ModalFiltrarPostagemComponent>
   ) 
   {
-    this.bairros = this.data;
+    this.bairros = this.data.bairros;
+    this.categorias = this.data.categorias;
   }
 
   ngOnInit(): void { }
@@ -32,6 +35,10 @@ export class ModalFiltrarPostagemComponent implements OnInit {
       this.toastr.warning('Formulário inválido!', 'Atenção');
       return;
     }
+    if(this.form.value.bairro != null)
     this.dialogRef.close(this.form.value.bairro);
+    if(this.form.value.categoria != null)
+    this.dialogRef.close(this.form.value.categoria);
+
   }
 }

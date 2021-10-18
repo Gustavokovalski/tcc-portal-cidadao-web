@@ -19,6 +19,11 @@ export class PostagemService extends BaseService {
         .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem?bairro=${bairro}`)
         .toPromise();
     }
+    public async listarPorCategoria(categoria: string): Promise<IBaseModel<IPostagemModel[]>> {
+      return this.httpClient
+        .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem/categoria/${categoria}`)
+        .toPromise();
+    }
 
     public async buscarPostagem(id: number): Promise<IBaseModel<IPostagemModel>> {
       return this.httpClient
