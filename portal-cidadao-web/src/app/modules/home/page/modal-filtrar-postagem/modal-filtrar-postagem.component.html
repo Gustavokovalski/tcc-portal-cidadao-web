@@ -10,12 +10,20 @@
                 <mat-option *ngFor="let bairro of bairros" [value]="bairro">
                     {{bairro}}
                 </mat-option>
+            
             </mat-select>
-            <div *ngIf="f.submitted && form.controls['bairro'].invalid" class="invalid-feedback">
-                <div *ngIf="form.controls['bairro'].errors?.required">Campo obrigatório</div>
-            </div>
-        </mat-form-field>
 
+        </mat-form-field>
+        <mat-form-field class="local-form-field" appearance="fill">
+    <mat-label>Selecione a categoria</mat-label>
+    <mat-select formControlName="categoria"
+        [ngClass]="{ 'is-invalid': f.submitted && form.controls['categoria'].invalid }">
+        <mat-option value="todas">Todas</mat-option>
+        <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+            {{categoria.nome}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
         <mat-dialog-actions align="end">
             <button type="submit" mat-raised-button mat-dialog-close>Filtrar</button>
             <button mat-button mat-dialog-close>Voltar</button>

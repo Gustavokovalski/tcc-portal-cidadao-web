@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
   };
   public markers = [] as any;
   public comboBairros = [] as any;
+  public comboCategorias = [] as any;
   constructor(
     public matDialog: MatDialog,
     public postagemService: PostagemService
@@ -38,7 +39,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.preencheMarcadorPosicaoAtual();
-    this.iniciarPagina('');
+    this.iniciarPaginaBairro('');
   }
 
   preencheMarcadorPosicaoAtual(): void {
@@ -67,7 +68,7 @@ export class HomeComponent implements OnInit {
     dialogConfig.data = this.position;
     const modal = this.matDialog.open(ModalCriarPostagemComponent, dialogConfig);
     modal.afterClosed().subscribe(() => {
-      this.iniciarPagina('');
+      this.iniciarPaginaBairro('');
     })
   }
 
@@ -86,11 +87,27 @@ export class HomeComponent implements OnInit {
     this.markers.push(marker);
   }
 
-  private iniciarPagina(bairro: string) {
+  private iniciarPaginaBairro(bairro: string) {
     this.markers.length = 0;
     this.preencheMarcadorPosicaoAtual()
     this.postagemService.listarTodos(bairro)
       .then((res) => {
+        console.log(res);
+        if (res.dados) {
+          res.dados.forEach((postagem) => {
+            this.novoMarcador(postagem.id, postagem.subcategoria.codigo, postagem.latitude, postagem.longitude);
+          })
+        }
+      });
+  }
+
+  private iniciarPaginaCategoria(categoria: string) {
+    this.markers.length = 0;
+    this.preencheMarcadorPosicaoAtual();
+    console.log(categoria);
+    this.postagemService.listarPorCategoria(categoria)
+      .then((res) => {
+        console.log(res);
         if (res.dados) {
           res.dados.forEach((postagem) => {
             this.novoMarcador(postagem.id, postagem.subcategoria.codigo, postagem.latitude, postagem.longitude);
@@ -111,21 +128,44 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  private preencheComboFiltroCategorias(): void {
+    this.comboCategorias = [];
+    this.postagemService.listarCategorias()
+      .then((res) => {
+        if (res.dados) {
+          res.dados.forEach((x) => {
+            this.comboCategorias.push(x)
+          })
+        }
+      });
+  }
+
 
   public abrirModalFiltro() {
     this.preencheComboFiltroBairros();
+    this.preencheComboFiltroCategorias();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '30vw';
     dialogConfig.hasBackdrop = true;
     dialogConfig.disableClose = true;
 
-    dialogConfig.data = this.comboBairros;
-    const modal = this.matDialog.open(ModalFiltrarPostagemComponent, dialogConfig);
-    modal.afterClosed().subscribe((bairro) => {
-      if(bairro){
-        const res = bairro == 'todos' ? '' : bairro;
-        this.iniciarPagina(res);
+
+    const modal = this.matDialog.open(ModalFiltrarPostagemComponent,{data: 
+      {bairros:this.comboBairros,
+      categorias: this.comboCategorias
+    },});
+    modal.afterClosed().subscribe((result) => {
+      console.log(result);
+      console.log(this.comboBairros);
+      if(this.comboBairros.includes(result)){
+        const res = result == 'todos' ? '' : result;
+        this.iniciarPaginaBairro(res);
+      }
+      else if(this.comboCategorias.includes(result)){
+
+        const res = result == 'todas' ? '' : result;
+        this.iniciarPaginaCategoria(res.nome);
       }
     })
   }
@@ -141,7 +181,7 @@ export class HomeComponent implements OnInit {
       dialogConfig.data = id;
       const modal = this.matDialog.open(ModalVisualizarPostagemComponent, dialogConfig);
       modal.afterClosed().subscribe(() => {
-        this.iniciarPagina('');
+        this.iniciarPaginaBairro('');
       })
     }
   }
