@@ -90,9 +90,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
 public listarComentarios() : void {
   this.comentarioService.ListarTodos(this.data)
     .then((res) => {
-      console.log(res);
       this.comentarios = res.dados;
-      console.log(this.comentarios);
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
@@ -136,7 +134,6 @@ public listarComentarios() : void {
  public comentar(): void {
    this.comentarioModel.descricao = this.form.value["comentario"];
    let today = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    console.log(today);
   this.comentarioModel.dataCadastro = new Date(today);
   this.comentarioModel.usuarioId = this.authService.currentUserValue.id;
   this.comentarioModel.postagemId = this.model.id;  

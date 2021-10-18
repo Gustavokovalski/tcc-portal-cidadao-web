@@ -75,7 +75,6 @@ export class ModalCriarPostagemComponent implements OnInit {
 
     try {
       const res = await this.postagemService.inserir(this.model, this.fileControl.value as File);
-      console.log(res);
       if (res.sucesso) {
         this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
         this.dialog.closeAll();
