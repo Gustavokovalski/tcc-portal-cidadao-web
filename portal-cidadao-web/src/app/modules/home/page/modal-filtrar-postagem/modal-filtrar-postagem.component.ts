@@ -35,10 +35,12 @@ export class ModalFiltrarPostagemComponent implements OnInit {
       this.toastr.warning('Formulário inválido!', 'Atenção');
       return;
     }
-    if(this.form.value.bairro != null)
-    this.dialogRef.close(this.form.value.bairro);
-    if(this.form.value.categoria != null)
-    this.dialogRef.close(this.form.value.categoria);
 
+    this.dialogRef.close(
+      {
+        bairro: this.form.value.bairro, 
+        categoriaId: this.form.value.categoria
+      }
+      );
   }
 }

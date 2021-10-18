@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IBaseModel } from '../models/base.model';
 import { ICategoriaModel } from '../models/categoria.model';
@@ -13,15 +13,16 @@ export class PostagemService extends BaseService {
     constructor(httpClient: HttpClient) {
         super(httpClient);
     }
+    public async listarTodos(bairro = '', categoriaId = 0): Promise<IBaseModel<IPostagemModel[]>> {
+      let params = new HttpParams();
+      if (bairro && bairro != '')
+        params = params.append('bairro', bairro);
 
-    public async listarTodos(bairro: string): Promise<IBaseModel<IPostagemModel[]>> {
+      if (categoriaId && categoriaId > 0)
+        params = params.append('categoriaId', categoriaId);
+
       return this.httpClient
-        .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem?bairro=${bairro}`)
-        .toPromise();
-    }
-    public async listarPorCategoria(categoria: string): Promise<IBaseModel<IPostagemModel[]>> {
-      return this.httpClient
-        .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem/categoria/${categoria}`)
+        .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem`, {params: params})
         .toPromise();
     }
 
