@@ -31,11 +31,16 @@ export class LoginComponent implements OnInit {
       ) { }
 
   ngOnInit() {
+    console.log(this.authService.currentUserValue);
+    if (this.authService.currentUserValue?.id) {
+      console.log('aaa');
+      this.router.navigate(["/home"]);
+    }
+
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-}
+  }
 
   public async login() {
-
     if (this.form.invalid) {
       this.toastr.warning('Formulário inválido!', 'Atenção');
       return;

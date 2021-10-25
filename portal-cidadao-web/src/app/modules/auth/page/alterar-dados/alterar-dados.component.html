@@ -7,8 +7,8 @@
             <div class="user-icon">
               <mat-icon [inline]="true">account_circle</mat-icon>
             </div>
-            <h1 class="text-center">João da Silva</h1>
-            <h6 class="text-center mb-5">Administrador</h6>
+            <h1 class="text-center">{{this.authService.currentUserValue.nome}}</h1>
+            <h6 class="text-center mb-5">{{this.authService.currentUserValue.perfil.nome}}</h6>
           </div>
 
           <form [formGroup]="form" #f="ngForm" (ngSubmit)="onSubmit()">

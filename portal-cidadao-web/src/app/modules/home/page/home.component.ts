@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-postagem.component';
 import { ModalFiltrarPostagemComponent } from './modal-filtrar-postagem/modal-filtrar-postagem.component';
@@ -34,7 +35,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     public matDialog: MatDialog,
-    public postagemService: PostagemService
+    public postagemService: PostagemService,
+    public authService: AuthService
   ) {
 
   }

@@ -38,7 +38,8 @@
                 </div>
 
                 <div class="map-content">
-                    <button (click)="abrirModalCriarPostagem()" mat-raised-button color="primary"
+                    <button [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" 
+                    (click)="abrirModalCriarPostagem()" mat-raised-button color="primary"
                         class="btn-criar-postagem">Criar postagem</button>
                 </div>
             </google-map>
