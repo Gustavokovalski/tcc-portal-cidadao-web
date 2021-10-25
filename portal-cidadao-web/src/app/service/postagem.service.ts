@@ -13,13 +13,16 @@ export class PostagemService extends BaseService {
     constructor(httpClient: HttpClient) {
         super(httpClient);
     }
-    public async listarTodos(bairro = '', categoriaId = 0): Promise<IBaseModel<IPostagemModel[]>> {
+    public async listarTodos(bairro = '', categoriaId = 0, subcategoriaId = 0): Promise<IBaseModel<IPostagemModel[]>> {
       let params = new HttpParams();
       if (bairro && bairro != '')
         params = params.append('bairro', bairro);
 
       if (categoriaId && categoriaId > 0)
         params = params.append('categoriaId', categoriaId);
+
+      if (subcategoriaId && subcategoriaId > 0)
+        params = params.append('subcategoriaId', subcategoriaId);
 
       return this.httpClient
         .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem`, {params: params})

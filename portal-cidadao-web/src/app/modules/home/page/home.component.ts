@@ -30,6 +30,8 @@ export class HomeComponent implements OnInit {
   public markers = [] as any;
   public comboBairros = [] as any;
   public comboCategorias = [] as any;
+  public comboSubcategorias = [] as any;
+
   constructor(
     public matDialog: MatDialog,
     public postagemService: PostagemService
@@ -86,10 +88,10 @@ export class HomeComponent implements OnInit {
     this.markers.push(marker);
   }
 
-  private iniciarPagina(bairro = '', categoriaId = 0) {
+  private iniciarPagina(bairro = '', categoriaId = 0, subcategoriaId = 0) {
     this.markers.length = 0;
     this.preencheMarcadorPosicaoAtual();
-    this.postagemService.listarTodos(bairro, categoriaId)
+    this.postagemService.listarTodos(bairro, categoriaId, subcategoriaId)
       .then((res) => {
         if (res.dados) {
           res.dados.forEach((postagem) => {
@@ -123,10 +125,22 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  private preencheComboFiltroSubcategorias(): void {
+    this.comboSubcategorias = [];
+    this.postagemService.listarSubcategorias()
+      .then((res) => {
+        if (res.dados) {
+          res.dados.forEach((x) => {
+            this.comboSubcategorias.push(x)
+          })
+        }
+      });
+  }
 
   public abrirModalFiltro() {
     this.preencheComboFiltroBairros();
     this.preencheComboFiltroCategorias();
+    this.preencheComboFiltroSubcategorias();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '30vw';
@@ -136,13 +150,15 @@ export class HomeComponent implements OnInit {
 
     const modal = this.matDialog.open(ModalFiltrarPostagemComponent,{data: 
       {bairros:this.comboBairros,
-      categorias: this.comboCategorias
+      categorias: this.comboCategorias,
+      subcategorias: this.comboSubcategorias
     },});
     modal.afterClosed().subscribe((result) => {
       const bairroParam = result.bairro === 'todos' ? '' : result.bairro;
       const categoriaIdParam = result.categoriaId;
+      const subcategoriaIdParam = result.subcategoriaId;
 
-      this.iniciarPagina(bairroParam, categoriaIdParam);
+      this.iniciarPagina(bairroParam, categoriaIdParam, subcategoriaIdParam);
     })
   }
 

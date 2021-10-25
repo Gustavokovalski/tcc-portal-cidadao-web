@@ -10,6 +10,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
       <mat-form-field class="local-form-field" appearance="fill">
         <mat-label>Selecione a categoria</mat-label>
         <mat-select formControlName="categoria" [ngClass]="{ 'is-invalid': f.submitted && form.controls['categoria'].invalid }">
@@ -19,6 +20,17 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-form-field class="local-form-field" appearance="fill">
+        <mat-label>Selecione a subcategoria</mat-label>
+        <mat-select formControlName="subcategoria" [ngClass]="{ 'is-invalid': f.submitted && form.controls['subcategoria'].invalid }">
+          <mat-option value="0">Todas</mat-option>
+          <mat-option *ngFor="let subcategoria of subcategorias" [value]="subcategoria.codigo">
+            {{subcategoria.nome}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <mat-dialog-actions align="end">
         <button type="submit" mat-raised-button mat-dialog-close>Filtrar</button>
         <button mat-button mat-dialog-close>Voltar</button>
