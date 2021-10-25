@@ -10,6 +10,8 @@ import { RedefinirSenhaComponent } from './page/redefinir-senha/redefinir-senha.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxMaskModule } from 'ngx-mask';
+import { AlterarDadosComponent } from './page/alterar-dados/alterar-dados.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -19,13 +21,15 @@ import { NgxMaskModule } from 'ngx-mask';
     ConfirmacaoEmailComponent,
     EsqueciSenhaComponent,
     EnvioEmailRecuperacaoComponent,
-    RedefinirSenhaComponent
+    RedefinirSenhaComponent,
+    AlterarDadosComponent
   ],
   imports: [
     AuthRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
+    MatIconModule,
     NgxMaskModule.forRoot()
   ]
 })

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AlterarDadosComponent } from './page/alterar-dados/alterar-dados.component';
 import { CadastroComponent } from './page/cadastro/cadastro.component';
 import { ConfirmacaoEmailComponent } from './page/confirmacao-email/confirmacao-email.component';
 import { EnvioEmailRecuperacaoComponent } from './page/envio-email-recuperacao/envio-email-recuperacao.component';
@@ -44,6 +45,10 @@ const routes: Routes = [
       {
         path: 'redefinir-senha',
         component: RedefinirSenhaComponent
+      },
+      {
+        path: 'alterar-dados',
+        component: AlterarDadosComponent
       }
     ]
   }

@@ -83,7 +83,6 @@ export class HomeComponent implements OnInit {
       icon: this.definirTipoMarcador(subcategoriaId),
       options: { store_id: id, cursor: 'pointer', animation: google.maps.Animation.DROP },
     };
-    console.log(marker);
     this.markers.push(marker);
   }
 
@@ -92,7 +91,6 @@ export class HomeComponent implements OnInit {
     this.preencheMarcadorPosicaoAtual();
     this.postagemService.listarTodos(bairro, categoriaId)
       .then((res) => {
-        console.log(res);
         if (res.dados) {
           res.dados.forEach((postagem) => {
             this.novoMarcador(postagem.id, postagem.subcategoria.codigo, postagem.latitude, postagem.longitude);
