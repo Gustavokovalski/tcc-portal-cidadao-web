@@ -23,7 +23,7 @@
                         <a href="/" class="nav-link">Login</a>
                     </li> -->
                     <li class="nav-item">
-                        <a [routerLink]="['/dashboard']" class="nav-link">Dashboard</a>
+                        <a [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Cidadao' " [routerLink]="['/dashboard']" class="nav-link">Dashboard</a>
                     </li>
                 </ul>
 
@@ -163,6 +163,11 @@
                         <i class="fas fa-th-large"></i>
                     </a>
                 </li> -->
+                <li class="nav-item">
+                    <a [routerLink]="['/alterar-dados']" class="nav-link" data-widget="control-sidebar" data-slide="true"
+                        role="button">Minha Conta
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a (click)="logout()" class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"
                         role="button">Sair

@@ -1,57 +1,63 @@
-    <form style ="overflow-y: auto !important;" [formGroup]="form" #f="ngForm" (keydown.enter)="$event.preventDefault()">
-
-        <div style="background: white; height: 515px">
-        <h3 class="text-left my-3">{{model.titulo}}</h3>
-
-        <mat-form-field class="local-form-field" appearance="fill">
-            <mat-label>Local</mat-label>
-            <input matInput type="text" [(ngModel)]="enderecoAtual" ngxAutocomPlace formControlName="endereco" readonly
-                (selectedPlace)="onChangeLocalPostagem($event)"
-                [ngClass]="{ 'is-invalid': f.submitted && form.controls['endereco'].invalid }">
-            <div *ngIf="f.submitted && form.controls['endereco'].invalid" class="invalid-feedback">
-                <div *ngIf="form.controls['endereco'].errors?.required">Campo obrigatório</div>
-            </div>
-        </mat-form-field>
-
-        <div
-            [ngClass]="{'text-reclamacao': model?.subcategoria?.codigo === 1, 'text-elogio': model?.subcategoria?.codigo === 2, 'text-sugestao': model?.subcategoria?.codigo === 3}">
-            <h5 class="text-center my-1">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
+<form style="overflow-y: auto !important;" [formGroup]="form" #f="ngForm" (keydown.enter)="$event.preventDefault()">
+    <div style="background: white; height: 515px">
+      <h3 class="text-left my-3">{{model.titulo}}</h3>
+      <mat-form-field class="local-form-field" appearance="fill">
+        <mat-label>Local</mat-label>
+        <input matInput type="text" [(ngModel)]="enderecoAtual" ngxAutocomPlace formControlName="endereco" readonly (selectedPlace)="onChangeLocalPostagem($event)" [ngClass]="{ 'is-invalid': f.submitted && form.controls['endereco'].invalid }">
+        <div *ngIf="f.submitted && form.controls['endereco'].invalid" class="invalid-feedback">
+          <div *ngIf="form.controls['endereco'].errors?.required">Campo obrigatório</div>
         </div>
-
-       <!-- <google-map width="100%" height="15vh" [options]="options">
-            <map-marker [position]="marker.position" [label]="marker.label" [title]="marker.title"
-                [options]="marker.options" [icon]="marker.icon" [clickable]="false">
-            </map-marker>
-        </google-map> -->
-
-        <img *ngIf="midiaPostagem === ''" mat-card-image src="../assets/images/placeholder.png" alt="Postagem sem foto" 
-            style="width: 100%"/>
-
-        <img *ngIf="midiaPostagem !== ''" mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
-
-        <br />
-        <mat-form-field class="form-full-width" appearance="fill">
-            <mat-label>Descrição</mat-label>
-            <textarea matInput formControlName="descricao" [(ngModel)]="model.descricao" readonly
-                [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }"></textarea>
-            <div *ngIf="f.submitted && form.controls['descricao'].invalid" class="invalid-feedback">
-                <div *ngIf="form.controls['descricao'].errors?.required">Campo obrigatório</div>
-            </div>
-        </mat-form-field>
-
-        <div style="float:left;">
-
-        <mat-dialog-actions align="start">
-        <button (click)="clickedLike = !clickedLike"(click) = "like()" [class.like]="clickedLike" mat-button><mat-icon>thumb_up</mat-icon></button>
-        <span class="mr-3">{{model?.curtidas}}</span>
-        </mat-dialog-actions>
+      </mat-form-field>
+      <div [ngClass]="{'text-reclamacao': model?.subcategoria?.codigo === 1, 'text-elogio': model?.subcategoria?.codigo === 2, 'text-sugestao': model?.subcategoria?.codigo === 3}">
+        <h5 class="text-center my-1">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
+      </div>
+      <img *ngIf="midiaPostagem === ''" mat-card-image src="../assets/images/placeholder.png" alt="Postagem sem foto" style="width: 100%" />
+      <img *ngIf="midiaPostagem !== ''" mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
+      <br />
+      <mat-form-field class="form-full-width" appearance="fill">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="descricao" [(ngModel)]="model.descricao" readonly [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }"></textarea>
+        <div *ngIf="f.submitted && form.controls['descricao'].invalid" class="invalid-feedback">
+          <div *ngIf="form.controls['descricao'].errors?.required">Campo obrigatório</div>
         </div>
-
-        <div style="float:left;">
+      </mat-form-field>
+      <div style="float:left;">
         <mat-dialog-actions align="start">
-            <button (click)="clickedDislike = !clickedDislike" (click) = "dislike()" [class.dislike]="clickedDislike"mat-button><mat-icon>thumb_down</mat-icon></button>
-            <span class="mr-3">{{model?.descurtidas}}</span>
+          <button [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" 
+          (click)="setClickedLike()" (click)="like()" [class.like]="clickedLike" mat-button>
+            <mat-icon>thumb_up</mat-icon>
+          </button>
+          <span class="mr-3">{{model?.curtidas}}</span>
         </mat-dialog-actions>
+      </div>
+      <div style="float:left;">
+        <mat-dialog-actions align="start">
+          <button [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" 
+          (click)="setClickedDislike()" (click)="dislike()" [class.dislike]="clickedDislike" mat-button>
+            <mat-icon>thumb_down</mat-icon>
+          </button>
+          <span class="mr-3">{{model?.descurtidas}}</span>
+        </mat-dialog-actions>
+      </div>
+      <div class="container">
+        <hr />
+        <div class="form-group">
+          <br>
+          <h6 class="text-left my-3" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" >Deixe um comentário</h6>
+          <mat-form-field class="local-form-field" appearance="fill" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" >
+            <textarea matInput formControlName="comentario" rows="2" ng-model="cmtName" placeholder="Seu comentário" [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }" maxlength="500"></textarea>
+            <div *ngIf="f.submitted && form.controls['comentario'].invalid" class="invalid-feedback"></div>
+            <br />
+            <button class="btn btn-success btn-md pull-right" (click)="comentar()">
+              <mat-icon>send</mat-icon>
+            </button>
+            <br />
+            <hr />
+          </mat-form-field>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let c of comentarios"><strong>{{c.nomeUsuario}}</strong> - {{c.descricao}}
+            </li>
+          </ul>
         </div>
 
         <div style="float:left;">
@@ -89,5 +95,10 @@
             <!-- <button type="submit" mat-raised-button>Salvar</button> -->
             <button mat-button mat-dialog-close>Voltar</button>
         </mat-dialog-actions>
+      </div>
+      <mat-dialog-actions align="end">
+        <!-- <button type="submit" mat-raised-button>Salvar</button> -->
+        <button mat-button mat-dialog-close>Voltar</button>
+      </mat-dialog-actions>
     </div>
-</form>
+  </form>

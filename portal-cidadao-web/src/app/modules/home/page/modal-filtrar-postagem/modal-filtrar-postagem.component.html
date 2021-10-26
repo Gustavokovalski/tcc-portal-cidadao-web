@@ -1,32 +1,39 @@
 <form [formGroup]="form" #f="ngForm" (ngSubmit)="filtrar()" (keydown.enter)="$event.preventDefault()">
     <div style="background: white;">
-        <h3 class="text-center my-3">Filtro</h3>
+      <h3 class="text-center my-3">Filtro</h3>
+      <mat-form-field class="local-form-field" appearance="fill">
+        <mat-label>Selecione o bairro</mat-label>
+        <mat-select formControlName="bairro" [ngClass]="{ 'is-invalid': f.submitted && form.controls['bairro'].invalid }">
+          <mat-option value="todos">Todos</mat-option>
+          <mat-option *ngFor="let bairro of bairros" [value]="bairro">
+            {{bairro}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-        <mat-form-field class="local-form-field" appearance="fill">
-            <mat-label>Selecione o bairro</mat-label>
-            <mat-select formControlName="bairro"
-                [ngClass]="{ 'is-invalid': f.submitted && form.controls['bairro'].invalid }">
-                <mat-option value="todos">Todos</mat-option>
-                <mat-option *ngFor="let bairro of bairros" [value]="bairro">
-                    {{bairro}}
-                </mat-option>
-            
-            </mat-select>
-
-        </mat-form-field>
-        <mat-form-field class="local-form-field" appearance="fill">
-    <mat-label>Selecione a categoria</mat-label>
-    <mat-select formControlName="categoria"
-        [ngClass]="{ 'is-invalid': f.submitted && form.controls['categoria'].invalid }">
-        <mat-option value="todas">Todas</mat-option>
-        <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+      <mat-form-field class="local-form-field" appearance="fill">
+        <mat-label>Selecione a categoria</mat-label>
+        <mat-select formControlName="categoria" [ngClass]="{ 'is-invalid': f.submitted && form.controls['categoria'].invalid }">
+          <mat-option value="0">Todas</mat-option>
+          <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
             {{categoria.nome}}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
-        <mat-dialog-actions align="end">
-            <button type="submit" mat-raised-button mat-dialog-close>Filtrar</button>
-            <button mat-button mat-dialog-close>Voltar</button>
-        </mat-dialog-actions>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="local-form-field" appearance="fill">
+        <mat-label>Selecione a subcategoria</mat-label>
+        <mat-select formControlName="subcategoria" [ngClass]="{ 'is-invalid': f.submitted && form.controls['subcategoria'].invalid }">
+          <mat-option value="0">Todas</mat-option>
+          <mat-option *ngFor="let subcategoria of subcategorias" [value]="subcategoria.codigo">
+            {{subcategoria.nome}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-dialog-actions align="end">
+        <button type="submit" mat-raised-button mat-dialog-close>Filtrar</button>
+        <button mat-button mat-dialog-close>Voltar</button>
+      </mat-dialog-actions>
     </div>
-</form>
+  </form>

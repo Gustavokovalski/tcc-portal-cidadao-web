@@ -59,7 +59,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     private comentarioService: ComentarioService,
     private toastr: ToastrService,
     public dialog: MatDialog,
-    private authService: AuthService
+    public authService: AuthService
   ) 
   {
     this.buscarPostagem();
@@ -95,9 +95,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
 public listarComentarios() : void {
   this.comentarioService.ListarTodos(this.data)
     .then((res) => {
-      console.log(res);
       this.comentarios = res.dados;
-      console.log(this.comentarios);
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
@@ -106,6 +104,9 @@ public listarComentarios() : void {
   }
 
  public like(): void {
+  if (this.authService.currentUserValue?.perfil?.nome === 'Especial')
+    return;
+
   this.curtidaModel.postagemId = this.model.id;
   this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
   this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)
@@ -162,10 +163,24 @@ public resolver(): void {
     this.postagemService.resolverPostagem(this.model.id, true);     
   }
 }
+ public setClickedLike() {
+   console.log(this.authService.currentUserValue?.perfil?.nome);
+  if (this.authService.currentUserValue?.perfil?.nome === 'Especial')
+    return;
+
+  this.clickedLike = !this.clickedLike
+ }
+
+ public setClickedDislike() {
+  if (this.authService.currentUserValue?.perfil?.nome === 'Especial')
+    return;
+
+   this.clickedDislike = !this.clickedDislike;
+ }
+
  public comentar(): void {
    this.comentarioModel.descricao = this.form.value["comentario"];
    let today = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    console.log(today);
   this.comentarioModel.dataCadastro = new Date(today);
   this.comentarioModel.usuarioId = this.authService.currentUserValue.id;
   this.comentarioModel.postagemId = this.model.id;  
@@ -173,6 +188,9 @@ public resolver(): void {
  }
 
 public dislike(): void {
+  if (this.authService.currentUserValue?.perfil?.nome === 'Especial')
+    return;
+
   this.curtidaModel.postagemId = this.model.id;
   this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
   this.curtidaService.obterLike(this.authService.currentUserValue.id, this.data)

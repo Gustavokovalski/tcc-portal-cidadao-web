@@ -24,6 +24,9 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+        data: {
+          perfis: ['Administrador', 'Especial']
+        },
         loadChildren: () =>
           import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
       }

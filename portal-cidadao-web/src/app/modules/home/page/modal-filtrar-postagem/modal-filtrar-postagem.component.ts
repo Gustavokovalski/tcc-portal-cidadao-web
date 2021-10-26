@@ -12,10 +12,12 @@ import { ToastrService } from 'ngx-toastr';
 export class ModalFiltrarPostagemComponent implements OnInit {
   public bairros!: any[];
   public categorias!: any[];
+  public subcategorias!: any[];
 
   public form = new FormGroup({
     bairro: new FormControl(''),
-    categoria: new FormControl('')
+    categoria: new FormControl(''),
+    subcategoria: new FormControl('')
   });
 
   constructor(
@@ -26,19 +28,24 @@ export class ModalFiltrarPostagemComponent implements OnInit {
   {
     this.bairros = this.data.bairros;
     this.categorias = this.data.categorias;
+    this.subcategorias = this.data.subcategorias;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+  }
 
   public async filtrar() {
     if (this.form.invalid) {
       this.toastr.warning('Formulário inválido!', 'Atenção');
       return;
     }
-    if(this.form.value.bairro != null)
-    this.dialogRef.close(this.form.value.bairro);
-    if(this.form.value.categoria != null)
-    this.dialogRef.close(this.form.value.categoria);
 
+    this.dialogRef.close(
+      {
+        bairro: this.form.value.bairro, 
+        categoriaId: this.form.value.categoria,
+        subcategoriaId: this.form.value.subcategoria
+      }
+      );
   }
 }

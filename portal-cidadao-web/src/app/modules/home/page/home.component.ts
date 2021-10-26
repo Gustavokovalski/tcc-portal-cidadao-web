@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-postagem.component';
 import { ModalFiltrarPostagemComponent } from './modal-filtrar-postagem/modal-filtrar-postagem.component';
@@ -30,16 +31,19 @@ export class HomeComponent implements OnInit {
   public markers = [] as any;
   public comboBairros = [] as any;
   public comboCategorias = [] as any;
+  public comboSubcategorias = [] as any;
+
   constructor(
     public matDialog: MatDialog,
-    public postagemService: PostagemService
+    public postagemService: PostagemService,
+    public authService: AuthService
   ) {
 
   }
 
   ngOnInit(): void {
     this.preencheMarcadorPosicaoAtual();
-    this.iniciarPaginaBairro('');
+    this.iniciarPagina('');
   }
 
   preencheMarcadorPosicaoAtual(): void {
@@ -68,7 +72,7 @@ export class HomeComponent implements OnInit {
     dialogConfig.data = this.position;
     const modal = this.matDialog.open(ModalCriarPostagemComponent, dialogConfig);
     modal.afterClosed().subscribe(() => {
-      this.iniciarPaginaBairro('');
+      this.iniciarPagina('');
     })
   }
 
@@ -83,31 +87,14 @@ export class HomeComponent implements OnInit {
       icon: this.definirTipoMarcador(subcategoriaId),
       options: { store_id: id, cursor: 'pointer', animation: google.maps.Animation.DROP },
     };
-    console.log(marker);
     this.markers.push(marker);
   }
 
-  private iniciarPaginaBairro(bairro: string) {
-    this.markers.length = 0;
-    this.preencheMarcadorPosicaoAtual()
-    this.postagemService.listarTodos(bairro)
-      .then((res) => {
-        console.log(res);
-        if (res.dados) {
-          res.dados.forEach((postagem) => {
-            this.novoMarcador(postagem.id, postagem.subcategoria.codigo, postagem.latitude, postagem.longitude);
-          })
-        }
-      });
-  }
-
-  private iniciarPaginaCategoria(categoria: string) {
+  private iniciarPagina(bairro = '', categoriaId = 0, subcategoriaId = 0) {
     this.markers.length = 0;
     this.preencheMarcadorPosicaoAtual();
-    console.log(categoria);
-    this.postagemService.listarPorCategoria(categoria)
+    this.postagemService.listarTodos(bairro, categoriaId, subcategoriaId)
       .then((res) => {
-        console.log(res);
         if (res.dados) {
           res.dados.forEach((postagem) => {
             this.novoMarcador(postagem.id, postagem.subcategoria.codigo, postagem.latitude, postagem.longitude);
@@ -140,10 +127,22 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  private preencheComboFiltroSubcategorias(): void {
+    this.comboSubcategorias = [];
+    this.postagemService.listarSubcategorias()
+      .then((res) => {
+        if (res.dados) {
+          res.dados.forEach((x) => {
+            this.comboSubcategorias.push(x)
+          })
+        }
+      });
+  }
 
   public abrirModalFiltro() {
     this.preencheComboFiltroBairros();
     this.preencheComboFiltroCategorias();
+    this.preencheComboFiltroSubcategorias();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '30vw';
@@ -153,20 +152,15 @@ export class HomeComponent implements OnInit {
 
     const modal = this.matDialog.open(ModalFiltrarPostagemComponent,{data: 
       {bairros:this.comboBairros,
-      categorias: this.comboCategorias
+      categorias: this.comboCategorias,
+      subcategorias: this.comboSubcategorias
     },});
     modal.afterClosed().subscribe((result) => {
-      console.log(result);
-      console.log(this.comboBairros);
-      if(this.comboBairros.includes(result)){
-        const res = result == 'todos' ? '' : result;
-        this.iniciarPaginaBairro(res);
-      }
-      else if(this.comboCategorias.includes(result)){
+      const bairroParam = result.bairro === 'todos' ? '' : result.bairro;
+      const categoriaIdParam = result.categoriaId;
+      const subcategoriaIdParam = result.subcategoriaId;
 
-        const res = result == 'todas' ? '' : result;
-        this.iniciarPaginaCategoria(res.nome);
-      }
+      this.iniciarPagina(bairroParam, categoriaIdParam, subcategoriaIdParam);
     })
   }
 
@@ -181,7 +175,7 @@ export class HomeComponent implements OnInit {
       dialogConfig.data = id;
       const modal = this.matDialog.open(ModalVisualizarPostagemComponent, dialogConfig);
       modal.afterClosed().subscribe(() => {
-        this.iniciarPaginaBairro('');
+        this.iniciarPagina();
       })
     }
   }

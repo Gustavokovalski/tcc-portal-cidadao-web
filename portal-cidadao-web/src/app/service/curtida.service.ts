@@ -21,7 +21,6 @@ import { ICurtidaModel } from '../models/curtida.model';
     }
 
     public async inserir(curtidaModel: ICurtidaModel): Promise<IBaseModel<ICurtidaModel>> {
-      console.log(curtidaModel)
       return this.httpClient
         .post<IBaseModel<ICurtidaModel>>(`${this.apiBaseUrl}/curtida`, curtidaModel)
         .toPromise();    
