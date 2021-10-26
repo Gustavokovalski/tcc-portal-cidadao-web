@@ -53,6 +53,12 @@
             <span class="mr-3">{{model?.descurtidas}}</span>
         </mat-dialog-actions>
         </div>
+
+        <div style="float:left;">
+            <mat-dialog-actions align="start">
+                <button (click)= "clickedResolver = !clickedResolver" (click) = "resolver()" [class.resolvido]="clickedResolver" *ngIf="this.visible" mat-button><mat-icon>check</mat-icon></button>
+            </mat-dialog-actions>
+        </div>
     
 
     <div class="container">

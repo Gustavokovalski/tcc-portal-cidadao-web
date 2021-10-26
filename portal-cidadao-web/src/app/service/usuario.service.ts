@@ -18,4 +18,10 @@ export class UsuarioService extends BaseService {
         .post<IBaseModel<IUsuarioModel>>(`${this.apiBaseUrl}/usuario`, data)
         .toPromise();
     }
+
+    public async obter(id: number): Promise<IBaseModel<IUsuarioModel>> {
+      return this.httpClient
+        .get<IBaseModel<IUsuarioModel>>(`${this.apiBaseUrl}/usuario/${id}`)
+        .toPromise();
+    }
 }

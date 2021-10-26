@@ -11,6 +11,7 @@ import { CurtidaService } from 'src/app/service/curtida.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ComentarioService } from 'src/app/service/comentario.service';
+import { UsuarioService } from 'src/app/service/usuario.service';
 
 @Component({
   selector: 'app-modal-visualizar-postagem',
@@ -33,9 +34,11 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   public midiaPostagem = '';
   public clickedDislike = false;
   public clickedLike = false;
+  public clickedResolver = false;
   public curtida!: ICurtidaModel[];
   public fileControl = new FormControl(null);
   public comentarios:  any = [];
+  public visible = false;
 
 
 
@@ -52,6 +55,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
     private curtidaService: CurtidaService,
+    private usuarioService: UsuarioService,
     private comentarioService: ComentarioService,
     private toastr: ToastrService,
     public dialog: MatDialog,
@@ -66,6 +70,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     this.listarSubcategorias();
     this.buscarLike();   
     this.listarComentarios();
+    this.botaoResolver();
 
   }
 
@@ -132,7 +137,31 @@ public listarComentarios() : void {
   }) 
  
  }
+public botaoResolver(): void {
+  this.usuarioService.obter(this.authService.currentUserValue.id)
+  .then((res) => {
+    if (res.dados) {
+      const user = res.dados;
+      if(user != null && user.perfil.nome === 'Especial'){        
+        this.visible = true;
+      }
+      
+    }
+})
+.catch((err) => {
+  this.toastr.error(err.mensagem.descricao, 'Atenção');
+}) 
+}
 
+public resolver(): void {
+  if(this.model.resolvido == true){        
+    this.postagemService.resolverPostagem(this.model.id, false);     
+  }
+  else
+  if(this.model.resolvido == false){
+    this.postagemService.resolverPostagem(this.model.id, true);     
+  }
+}
  public comentar(): void {
    this.comentarioModel.descricao = this.form.value["comentario"];
    let today = new Date().toISOString().slice(0, 19).replace('T', ' ');
