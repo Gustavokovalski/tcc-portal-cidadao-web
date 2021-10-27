@@ -39,6 +39,12 @@
           <span class="mr-3">{{model?.descurtidas}}</span>
         </mat-dialog-actions>
       </div>
+
+      <div style="float:left;">
+        <mat-dialog-actions align="start">
+            <button *ngIf="visible" (click)= "clickedResolver = !clickedResolver" (click) = "resolver()" [class.resolvido]="clickedResolver"  mat-button><mat-icon>check</mat-icon></button>
+        </mat-dialog-actions>
+    </div>
       <div class="container">
         <hr />
         <div class="form-group">
@@ -60,11 +66,7 @@
           </ul>
         </div>
 
-        <div style="float:left;">
-            <mat-dialog-actions align="start">
-                <button (click)= "clickedResolver = !clickedResolver" (click) = "resolver()" [class.resolvido]="clickedResolver" *ngIf="this.visible" mat-button><mat-icon>check</mat-icon></button>
-            </mat-dialog-actions>
-        </div>
+        
     
 
     <div class="container">
@@ -96,9 +98,6 @@
             <button mat-button mat-dialog-close>Voltar</button>
         </mat-dialog-actions>
       </div>
-      <mat-dialog-actions align="end">
-        <!-- <button type="submit" mat-raised-button>Salvar</button> -->
-        <button mat-button mat-dialog-close>Voltar</button>
-      </mat-dialog-actions>
+      
     </div>
   </form>
