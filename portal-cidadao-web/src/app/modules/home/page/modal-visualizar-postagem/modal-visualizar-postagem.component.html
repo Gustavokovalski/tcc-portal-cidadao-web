@@ -39,6 +39,12 @@
           <span class="mr-3">{{model?.descurtidas}}</span>
         </mat-dialog-actions>
       </div>
+
+      <div style="float:left;">
+        <mat-dialog-actions align="start">
+            <button *ngIf="visible" (click)= "clickedResolver = !clickedResolver" (click) = "resolver()" [class.resolvido]="clickedResolver"  mat-button><mat-icon>check</mat-icon></button>
+        </mat-dialog-actions>
+    </div>
       <div class="container">
         <hr />
         <div class="form-group">
@@ -59,10 +65,39 @@
             </li>
           </ul>
         </div>
+
+        
+    
+
+    <div class="container">
+    <hr/>
+    <div class="form-group" >
+        <br>
+        <h6 class="text-left my-3">Deixe um comentário</h6>
+        <mat-form-field class="local-form-field" appearance="fill">
+            <textarea matInput formControlName="comentario" rows="2" ng-model="cmtName" placeholder="Seu comentário"
+            [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }"
+            maxlength="500"></textarea>
+        <div *ngIf="f.submitted && form.controls['comentario'].invalid" class="invalid-feedback"></div>
+            <br/>
+            <button class="btn btn-success btn-md pull-right" (click)="comentar()"><mat-icon>send</mat-icon></button>
+            <br/>
+            <hr/>
+            <ul class="list-group"  >  
+                <li class="list-group-item" *ngFor="let c of comentarios" >{{c.descricao}}  
+                </li>  
+            </ul> 
+            </mat-form-field>
+    </div>
+    </div>
+
+    
+
+        <mat-dialog-actions align="end">
+            <!-- <button type="submit" mat-raised-button>Salvar</button> -->
+            <button mat-button mat-dialog-close>Voltar</button>
+        </mat-dialog-actions>
       </div>
-      <mat-dialog-actions align="end">
-        <!-- <button type="submit" mat-raised-button>Salvar</button> -->
-        <button mat-button mat-dialog-close>Voltar</button>
-      </mat-dialog-actions>
+      
     </div>
   </form>

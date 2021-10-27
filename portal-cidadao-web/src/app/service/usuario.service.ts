@@ -20,9 +20,12 @@ export class UsuarioService extends BaseService {
         .toPromise();
     }
 
+    public async obter(id: number): Promise<IBaseModel<IUsuarioModel>> {
+      return this.httpClient
+        .get<IBaseModel<IUsuarioModel>>(`${this.apiBaseUrl}/usuario/${id}`).toPromise();
+    }
     public async alterarDados(id: number, data: IUsuarioAlteracaoModel): Promise<IBaseModel<IUsuarioAlteracaoModel>> {
       return this.httpClient
-        .patch<IBaseModel<IUsuarioAlteracaoModel>>(`${this.apiBaseUrl}/usuario/${id}`, data)
-        .toPromise();
+        .patch<IBaseModel<IUsuarioAlteracaoModel>>(`${this.apiBaseUrl}/usuario/${id}`, data).toPromise();
     }
 }

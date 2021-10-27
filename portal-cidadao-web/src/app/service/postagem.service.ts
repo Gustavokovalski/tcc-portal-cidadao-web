@@ -34,6 +34,11 @@ export class PostagemService extends BaseService {
         .get<IBaseModel<IPostagemModel>>(`${this.apiBaseUrl}/postagem/${id}`)
         .toPromise();
     }
+    public async resolverPostagem(id: number, resolvido: boolean): Promise<IBaseModel<IPostagemModel>> {
+      return this.httpClient
+        .put<IBaseModel<IPostagemModel>>(`${this.apiBaseUrl}/postagem/${id}/${resolvido}`, id)
+        .toPromise();    
+    }
 
     public async buscarMidiaPostagem(nomeArquivo: string): Promise<any> {
       return this.httpClient

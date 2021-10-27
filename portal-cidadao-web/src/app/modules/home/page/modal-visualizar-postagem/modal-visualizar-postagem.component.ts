@@ -11,6 +11,8 @@ import { CurtidaService } from 'src/app/service/curtida.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ComentarioService } from 'src/app/service/comentario.service';
+import { UsuarioService } from 'src/app/service/usuario.service';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-modal-visualizar-postagem',
@@ -33,9 +35,11 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   public midiaPostagem = '';
   public clickedDislike = false;
   public clickedLike = false;
+  public clickedResolver = false;
   public curtida!: ICurtidaModel[];
   public fileControl = new FormControl(null);
   public comentarios:  any = [];
+  public visible = false;
 
 
 
@@ -52,6 +56,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
     private curtidaService: CurtidaService,
+    private usuarioService: UsuarioService,
     private comentarioService: ComentarioService,
     private toastr: ToastrService,
     public dialog: MatDialog,
@@ -66,7 +71,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     this.listarSubcategorias();
     this.buscarLike();   
     this.listarComentarios();
-
+    this.mostrarBotaoResolver();
   }
 
    public onChangeLocalPostagem(event: any): void {
@@ -80,7 +85,15 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     .then((res) => {
       this.model = res.dados;
       this.setarEnderecoAtual(this.model.latitude, this.model.longitude);
-
+      console.log(this.model);
+      if (this.model.resolvido == true){        
+        this.clickedResolver = true;
+        console.log(this.clickedResolver);
+      }
+      else if (this.model.resolvido == false){
+        this.clickedResolver = false;
+        console.log(this.clickedResolver);
+      }      
       this.buscarMidiaPostagem(res.dados.imagemUrl);
     })
     .catch((err) => {
@@ -133,7 +146,26 @@ public listarComentarios() : void {
   }) 
  
  }
+ public mostrarBotaoResolver(): void {
+  if (this.authService.currentUserValue?.perfil?.nome === 'Especial'){
+    this.visible = true;
+  }
+ }
 
+    
+      
+
+public resolver(): void {
+  if(this.model.resolvido == true){        
+    this.postagemService.resolverPostagem(this.model.id, false);     
+    this.clickedResolver = false;
+  }
+  else
+  if(this.model.resolvido == false){
+    this.postagemService.resolverPostagem(this.model.id, true);  
+    this.clickedResolver = true;
+  }
+}
  public setClickedLike() {
    console.log(this.authService.currentUserValue?.perfil?.nome);
   if (this.authService.currentUserValue?.perfil?.nome === 'Especial')
