@@ -9,21 +9,23 @@
         <div class="card-body">
           <p class="login-box-msg">Digite a nova senha desejada.</p>
     
-          <form action="home" method="get">
+          <form [formGroup]="form" #f="ngForm" (ngSubmit)="redefinirSenha()">
             <div class="input-group mb-3">
-                <input type="password" class="form-control" placeholder="Nova Senha">
+                <input type="password" class="form-control" placeholder="Nova Senha" formControlName="senha"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['senha'].invalid }">
                 <div class="input-group-append">
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input type="password" class="form-control" placeholder="Confirmar Senha">
+                <input type="password" class="form-control" placeholder="Confirmar Senha" formControlName="confirmarSenha"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['confirmarSenha'].invalid }">
                 <div class="input-group-append">
                 </div>
             </div>  
             <div class="row">
               <!-- /.col -->
               <div class="col-12">
-                <button routerLink="/login" type="button" class="btn btn-primary btn-block">Salvar</button>
+                <button (click)="redefinirSenha()" type="button" class="btn btn-primary btn-block">Salvar</button>
               </div>
               <!-- /.col -->
             </div>
