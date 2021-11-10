@@ -62,6 +62,10 @@
           </mat-form-field>
           <ul class="list-group">
             <li class="list-group-item" *ngFor="let c of comentarios"><strong>{{c.nomeUsuario}}</strong> - {{c.descricao}}
+              <mat-dialog-actions align="end">
+
+              <button *ngIf="admin" class="btnbtn-md pull-right" (click)="excluirComentario(c)"><mat-icon>delete_sweep</mat-icon></button>
+              </mat-dialog-actions>
             </li>
           </ul>
         </div>
@@ -69,29 +73,12 @@
         
     
 
-    <div class="container">
-    <hr/>
-    <div class="form-group" >
-        <br>
-        <h6 class="text-left my-3">Deixe um comentário</h6>
-        <mat-form-field class="local-form-field" appearance="fill">
-            <textarea matInput formControlName="comentario" rows="2" ng-model="cmtName" placeholder="Seu comentário"
-            [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }"
-            maxlength="500"></textarea>
-        <div *ngIf="f.submitted && form.controls['comentario'].invalid" class="invalid-feedback"></div>
-            <br/>
-            <button class="btn btn-success btn-md pull-right" (click)="comentar()"><mat-icon>send</mat-icon></button>
-            <br/>
-            <hr/>
-            <ul class="list-group"  >  
-                <li class="list-group-item" *ngFor="let c of comentarios" >{{c.descricao}}  
-                </li>  
-            </ul> 
-            </mat-form-field>
-    </div>
-    </div>
-
     
+    
+    <mat-dialog-actions align="end">
+      <!-- <button type="submit" mat-raised-button>Salvar</button> -->
+      <button *ngIf="admin" (click)="excluirPostagem()" mat-button mat-dialog-close>Excluir Postagem</button>
+  </mat-dialog-actions>
 
         <mat-dialog-actions align="end">
             <!-- <button type="submit" mat-raised-button>Salvar</button> -->

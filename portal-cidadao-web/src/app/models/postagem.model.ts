@@ -19,4 +19,5 @@ export interface IPostagemModel {
     curtidas: number;
     descurtidas: number;
     comentarios: IComentarioModel[];
+    excluida: boolean;
 }

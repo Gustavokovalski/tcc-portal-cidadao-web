@@ -10,9 +10,11 @@ import { IComentarioModel } from 'src/app/models/comentario.model';
 import { CurtidaService } from 'src/app/service/curtida.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ComentarioService } from 'src/app/service/comentario.service';
 import { UsuarioService } from 'src/app/service/usuario.service';
 import { ThisReceiver } from '@angular/compiler';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal-visualizar-postagem',
@@ -40,6 +42,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   public fileControl = new FormControl(null);
   public comentarios:  any = [];
   public visible = false;
+  public admin= false;
 
 
 
@@ -55,8 +58,10 @@ export class ModalVisualizarPostagemComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postagemService: PostagemService,
+    private router: Router,
     private curtidaService: CurtidaService,
     private usuarioService: UsuarioService,
+    public matDialog: MatDialog,
     private comentarioService: ComentarioService,
     private toastr: ToastrService,
     public dialog: MatDialog,
@@ -72,6 +77,7 @@ export class ModalVisualizarPostagemComponent implements OnInit {
     this.buscarLike();   
     this.listarComentarios();
     this.mostrarBotaoResolver();
+    this.mostrarBotaoExcluirComentario();
   }
 
    public onChangeLocalPostagem(event: any): void {
@@ -152,6 +158,13 @@ public listarComentarios() : void {
   }
  }
 
+  public mostrarBotaoExcluirComentario(): void {
+  if (this.authService.currentUserValue?.perfil?.nome === 'Administrador'){
+    console.log('Administrador');
+    this.admin = true;
+  }
+ }
+
     
       
 
@@ -188,7 +201,11 @@ public resolver(): void {
   this.comentarioModel.usuarioId = this.authService.currentUserValue.id;
   this.comentarioModel.postagemId = this.model.id;  
   this.comentarioService.inserir(this.comentarioModel);
+  this.buscarPostagem();
  }
+ 
+
+
 
 public dislike(): void {
   if (this.authService.currentUserValue?.perfil?.nome === 'Especial')
@@ -259,7 +276,15 @@ public buscarLike() : void{
       this.toastr.error(err.mensagem.descricao, 'Atenção');
     })
   }
-
+public excluirPostagem(): void {
+console.log(this.model.id);
+this.postagemService.excluirPostagem(this.model.id, true);
+this.router.navigate(["/home"]);
+}
+public excluirComentario(c): void {
+this.comentarioService.excluirComentario(c.id);
+this.data
+}
   public listarSubcategorias(): void {
     this.postagemService.listarSubcategorias()
     .then((res) => {
