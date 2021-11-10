@@ -73,6 +73,23 @@ export class AlterarDadosComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+  
+  redefinirSenha() {
+    if (this.form.invalid) {
+      this.toastr.warning('Formulário inválido!', 'Atenção');
+      return;
+    }
+
+    // fazer logica aqui de enviar email de recuperação
+    this.usuarioService.esqueciSenha(this.form.value.email)
+    .then(() => {
+      this.router.navigate(['/email-enviado-recuperacao']);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    
+  }
 
   private atualizarModel(values: any) {
     Object.assign(this.model, values);

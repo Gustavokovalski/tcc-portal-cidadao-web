@@ -25,6 +25,9 @@ import { JwtInterceptor } from './core/http/jwt.interceptor';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldControl } from '@angular/material/form-field';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+// Import library module
+import { NgxSpinnerModule } from "ngx-spinner";
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -59,13 +62,15 @@ const maskConfig: Partial<IConfig> = {
       preventDuplicates: true,
       enableHtml: true
     }),
-    NgxMaskModule.forRoot(maskConfig)
+    NgxMaskModule.forRoot(maskConfig),
+    NgxSpinnerModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-envio-email-recuperacao',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EnvioEmailRecuperacaoComponent implements OnInit {
   constructor(
-
+    private location: Location
   ) {
 
   }
@@ -16,6 +17,10 @@ export class EnvioEmailRecuperacaoComponent implements OnInit {
 
   login() {
 
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 

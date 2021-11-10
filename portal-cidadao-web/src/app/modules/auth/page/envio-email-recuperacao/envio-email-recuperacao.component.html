@@ -1,6 +1,5 @@
 <div class="login-page" data-new-gr-c-s-check-loaded="14.988.0" data-gr-ext-installed="" style="min-height: 466px;">
     <div class="login-box">
-      <!-- /.login-logo -->
       <div class="card card-outline card-primary">
         <div class="card-header text-center">
             <img src="../../../../../assets/images/logo.png">
@@ -8,7 +7,7 @@
         </div>
         <div class="card-body">
           <p class="login-box-msg"><strong>
-              Se o cadastro existir, um link de recuperação de senha será enviado para sua conta de e-mail.</strong></p>
+              Um link de recuperação de senha será enviado para sua conta de e-mail.</strong></p>
           <p class="login-box-msg">Por favor clique no link para iniciar o processo de redefinição de senha.</p>
     
           <!--<div class="social-auth-links text-center mt-2 mb-3">
@@ -17,13 +16,14 @@
             </a>
           </div> -->
           <!-- /.social-auth-links -->
-    
+          <div class="row">
+            <div class="col-12 my-1">
+              <button (click)="goBack()" type="button" class="btn btn-secondary btn-block">Voltar</button>
+            </div>
+          </div>
         </div>
-        <!-- /.card-body -->
       </div>
-      <!-- /.card -->
     </div>
-    <!-- /.login-box -->
     
     
 </div>

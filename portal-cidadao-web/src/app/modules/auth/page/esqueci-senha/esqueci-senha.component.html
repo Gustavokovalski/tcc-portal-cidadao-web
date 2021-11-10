@@ -1,4 +1,8 @@
+<ngx-spinner bdColor = "rgba(238,238,238,0.8)" size = "default" color = "#ffffff" type = "line-scale" [fullScreen] = "false">
+  <p style="color: white" > Carregando... </p>
+</ngx-spinner>
 <div class="login-page" data-new-gr-c-s-check-loaded="14.988.0" data-gr-ext-installed="" style="min-height: 466px;">
+  
     <div class="login-box">
       <!-- /.login-logo -->
       <div class="card card-outline card-primary">
@@ -9,11 +13,15 @@
         <div class="card-body">
           <p class="login-box-msg">Digite o e-mail cadastrado para enviar o link de recuperação.</p>
     
-          <form action="home" method="get">
+          <form [formGroup]="form" #f="ngForm" (ngSubmit)="enviarEmailRecuperacao()">
             <div class="input-group mb-3">
-                <input type="email" class="form-control" placeholder="Email">
+                <input type="email" class="form-control" placeholder="Email" formControlName="email"
+                [ngClass]="{ 'is-invalid': f.submitted && form.controls['email'].invalid }">
                 <div class="input-group-append">
                 </div>
+            </div>
+            <div *ngIf="f.submitted && form.controls['email'].invalid" class="invalid-feedback">
+              <div *ngIf="form.controls['email'].errors?.required">Campo obrigatório</div>
             </div>
             <div class="row">
               <!-- /.col -->
