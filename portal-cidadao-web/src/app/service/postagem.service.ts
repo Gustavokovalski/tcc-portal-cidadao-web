@@ -61,7 +61,12 @@ export class PostagemService extends BaseService {
         .get<IBaseModel<ICategoriaModel[]>>(`${this.apiBaseUrl}/postagem/categorias`)
         .toPromise();
     }
-
+    
+    public async excluirPostagem(id: number, excluir: boolean): Promise<IBaseModel<IPostagemModel>> {
+      return this.httpClient
+        .put<IBaseModel<IPostagemModel>>(`${this.apiBaseUrl}/postagem/${id}/${excluir}`, id)
+        .toPromise();    
+    }
     public async listarSubcategorias(): Promise<IBaseModel<IEnumModel[]>> {
       return this.httpClient
         .get<IBaseModel<IEnumModel[]>>(`${this.apiBaseUrl}/postagem/subcategorias`)

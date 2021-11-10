@@ -61,7 +61,7 @@ export class AlterarDadosComponent implements OnInit {
 
       if (res.sucesso) {
         this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
-        this.router.navigate(['/alterar-dados']);
+        this.router.navigate(['/login']);
       } else {
         this.toastr.warning(res.mensagem.descricao, 'Atenção');
       }

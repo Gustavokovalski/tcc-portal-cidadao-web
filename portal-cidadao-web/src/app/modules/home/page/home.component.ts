@@ -97,6 +97,7 @@ export class HomeComponent implements OnInit {
     this.postagemService.listarTodos(bairro, categoriaId, subcategoriaId)
       .then((res) => {
         if (res.dados) {
+          console.log(res.dados);
           res.dados.forEach((postagem) => {
             this.novoMarcador(postagem.id, postagem.subcategoria.codigo, postagem.latitude, postagem.longitude);
           })

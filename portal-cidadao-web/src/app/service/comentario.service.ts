@@ -24,4 +24,10 @@ import { IComentarioModel } from '../models/comentario.model';
         .get<IBaseModel<IComentarioModel[]>>(`${this.apiBaseUrl}/comentario/${postagemId}/`)
         .toPromise();
     }
+
+    public async excluirComentario(comentarioId:number): Promise<IBaseModel<IComentarioModel>> {
+      return this.httpClient
+        .delete<IBaseModel<IComentarioModel>>(`${this.apiBaseUrl}/comentario/${comentarioId}`)
+        .toPromise();    
+    }
   }
