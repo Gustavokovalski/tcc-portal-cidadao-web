@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { UsuarioService } from 'src/app/service/usuario.service';
 
@@ -18,8 +17,7 @@ export class EsqueciSenhaComponent implements OnInit {
   constructor(
     private router: Router,
     private usuarioService: UsuarioService,
-    private toastr: ToastrService,
-    private spinner: NgxSpinnerService
+    private toastr: ToastrService
   ) {
 
   }
@@ -32,7 +30,6 @@ export class EsqueciSenhaComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
     // fazer logica aqui de enviar email de recuperação
     this.usuarioService.esqueciSenha(this.form.value.email)
     .then(() => {
@@ -40,10 +37,7 @@ export class EsqueciSenhaComponent implements OnInit {
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => this.spinner.hide())
-    
+    })    
   }
-
 
 }

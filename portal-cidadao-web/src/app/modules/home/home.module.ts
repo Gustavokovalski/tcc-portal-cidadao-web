@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HomeComponent } from './page/home.component';
 import { HomeRoutingModule } from './home.routing';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ModalFiltrarPostagemComponent } from './page/modal-filtrar-postagem/modal-filtrar-postagem.component';
 import { ModalVisualizarPostagemComponent } from './page/modal-visualizar-postagem/modal-visualizar-postagem.component';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -36,9 +37,11 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     ReactiveFormsModule,
     MatOptionModule,
     MatSelectModule,
-    NgxMatFileInputModule
+    NgxMatFileInputModule,
+    NgxSpinnerModule
   ],
   exports: [],
-  providers: []
+  providers: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HomeModule {}

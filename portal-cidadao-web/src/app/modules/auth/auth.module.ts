@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { NgxMaskModule } from 'ngx-mask';
 import { AlterarDadosComponent } from './page/alterar-dados/alterar-dados.component';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     CommonModule,
     MatIconModule,
+    NgxSpinnerModule,
     NgxMaskModule.forRoot()
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

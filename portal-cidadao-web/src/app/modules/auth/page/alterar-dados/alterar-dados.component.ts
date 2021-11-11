@@ -56,7 +56,6 @@ export class AlterarDadosComponent implements OnInit {
 
     try {
       let res: IBaseModel<IUsuarioAlteracaoModel>  = {} as IBaseModel<IUsuarioAlteracaoModel>;
-
       res = await this.usuarioService.alterarDados(id, this.model);
 
       if (res.sucesso) {
@@ -80,15 +79,13 @@ export class AlterarDadosComponent implements OnInit {
       return;
     }
 
-    // fazer logica aqui de enviar email de recuperação
     this.usuarioService.esqueciSenha(this.form.value.email)
     .then(() => {
       this.router.navigate(['/email-enviado-recuperacao']);
     })
     .catch((err) => {
       console.log(err);
-    })
-    
+    })    
   }
 
   private atualizarModel(values: any) {

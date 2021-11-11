@@ -1,3 +1,4 @@
+<ngx-spinner></ngx-spinner>
 <form style="overflow-y: auto !important;" [formGroup]="form" #f="ngForm" (keydown.enter)="$event.preventDefault()">
     <div style="background: white; height: 515px">
       <h3 class="text-left my-3">{{model.titulo}}</h3>
@@ -51,7 +52,7 @@
           <br>
           <h6 class="text-left my-3" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" >Deixe um comentário</h6>
           <mat-form-field class="local-form-field" appearance="fill" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" >
-            <textarea matInput formControlName="comentario" rows="2" ng-model="cmtName" placeholder="Seu comentário" [ngClass]="{ 'is-invalid': f.submitted && form.controls['descricao'].invalid }" maxlength="500"></textarea>
+            <textarea matInput formControlName="comentario" rows="2" ng-model="cmtName" placeholder="Seu comentário" [ngClass]="{ 'is-invalid': f.submitted && form.controls['comentario'].invalid }" maxlength="500"></textarea>
             <div *ngIf="f.submitted && form.controls['comentario'].invalid" class="invalid-feedback"></div>
             <br />
             <button class="btn btn-success btn-md pull-right" (click)="comentar()">
