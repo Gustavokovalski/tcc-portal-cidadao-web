@@ -32,7 +32,7 @@ export type ChartOptions = {
   templateUrl: './grafico-incidentes-abertos.component.html',
   styleUrls: ['./grafico-incidentes-abertos.component.scss']
 })
-export class GraficoIncidentesAbertosComponent {
+export class GraficoIncidentesAbertosComponent implements OnInit {
   @ViewChild("chart") chart = new ChartComponent();
   public chartOptions = {} as ChartOptions;
   private fevereiro: number;
@@ -42,21 +42,94 @@ export class GraficoIncidentesAbertosComponent {
   private junho: number;
   private julho: number;
   private soma: number;
+  private sum= '';
+  private num = [];
   constructor(
     public matDialog: MatDialog,
     private postagemService: PostagemService,   
     private toastr: ToastrService
-  ) 
+  ) {}
    
+  ngOnInit(): void {
   
-  {
+    this.postagemService
+    .PostagensAbertasPorMes('2')
+    .then((res) => {
+      console.log("1", res.dados.length);
+      this.fevereiro = res.dados.length;
+      this.num.push(res.dados.length);
+      this.soma = 0;
+      this.soma += res.dados.length;
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    });
+    this.postagemService
+    .PostagensAbertasPorMes('3')
+    .then((res) => {
+      console.log("2", res.dados.length);
+      this.março = res.dados.length;
+      this.num.push(res.dados.length);
+      this.soma += res.dados.length;
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    });
+    this.postagemService
+    .PostagensAbertasPorMes('4')
+    .then((res) => {
+      console.log("3", res.dados.length);
+      this.abril = res.dados.length;
+      this.num.push(res.dados.length);
+      this.soma += res.dados.length;
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    });
+    this.postagemService
+    .PostagensAbertasPorMes('5')
+    .then((res) => {
+      console.log("4", res.dados.length);
+      this.maio = res.dados.length;
+      this.num.push(res.dados.length);
+      this.soma += res.dados.length;
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    });
+    this.postagemService
+    .PostagensAbertasPorMes('6')
+    .then((res) => {
+      console.log("5", res.dados.length);
+      this.junho = res.dados.length;
+      this.num.push(res.dados.length);
+      this.soma += res.dados.length;
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    });
+    this.postagemService
+    .PostagensAbertasPorMes('7')
+    .then((res) => {
+      console.log("6", res.dados.length);
+      this.julho = res.dados.length;
+      this.num.push(res.dados.length);
+      this.soma += res.dados.length;
+    })
+    .catch((err) => {
+      this.toastr.error(err.mensagem.descricao, 'Atenção');
+    });
+    console.log("podksas", this.soma);
+   
+
       this.chartOptions = {
         series: [
           {
             name: "Incidentes Abertos",
-            data: [this.fevereiro, this.março, this.abril, this.maio, this.junho, this.julho]
+            data: this.num
           }
         ],
+        
         chart: {
           height: 280,
           type: "line",
@@ -64,6 +137,7 @@ export class GraficoIncidentesAbertosComponent {
             enabled: false
           }
         },
+        
         dataLabels: {
           enabled: false
         },
@@ -71,7 +145,7 @@ export class GraficoIncidentesAbertosComponent {
           curve: "straight"
         },
         title: {
-          text: "Incidentes abertos: " + this.soma,
+          text: ("Incidentes abertos: " ),
           align: "center"
         },
         subtitle: {
@@ -94,64 +168,12 @@ export class GraficoIncidentesAbertosComponent {
             "Jul"
           ]
         }
-      };
+      }
+     
     }
-    
-    public carregarChart(): void{
-      this.postagemService
-      .PostagensAbertasPorMes('2')
-      .then((res) => {
-        console.log("1", res.dados.length);
-        this.fevereiro = res.dados.length;
-      })
-      .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
-      });
-      this.postagemService
-      .PostagensAbertasPorMes('3')
-      .then((res) => {
-        console.log("2", res.dados.length);
-        this.março = res.dados.length;
-      })
-      .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
-      });
-      this.postagemService
-      .PostagensAbertasPorMes('4')
-      .then((res) => {
-        console.log("3", res.dados.length);
-        this.abril = res.dados.length;
-      })
-      .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
-      });
-      this.postagemService
-      .PostagensAbertasPorMes('5')
-      .then((res) => {
-        console.log("4", res.dados.length);
-        this.maio = res.dados.length;
-      })
-      .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
-      });
-      this.postagemService
-      .PostagensAbertasPorMes('6')
-      .then((res) => {
-        console.log("5", res.dados.length);
-        this.junho = res.dados.length;
-      })
-      .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
-      });
-      this.postagemService
-      .PostagensAbertasPorMes('7')
-      .then((res) => {
-        console.log("6", res.dados.length);
-        this.julho = res.dados.length;
-      })
-      .catch((err) => {
-        this.toastr.error(err.mensagem.descricao, 'Atenção');
-      });
-    }
-    
 }
+
+    
+   
+    
+
