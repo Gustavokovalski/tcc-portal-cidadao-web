@@ -13,7 +13,7 @@ export class PostagemService extends BaseService {
     constructor(httpClient: HttpClient) {
         super(httpClient);
     }
-    public async listarTodos(bairro = '', categoriaId = 0, subcategoriaId = 0): Promise<IBaseModel<IPostagemModel[]>> {
+    public async listarTodos(bairro = '', categoriaId = 0, subcategoriaId = 0, mes = 0): Promise<IBaseModel<IPostagemModel[]>> {
       let params = new HttpParams();
       if (bairro && bairro != '')
         params = params.append('bairro', bairro);
@@ -21,8 +21,12 @@ export class PostagemService extends BaseService {
       if (categoriaId && categoriaId > 0)
         params = params.append('categoriaId', categoriaId);
 
+        if (mes && mes > 0)
+        params = params.append('mes', mes);
+
       if (subcategoriaId && subcategoriaId > 0)
         params = params.append('subcategoriaId', subcategoriaId);
+        console.log("x", params);
 
       return this.httpClient
         .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem`, {params: params})
@@ -32,6 +36,12 @@ export class PostagemService extends BaseService {
     public async buscarPostagem(id: number): Promise<IBaseModel<IPostagemModel>> {
       return this.httpClient
         .get<IBaseModel<IPostagemModel>>(`${this.apiBaseUrl}/postagem/${id}`)
+        .toPromise();
+    }
+
+    public async PostagensAbertasPorMes(mes: string): Promise<IBaseModel<IPostagemModel[]>> {
+      return this.httpClient
+        .get<IBaseModel<IPostagemModel[]>>(`${this.apiBaseUrl}/postagem/mes/${mes}`)
         .toPromise();
     }
     public async resolverPostagem(id: number, resolvido: boolean): Promise<IBaseModel<IPostagemModel>> {
