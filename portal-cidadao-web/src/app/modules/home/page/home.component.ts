@@ -183,8 +183,9 @@ export class HomeComponent implements OnInit {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.id = 'modal-component';
       dialogConfig.width = '30vw';
-      dialogConfig.hasBackdrop = true;
+      dialogConfig.hasBackdrop = false;
       dialogConfig.disableClose = true;
+      dialogConfig.panelClass = 'custom-dialog-container';
 
       dialogConfig.data = id;
       const modal = this.matDialog.open(
