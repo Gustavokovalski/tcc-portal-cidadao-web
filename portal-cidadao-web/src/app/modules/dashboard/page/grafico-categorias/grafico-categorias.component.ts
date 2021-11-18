@@ -1,15 +1,13 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import {
   ChartComponent,
-  ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
-  ApexDataLabels,
-  ApexPlotOptions,
   ApexNonAxisChartSeries,
   ApexResponsive} from "ng-apexcharts";
+import { IDashboardCategoriasModel } from 'src/app/models/dashboard-categoria.model';
+import { DashboardService } from 'src/app/service/dashboard.service';
 
   export type ChartOptions = {
     series: ApexNonAxisChartSeries;
@@ -23,20 +21,22 @@ import {
   templateUrl: './grafico-categorias.component.html',
   styleUrls: ['./grafico-categorias.component.scss']
 })
-export class GraficoCategoriasComponent {
+export class GraficoCategoriasComponent implements OnInit {
   @ViewChild("chart") chart = new ChartComponent();
   public chartOptions = {} as ChartOptions;
+  public model = {} as IDashboardCategoriasModel;
 
   constructor(
     public matDialog: MatDialog,
+    private service: DashboardService
   ) {
     this.chartOptions = {
-        series: [70, 25, 5],
+        series: [100],
         chart: {
           width: 360,
           type: "pie"
         },
-        labels: ["Reclamação", "Sugestão", "Elogio"],
+        labels: [""],
         responsive: [
           {
             breakpoint: 480,
@@ -51,5 +51,15 @@ export class GraficoCategoriasComponent {
           }
         ]
       };
+  }
+
+  ngOnInit(): void {
+    this.service.obterDashboardCategorias()
+    .then((res) => {
+      if (res.sucesso && res.dados && res.dados.length > 0) {
+        this.chartOptions.labels = res.dados.map(x => x.nomeCategoria);
+        this.chartOptions.series = res.dados.map(x => x.porcentagem);
+      }
+    })
   }
 }
