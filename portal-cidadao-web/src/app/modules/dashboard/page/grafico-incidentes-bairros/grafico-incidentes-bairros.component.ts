@@ -7,15 +7,13 @@ import {
   ApexChart,
   ApexXAxis,
   ApexDataLabels,
-  ApexTitleSubtitle,
   ApexStroke,
-  ApexGrid,
   ApexPlotOptions,
-  ApexLegend,
   ApexTooltip,
   ApexFill,
   ApexYAxis
 } from "ng-apexcharts";
+import { DashboardService } from 'src/app/service/dashboard.service';
 
 export type ChartOptions = {
     series: ApexAxisChartSeries;
@@ -35,59 +33,16 @@ export type ChartOptions = {
   templateUrl: './grafico-incidentes-bairros.component.html',
   styleUrls: ['./grafico-incidentes-bairros.component.scss']
 })
-export class GraficoIncidentesBairrosComponent {
+export class GraficoIncidentesBairrosComponent implements OnInit {
   @ViewChild("chart") chart = new ChartComponent();
   public chartOptions = {} as ChartOptions;
 
   constructor(
     public matDialog: MatDialog,
+    private service: DashboardService
   ) {
     this.chartOptions = {
         series: [
-          {
-            name: "Água Verde",
-            data: [44]
-          },
-          {
-            name: "Fazendinha",
-            data: [9]
-          },
-          {
-            name: "Portão",
-            data: [30]
-          },
-          {
-            name: "Rebouças",
-            data: [50]
-          },
-          {
-            name: "Centro",
-            data: [100]
-          },
-          {
-            name: "Hauer",
-            data: [20]
-          },
-          {
-            name: "Batel",
-            data: [12]
-          },
-          {
-            name: "CIC",
-            data: [60]
-          },
-          {
-            name: "Mossunguê",
-            data: [28]
-          },
-          {
-            name: "Jd. das Américas",
-            data: [7]
-          },
-          {
-            name: "Cajuru",
-            data: [35]
-          },
         ],
         chart: {
           type: "bar",
@@ -96,7 +51,7 @@ export class GraficoIncidentesBairrosComponent {
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: "75%"
+            columnWidth: "50%"
           }
         },
         dataLabels: {
@@ -128,5 +83,34 @@ export class GraficoIncidentesBairrosComponent {
           }
         }
       };
+    }
+
+    ngOnInit(): void {
+      this.service.obterDashboardBairros()
+      .then((res) => {
+        if (res.sucesso && res.dados && res.dados.length > 0) {
+          const dadosGrafico = res.dados.map(function(item) {
+            return {
+              name: item.bairro,
+              data: [
+                item.qtdPostagens
+              ]
+            }
+          });
+
+          this.chartOptions.series = dadosGrafico;
+        }
+      });
+
+      const date = new Date(); 
+      const mes = this.capitalizeFirstLetter(date.toLocaleString('pt-BR', { month: 'long' }));
+      const mesAno = `${mes}/${date.getFullYear()}`;
+      this.chartOptions.xaxis.categories = [
+        mesAno
+      ]
+    }
+
+    private capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
     }
 }

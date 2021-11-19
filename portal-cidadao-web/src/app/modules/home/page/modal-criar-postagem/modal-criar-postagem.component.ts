@@ -21,9 +21,7 @@ export class ModalCriarPostagemComponent implements OnInit {
   public bairroAtual = '';
   public categorias!: ICategoriaModel[];
   public subcategorias!: IEnumModel[];
-  public autocompleteOptions = {
-    types: ["geocode", "establishment"]
-  }
+  public autocompleteOptions = {};
 
   public fileControl = new FormControl(null);
   public accept = '';
@@ -45,6 +43,13 @@ export class ModalCriarPostagemComponent implements OnInit {
     public dialog: MatDialog
   ) 
   {
+    this.autocompleteOptions = {
+      types: ["geocode"],
+      componentRestrictions: {
+        country: 'br'
+      },
+      strictbounds: true
+    };
     this.setarEnderecoAtual(data);
   }
 
