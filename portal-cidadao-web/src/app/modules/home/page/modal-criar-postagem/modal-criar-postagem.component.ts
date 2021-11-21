@@ -127,6 +127,7 @@ export class ModalCriarPostagemComponent implements OnInit {
           this.objEnderecoAtual = results[0];
           
           this.obterBairroAtual();
+          document.getElementById('endereco-postagem').focus();
         } else {
           alert("No address available");
         }

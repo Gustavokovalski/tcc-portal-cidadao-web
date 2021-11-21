@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { IArquivoModel } from '../models/arquivo.model';
 import { IBaseModel } from '../models/base.model';
 import { ICategoriaModel } from '../models/categoria.model';
 import { IEnumModel } from '../models/enum.model';
@@ -45,15 +46,15 @@ export class PostagemService extends BaseService {
         .toPromise();
     }
     public async resolverPostagem(id: number, resolvido: boolean): Promise<IBaseModel<IPostagemModel>> {
-      return this.httpClient
+        return this.httpClient
         .put<IBaseModel<IPostagemModel>>(`${this.apiBaseUrl}/postagem/${id}/${resolvido}`, id)
         .toPromise();    
     }
 
-    public async buscarMidiaPostagem(nomeArquivo: string): Promise<any> {
+    public async buscarMidiaPostagem(nomeArquivo: string): Promise<IArquivoModel> {
       return this.httpClient
-        .get<any>(`${this.apiBaseUrl}/arquivo/${nomeArquivo}`)
-        .toPromise();
+      .get<IArquivoModel>(`${this.apiBaseUrl}/arquivo/${nomeArquivo}`)
+      .toPromise();
     }
 
     public async inserir(postagemModel: IPostagemModel, arquivo: File): Promise<IBaseModel<IPostagemModel>> {

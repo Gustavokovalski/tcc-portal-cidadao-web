@@ -4,7 +4,7 @@
 
         <mat-form-field class="local-form-field" appearance="fill">
             <mat-label>Local</mat-label>
-            <input matInput type="text" [(ngModel)]="enderecoAtual" [options]="autocompleteOptions" ngxAutocomPlace formControlName="endereco"
+            <input matInput type="text" [(ngModel)]="enderecoAtual" id="endereco-postagem" [options]="autocompleteOptions" ngxAutocomPlace formControlName="endereco"
                 (selectedPlace)="onChangeLocalPostagem($event)"
                 [ngClass]="{ 'is-invalid': f.submitted && form.controls['endereco'].invalid }">
             <button *ngIf="enderecoAtual" matSuffix mat-icon-button aria-label=""

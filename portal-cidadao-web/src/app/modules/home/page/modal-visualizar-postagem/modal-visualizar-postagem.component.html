@@ -25,7 +25,7 @@
         <br />
 
         <div style="text-align: justify; font-family: Roboto, sans-serif; color: black; ">
-          It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.      
+          {{model.descricao}}     
         </div>
 
         <div style="display: flex; flex-direction: row; justify-content: space-around;">
@@ -50,7 +50,7 @@
           </div>
 
           <div style="flex: 0.6; align-self:flex-end;" class="text-right">
-            <span><mat-icon>access_time</mat-icon> Por João da Silva há 6h</span>
+            <span><mat-icon>access_time</mat-icon> Por {{model?.usuario?.nome}} há {{obterTempoPost(model?.dataCadastro)}}</span>
           </div>
         </div>
 

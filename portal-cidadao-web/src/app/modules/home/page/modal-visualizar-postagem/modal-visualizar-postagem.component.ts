@@ -69,6 +69,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   ) {
     this.buscarPostagem();
   }
+
   ngOnDestroy(): void {
     this.comentarios = [];
     this.clickedDislike = false;
@@ -97,13 +98,10 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       .then((res) => {
         this.model = res.dados;
         this.setarEnderecoAtual(this.model.latitude, this.model.longitude);
-        console.log(this.model);
         if (this.model.resolvido == true) {
           this.clickedResolver = true;
-          console.log(this.clickedResolver);
         } else if (this.model.resolvido == false) {
           this.clickedResolver = false;
-          console.log(this.clickedResolver);
         }
         this.buscarMidiaPostagem(res.dados.imagemUrl);
       })
@@ -161,7 +159,6 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
 
   public mostrarBotaoExcluirComentario(): void {
     if (this.authService.currentUserValue?.perfil?.nome === 'Administrador') {
-      console.log('Administrador');
       this.admin = true;
     }
   }
@@ -176,7 +173,6 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
     }
   }
   public setClickedLike() {
-    console.log(this.authService.currentUserValue?.perfil?.nome);
     if (this.authService.currentUserValue?.perfil?.nome === 'Especial') return;
 
     this.clickedLike = !this.clickedLike;
@@ -264,9 +260,9 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       })
   }
   public buscarMidiaPostagem(nomeArquivo: string): void {
-    this.postagemService.buscarMidiaPostagem(nomeArquivo).then((res) => {
-      this.midiaPostagem = res.fileContents;
-    });
+    this.postagemService.buscarMidiaPostagem(nomeArquivo).then((res) => 
+      this.midiaPostagem = res.fileContents)
+    .catch((err) => null);
   }
 
   public listarCategorias(): void {
@@ -280,7 +276,6 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       });
   }
   public excluirPostagem(): void {
-    console.log(this.model.id);
     this.postagemService.excluirPostagem(this.model.id, true);
     this.router.navigate(['/home']);
   }
@@ -328,5 +323,21 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
 
   private atualizarModel(values: any) {
     Object.assign(this.comentarioModel.descricao, values);
+  }
+
+  public obterTempoPost(dataPostagem: any) {
+    const diferencaMinutos = ((new Date().getTime() - new Date(dataPostagem).getTime()) / 1000 ) / 60;
+  
+    if (diferencaMinutos > 59) {
+      const diferencaEmHoras = diferencaMinutos / 60;
+      if (diferencaEmHoras > 23) {
+        const diferencaEmDias = diferencaEmHoras / 24;
+        return Math.round(diferencaEmDias).toString() + 'd';
+      } else {
+        return Math.round(diferencaEmHoras).toString() + 'h';
+      }
+    } else {
+      return Math.round(diferencaMinutos).toString() + 'm';
+    }
   }
 }
