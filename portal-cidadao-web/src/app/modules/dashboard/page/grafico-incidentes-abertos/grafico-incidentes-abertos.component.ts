@@ -41,8 +41,8 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
   private maio: number;
   private junho: number;
   private julho: number;
-  private soma: number;
-  private sum= '';
+  private soma = 0;
+  private sum= 0;
   private num = [];
   constructor(
     public matDialog: MatDialog,
@@ -58,8 +58,7 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
       console.log("1", res.dados.length);
       this.fevereiro = res.dados.length;
       this.num.push(res.dados.length);
-      this.soma = 0;
-      this.soma += res.dados.length;
+      this.soma = this.soma+ res.dados.length;
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
@@ -70,7 +69,7 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
       console.log("2", res.dados.length);
       this.março = res.dados.length;
       this.num.push(res.dados.length);
-      this.soma += res.dados.length;
+      this.soma= this.soma+ res.dados.length;
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
@@ -81,7 +80,7 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
       console.log("3", res.dados.length);
       this.abril = res.dados.length;
       this.num.push(res.dados.length);
-      this.soma += res.dados.length;
+      this.soma = this.soma+ res.dados.length;
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
@@ -92,7 +91,7 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
       console.log("4", res.dados.length);
       this.maio = res.dados.length;
       this.num.push(res.dados.length);
-      this.soma += res.dados.length;
+      this.soma = this.soma+ res.dados.length;
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
@@ -103,7 +102,7 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
       console.log("5", res.dados.length);
       this.junho = res.dados.length;
       this.num.push(res.dados.length);
-      this.soma += res.dados.length;
+      this.soma = this.soma+ res.dados.length;
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
@@ -114,13 +113,13 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
       console.log("6", res.dados.length);
       this.julho = res.dados.length;
       this.num.push(res.dados.length);
-      this.soma += res.dados.length;
+      this.soma = this.soma+ res.dados.length;
     })
     .catch((err) => {
       this.toastr.error(err.mensagem.descricao, 'Atenção');
     });
-    console.log("podksas", this.soma);
-   
+
+    
 
       this.chartOptions = {
         series: [
@@ -145,11 +144,11 @@ export class GraficoIncidentesAbertosComponent implements OnInit {
           curve: "straight"
         },
         title: {
-          text: ("Incidentes abertos: " ),
+          text: "Incidentes abertos na cidade",
           align: "center"
         },
         subtitle: {
-          text: "Total de incidentes abertos na cidade",
+          text: ("Incidentes que ainda não foram resolvidos"),
           align: "center"
         },
         grid: {
