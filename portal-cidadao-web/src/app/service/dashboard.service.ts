@@ -25,9 +25,9 @@ export class DashboardService extends BaseService {
         .get<IBaseModel<IDashboardBairrosModel[]>>(`${this.apiBaseUrl}/dashboard/bairros`)
         .toPromise();
     }
-        public async obterDashboardAtrasados(mes: string): Promise<IBaseModel<IDashboardAtrasadosModel[]>> {
+        public async obterDashboardAtrasados(mesInicio: number, mesFim: number): Promise<IBaseModel<IDashboardAtrasadosModel>> {
           return this.httpClient
-            .get<IBaseModel<IDashboardAtrasadosModel[]>>(`${this.apiBaseUrl}/dashboard/atrasados/${mes}`)
+            .get<IBaseModel<IDashboardAtrasadosModel>>(`${this.apiBaseUrl}/dashboard/atrasados?mesInicio=${mesInicio}&mesFim=${mesFim}`)
             .toPromise();
     }
     
