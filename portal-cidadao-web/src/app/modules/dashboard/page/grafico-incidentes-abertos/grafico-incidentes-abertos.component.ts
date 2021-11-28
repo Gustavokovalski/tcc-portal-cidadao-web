@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PostagemService } from 'src/app/service/postagem.service';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-
+import { DashboardService } from 'src/app/service/dashboard.service';
 
 import {
   ChartComponent,
@@ -13,13 +10,15 @@ import {
   ApexDataLabels,
   ApexTitleSubtitle,
   ApexStroke,
-  ApexGrid
+  ApexGrid,
+  ApexYAxis
 } from "ng-apexcharts";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   xaxis: ApexXAxis;
+  yaxis: ApexYAxis;
   dataLabels: ApexDataLabels;
   grid: ApexGrid;
   stroke: ApexStroke;
@@ -32,147 +31,93 @@ export type ChartOptions = {
   templateUrl: './grafico-incidentes-abertos.component.html',
   styleUrls: ['./grafico-incidentes-abertos.component.scss']
 })
-export class GraficoIncidentesAbertosComponent implements OnInit {
+export class GraficoIncidentesAbertosComponent {
   @ViewChild("chart") chart = new ChartComponent();
   public chartOptions = {} as ChartOptions;
-  private fevereiro: number;
-  private março: number;
-  private abril: number;
-  private maio: number;
-  private junho: number;
-  private julho: number;
-  private soma = 0;
-  private sum= 0;
-  private num = [];
+  public chartLoaded = false;
+
   constructor(
     public matDialog: MatDialog,
-    private postagemService: PostagemService,   
-    private toastr: ToastrService
-  ) {}
-   
-  ngOnInit(): void {
-  
-    this.postagemService
-    .PostagensAbertasPorMes('2')
-    .then((res) => {
-      console.log("1", res.dados.length);
-      this.fevereiro = res.dados.length;
-      this.num.push(res.dados.length);
-      this.soma = this.soma+ res.dados.length;
-    })
-    .catch((err) => {
-      this.toastr.error(err.mensagem.descricao, 'Atenção');
-    });
-    this.postagemService
-    .PostagensAbertasPorMes('3')
-    .then((res) => {
-      console.log("2", res.dados.length);
-      this.março = res.dados.length;
-      this.num.push(res.dados.length);
-      this.soma= this.soma+ res.dados.length;
-    })
-    .catch((err) => {
-      this.toastr.error(err.mensagem.descricao, 'Atenção');
-    });
-    this.postagemService
-    .PostagensAbertasPorMes('4')
-    .then((res) => {
-      console.log("3", res.dados.length);
-      this.abril = res.dados.length;
-      this.num.push(res.dados.length);
-      this.soma = this.soma+ res.dados.length;
-    })
-    .catch((err) => {
-      this.toastr.error(err.mensagem.descricao, 'Atenção');
-    });
-    this.postagemService
-    .PostagensAbertasPorMes('5')
-    .then((res) => {
-      console.log("4", res.dados.length);
-      this.maio = res.dados.length;
-      this.num.push(res.dados.length);
-      this.soma = this.soma+ res.dados.length;
-    })
-    .catch((err) => {
-      this.toastr.error(err.mensagem.descricao, 'Atenção');
-    });
-    this.postagemService
-    .PostagensAbertasPorMes('6')
-    .then((res) => {
-      console.log("5", res.dados.length);
-      this.junho = res.dados.length;
-      this.num.push(res.dados.length);
-      this.soma = this.soma+ res.dados.length;
-    })
-    .catch((err) => {
-      this.toastr.error(err.mensagem.descricao, 'Atenção');
-    });
-    this.postagemService
-    .PostagensAbertasPorMes('7')
-    .then((res) => {
-      console.log("6", res.dados.length);
-      this.julho = res.dados.length;
-      this.num.push(res.dados.length);
-      this.soma = this.soma+ res.dados.length;
-    })
-    .catch((err) => {
-      this.toastr.error(err.mensagem.descricao, 'Atenção');
-    });
-
+    private service: DashboardService,
     
+  ) {
 
-      this.chartOptions = {
-        series: [
-          {
-            name: "Incidentes Abertos",
-            data: this.num
-          }
-        ],
-        
-        chart: {
-          height: 280,
-          type: "line",
-          zoom: {
-            enabled: false
-          }
-        },
-        
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: "straight"
-        },
-        title: {
-          text: "Incidentes abertos na cidade",
-          align: "center"
-        },
-        subtitle: {
-          text: ("Incidentes que ainda não foram resolvidos"),
-          align: "center"
-        },
-        grid: {
-          row: {
-            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-            opacity: 0.5
-          }
-        },
-        xaxis: {
-          categories: [
-            "Fev",
-            "Mar",
-            "Abr",
-            "Mai",
-            "Jun",
-            "Jul"
-          ]
-        }
-      }
-     
     }
-}
+    ngOnInit(): void {
+     var dataBase = new Date();
+     var meses = [];
 
-    
-   
-    
+     var mesBase = dataBase.getMonth();
+     while (meses.length < 6) {
+       meses.push({
+         numero: dataBase.getMonth()+1,
+         nome: dataBase.toLocaleString('default', { month: 'long' })
+       });
+       if (dataBase.getMonth() + 1 === 1) {
+         dataBase.setMonth(12);
+       } else {
+         dataBase.setMonth(dataBase.getMonth()-1);
+       }
+     }
+     console.log(meses);
+     meses = meses.reverse();
+      
+      this.service.obterDashboardAbertos(meses[0].numero, meses[5].numero)
+      .then((res) => {
+        if (res.sucesso && res.dados && res.dados.itens.length > 0) { 
+          console.log("Aberto", res.dados);
 
+          this.chartOptions = {
+            series: [
+              {
+                name: 'Incidentes em aberto',
+                data: res.dados.itens.map((item) => item.qtdPostagens),
+              }
+            ],
+            chart: {
+              height: 280,
+              type: "line",
+              zoom: {
+                enabled: false
+              }
+            },
+            dataLabels: {
+              enabled: false
+            },
+            stroke: {
+              curve: "straight"
+            },
+            title: {
+              text: 'Incidentes em aberto: ' + res.dados.totalAbertos.toString(),
+              align: "center",
+              style: {
+                fontSize: '18px',
+              }
+            },
+            subtitle: {
+                text: "Número de incidentes em aberto, por mês",
+                align: "center"
+            },
+            grid: {
+              row: {
+                colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+                opacity: 0.5
+              }
+            },
+            xaxis: {
+              categories: res.dados.itens.map(x => x.mes)
+            },
+            yaxis: {
+              labels: {
+                formatter: function(val) {
+                  return Math.floor(val).toString()
+                }
+              }
+            }
+          };
+          this.chartLoaded = true;
+      }
+      });
+    }
+ }
+    

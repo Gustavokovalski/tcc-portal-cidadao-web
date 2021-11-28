@@ -5,6 +5,7 @@ import { IDashboardBairrosModel } from '../models/dashboard-bairros.model';
 import { IDashboardCategoriasModel } from '../models/dashboard-categoria.model';
 import { BaseService } from './base.service';
 import { IDashboardAtrasadosModel } from '../models/dashboard-atrasados.model';
+import { IDashboardAbertosModel } from '../models/dashboard-abertos.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,11 @@ export class DashboardService extends BaseService {
             .get<IBaseModel<IDashboardAtrasadosModel>>(`${this.apiBaseUrl}/dashboard/atrasados?mesInicio=${mesInicio}&mesFim=${mesFim}`)
             .toPromise();
     }
+    public async obterDashboardAbertos(mesInicio: number, mesFim: number): Promise<IBaseModel<IDashboardAbertosModel>> {
+      return this.httpClient
+        .get<IBaseModel<IDashboardAbertosModel>>(`${this.apiBaseUrl}/dashboard/abertos?mesInicio=${mesInicio}&mesFim=${mesFim}`)
+        .toPromise();
+}
     
     
 }
