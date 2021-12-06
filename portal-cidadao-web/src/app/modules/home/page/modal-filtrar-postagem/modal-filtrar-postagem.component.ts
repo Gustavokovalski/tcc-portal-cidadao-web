@@ -13,11 +13,13 @@ export class ModalFiltrarPostagemComponent implements OnInit {
   public bairros!: any[];
   public categorias!: any[];
   public subcategorias!: any[];
+  public confiabilidades!: any[];
 
   public form = new FormGroup({
     bairro: new FormControl(''),
     categoria: new FormControl(''),
-    subcategoria: new FormControl('')
+    subcategoria: new FormControl(''),
+    confiabilidade: new FormControl('')
   });
 
   constructor(
@@ -29,6 +31,7 @@ export class ModalFiltrarPostagemComponent implements OnInit {
     this.bairros = this.data.bairros;
     this.categorias = this.data.categorias;
     this.subcategorias = this.data.subcategorias;
+    this.confiabilidades = this.data.confiabilidades;
   }
 
   ngOnInit(): void { 
@@ -44,7 +47,8 @@ export class ModalFiltrarPostagemComponent implements OnInit {
       {
         bairro: this.form.value.bairro, 
         categoriaId: this.form.value.categoria,
-        subcategoriaId: this.form.value.subcategoria
+        subcategoriaId: this.form.value.subcategoria,
+        confiabilidade: this.form.value.confiabilidade
       }
       );
   }
