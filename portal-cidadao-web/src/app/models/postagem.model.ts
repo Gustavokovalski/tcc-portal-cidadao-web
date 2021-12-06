@@ -7,6 +7,7 @@ export interface IPostagemModel {
     id: number;
     subcategoria: IEnumModel;
     categoria: ICategoriaModel;
+    confiabilidade: string;
     categoriaId: number;
     titulo: string;
     descricao: string;

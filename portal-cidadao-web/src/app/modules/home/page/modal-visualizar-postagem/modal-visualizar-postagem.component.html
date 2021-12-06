@@ -49,6 +49,10 @@
             </mat-dialog-actions>
           </div>
 
+          <div style="text-align: justify; font-family: Roboto, sans-serif; color: black; ">
+            Confiabilidade: {{model.confiabilidade}}     
+          </div>
+
           <div style="flex: 0.6; align-self:flex-end;" class="text-right">
             <span><mat-icon>access_time</mat-icon> Por {{model?.usuario?.nome}} há {{obterTempoPost(model?.dataCadastro)}}</span>
           </div>

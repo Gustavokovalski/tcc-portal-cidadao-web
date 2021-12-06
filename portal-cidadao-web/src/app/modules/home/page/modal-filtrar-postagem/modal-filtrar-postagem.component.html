@@ -12,6 +12,16 @@
       </mat-form-field>
 
       <mat-form-field class="local-form-field" appearance="fill">
+        <mat-label>Selecione o nível de confiabilidade</mat-label>
+        <mat-select formControlName="confiabilidade" [ngClass]="{ 'is-invalid': f.submitted && form.controls['confiabilidade'].invalid }">
+          <mat-option value="todos">Todos</mat-option>
+          <mat-option *ngFor="let confiabilidade of confiabilidades" [value]="confiabilidade">
+            {{confiabilidade}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="local-form-field" appearance="fill">
         <mat-label>Selecione a categoria</mat-label>
         <mat-select formControlName="categoria" [ngClass]="{ 'is-invalid': f.submitted && form.controls['categoria'].invalid }">
           <mat-option value="0">Todas</mat-option>

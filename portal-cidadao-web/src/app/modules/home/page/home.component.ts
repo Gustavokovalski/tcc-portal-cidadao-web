@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   public comboBairros = [] as any;
   public comboCategorias = [] as any;
   public comboSubcategorias = [] as any;
+  public comboConfiabilidades = [] as any;
 
   constructor(
     public matDialog: MatDialog,
@@ -54,7 +55,7 @@ export class HomeComponent implements OnInit {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
-      this.novoMarcador(0, 0, this.center.lat, this.center.lng);
+      this.novoMarcador(0, 0, this.center.lat, this.center.lng, '');
     });
   }
 
@@ -80,7 +81,8 @@ export class HomeComponent implements OnInit {
     id: number,
     subcategoriaId: number,
     lat: number,
-    lng: number
+    lng: number,
+    confiabilidade : string
   ): void {
     const marker = {
       position: {
@@ -89,7 +91,7 @@ export class HomeComponent implements OnInit {
       },
       label: '',
       title: '',
-      icon: this.definirTipoMarcador(subcategoriaId),
+      icon: this.definirTipoMarcador(subcategoriaId, confiabilidade),
       options: {
         store_id: id,
         cursor: 'pointer',
@@ -99,11 +101,11 @@ export class HomeComponent implements OnInit {
     this.markers.push(marker);
   }
 
-  private iniciarPagina(bairro = '', categoriaId = 0, subcategoriaId = 0) {
+  private iniciarPagina(bairro = '', categoriaId = 0, subcategoriaId = 0, confiabilidade = '') {
     this.markers.length = 0;
     this.preencheMarcadorPosicaoAtual();
     this.postagemService
-      .listarTodos(bairro, categoriaId, subcategoriaId)
+      .listarTodos(bairro, categoriaId, subcategoriaId, 0, confiabilidade)
       .then((res) => {
         if (res.dados) {
           console.log(res.dados);
@@ -112,7 +114,8 @@ export class HomeComponent implements OnInit {
               postagem.id,
               postagem.subcategoria.codigo,
               postagem.latitude,
-              postagem.longitude
+              postagem.longitude,
+              postagem.confiabilidade
             );
           });
         }
@@ -152,8 +155,20 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  private preencheComboFiltroConfiabilidades(): void {
+    this.comboConfiabilidades = [];
+    this.postagemService.listarConfiabilildades().then((res) => {
+      if (res.dados) {
+        res.dados.forEach((x) => {
+          this.comboConfiabilidades.push(x);
+        });
+      }
+    });
+  }
+
   public abrirModalFiltro() {
     this.preencheComboFiltroBairros();
+    this.preencheComboFiltroConfiabilidades();
     this.preencheComboFiltroCategorias();
     this.preencheComboFiltroSubcategorias();
     const dialogConfig = new MatDialogConfig();
@@ -167,14 +182,16 @@ export class HomeComponent implements OnInit {
         bairros: this.comboBairros,
         categorias: this.comboCategorias,
         subcategorias: this.comboSubcategorias,
+        confiabilidades : this.comboConfiabilidades,
       },
     });
     modal.afterClosed().subscribe((result) => {
       const bairroParam = result.bairro === 'todos' ? '' : result.bairro;
       const categoriaIdParam = result.categoriaId;
       const subcategoriaIdParam = result.subcategoriaId;
+      const confiabilidadeParam = result.confiabilidade === 'todas' ? '' : result.confiabilidade;
 
-      this.iniciarPagina(bairroParam, categoriaIdParam, subcategoriaIdParam);
+      this.iniciarPagina(bairroParam, categoriaIdParam, subcategoriaIdParam, confiabilidadeParam);
     });
   }
 
@@ -198,20 +215,77 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private definirTipoMarcador(subcategoriaId: number): string {
+  private obterIconePostVermelho(confiabilidade : string){
+    var result = '';
+    switch(confiabilidade){
+      case 'Alta':{
+        result = '../../../../assets/images/red-dot.g.png';
+        break;
+      }
+      case 'Média':{
+        result = '../../../../assets/images/red-dot.m.png';
+        break;
+      }
+      default:{
+        result = '../../../../assets/images/red-dot.p.png';
+        break;
+      }
+    }
+    return result;
+  }
+
+  private obterIconePostAmarelo(confiabilidade : string){
+    var result = '';
+    switch(confiabilidade){
+      case 'Alta':{
+        result = '../../../../assets/images/yellow-dot.g.png';
+        break;
+      }
+      case 'Média':{
+        result = '../../../../assets/images/yellow-dot.m.png';
+        break;
+      }
+      default:{
+        result = '../../../../assets/images/yellow-dot.p.png';
+        break;
+      }
+    }
+    return result;
+  }
+
+  private obterIconePostVerde(confiabilidade : string){
+    var result = '';
+    switch(confiabilidade){
+      case 'Alta':{
+        result = '../../../../assets/images/green-dot.g.png';
+        break;
+      }
+      case 'Média':{
+        result = '../../../../assets/images/green-dot.m.png';
+        break;
+      }
+      default:{
+        result = '../../../../assets/images/green-dot.p.png';
+        break;
+      }
+    }
+    return result;
+  }
+
+  private definirTipoMarcador(subcategoriaId: number, confiabilidade: string): string {
     var result = '';
 
     switch (subcategoriaId) {
       case 1: {
-        result = '../../../../assets/images/red-dot.png';
+         result =  this.obterIconePostVermelho(confiabilidade);        
         break;
       }
       case 2: {
-        result = '../../../../assets/images/green-dot.png';
+        result =  this.obterIconePostAmarelo(confiabilidade);        
         break;
       }
       case 3: {
-        result = '../../../../assets/images/blue-dot.png';
+        result =  this.obterIconePostVerde(confiabilidade);        
         break;
       }
       default: {

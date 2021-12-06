@@ -14,10 +14,13 @@ export class PostagemService extends BaseService {
     constructor(httpClient: HttpClient) {
         super(httpClient);
     }
-    public async listarTodos(bairro = '', categoriaId = 0, subcategoriaId = 0, mes = 0): Promise<IBaseModel<IPostagemModel[]>> {
+    public async listarTodos(bairro = '', categoriaId = 0, subcategoriaId = 0, mes = 0, confiabilidade = ''): Promise<IBaseModel<IPostagemModel[]>> {
       let params = new HttpParams();
       if (bairro && bairro != '')
         params = params.append('bairro', bairro);
+        
+      if (confiabilidade && confiabilidade != '')
+      params = params.append('confiabilidade', confiabilidade);
 
       if (categoriaId && categoriaId > 0)
         params = params.append('categoriaId', categoriaId);
@@ -87,6 +90,12 @@ export class PostagemService extends BaseService {
     public async listarBairros(): Promise<IBaseModel<string[]>> {
       return this.httpClient
         .get<IBaseModel<string[]>>(`${this.apiBaseUrl}/postagem/bairros`)
+        .toPromise();
+    }
+
+    public async listarConfiabilildades(): Promise<IBaseModel<string[]>> {
+      return this.httpClient
+        .get<IBaseModel<string[]>>(`${this.apiBaseUrl}/postagem/confiabilidades`)
         .toPromise();
     }
     
