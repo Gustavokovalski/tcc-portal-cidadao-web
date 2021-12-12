@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { PostagemService } from 'src/app/service/postagem.service';
 import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-postagem.component';
@@ -12,6 +13,8 @@ import { ModalVisualizarPostagemComponent } from './modal-visualizar-postagem/mo
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  @ViewChild('usuarioVisitanteModal') usuarioVisitanteModal: TemplateRef<any>;
+
   private maxDistance = 200;
   public position: object | undefined;
   public center = { lat: -25.4372, lng: -49.27 };
@@ -35,7 +38,8 @@ export class HomeComponent implements OnInit {
   constructor(
     public matDialog: MatDialog,
     public postagemService: PostagemService,
-    public authService: AuthService
+    public authService: AuthService,
+    public router: Router
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +63,17 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  irParaLogin() {
+    this.matDialog.closeAll();
+    this.router.navigate(['/auth/login']);
+  }
+
   abrirModalCriarPostagem() {
+    if (!this.authService.currentUserValue) {
+      this.matDialog.open(this.usuarioVisitanteModal);
+      return;
+    }
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '30vw';

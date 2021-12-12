@@ -49,3 +49,12 @@
     <!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<ng-template #usuarioVisitanteModal>
+    <h2 matDialogTitle>Olá!</h2>
+    <p matDialogContent>Para criar postagens, realize o login</p>
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="irParaLogin();">Login</button>
+        <button mat-button matDialogClose>Voltar</button>
+    </mat-dialog-actions>
+</ng-template>

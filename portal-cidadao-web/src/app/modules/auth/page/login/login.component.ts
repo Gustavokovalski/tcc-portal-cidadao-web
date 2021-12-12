@@ -31,9 +31,7 @@ export class LoginComponent implements OnInit {
       ) { }
 
   ngOnInit() {
-    console.log(this.authService.currentUserValue);
     if (this.authService.currentUserValue?.id) {
-      console.log('aaa');
       this.router.navigate(["/home"]);
     }
 
@@ -59,5 +57,11 @@ export class LoginComponent implements OnInit {
         error => {
             this.toastr.error(error, 'Atenção');
         });
-    }
+  }
+
+  public irParaMapa() {
+    console.log('aaaaa');
+    this.router.navigate(["/home"]);
+  }
+
 }
