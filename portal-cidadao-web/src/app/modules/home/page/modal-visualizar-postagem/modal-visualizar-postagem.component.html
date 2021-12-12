@@ -20,7 +20,7 @@
         <h5 class="text-center my-1">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
       </div>-->
       <div>
-        <img *ngIf="midiaPostagem === ''" mat-card-image src="../assets/images/placeholder.png" alt="Postagem sem foto" style="width: 100%" />
+        <img *ngIf="midiaPostagem === ''" mat-card-image src="assets/images/placeholder.png" alt="Postagem sem foto" style="width: 100%" />
         <img *ngIf="midiaPostagem !== ''" mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
         <br />
 

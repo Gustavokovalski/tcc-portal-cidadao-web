@@ -219,15 +219,15 @@ export class HomeComponent implements OnInit {
     var result = '';
     switch(confiabilidade){
       case 'Alta':{
-        result = '../../../../assets/images/red-dot.g.png';
+        result = '../../../assets/images/red-dot.g.png';
         break;
       }
       case 'Média':{
-        result = '../../../../assets/images/red-dot.m.png';
+        result = '../../../assets/images/red-dot.m.png';
         break;
       }
       default:{
-        result = '../../../../assets/images/red-dot.p.png';
+        result = '../../../assets/images/red-dot.p.png';
         break;
       }
     }
@@ -238,15 +238,15 @@ export class HomeComponent implements OnInit {
     var result = '';
     switch(confiabilidade){
       case 'Alta':{
-        result = '../../../../assets/images/yellow-dot.g.png';
+        result = '../../../assets/images/yellow-dot.g.png';
         break;
       }
       case 'Média':{
-        result = '../../../../assets/images/yellow-dot.m.png';
+        result = '../../../assets/images/yellow-dot.m.png';
         break;
       }
       default:{
-        result = '../../../../assets/images/yellow-dot.p.png';
+        result = '../../../assets/images/yellow-dot.p.png';
         break;
       }
     }
@@ -257,15 +257,15 @@ export class HomeComponent implements OnInit {
     var result = '';
     switch(confiabilidade){
       case 'Alta':{
-        result = '../../../../assets/images/green-dot.g.png';
+        result = '../../../assets/images/green-dot.g.png';
         break;
       }
       case 'Média':{
-        result = '../../../../assets/images/green-dot.m.png';
+        result = '../../../assets/images/green-dot.m.png';
         break;
       }
       default:{
-        result = '../../../../assets/images/green-dot.p.png';
+        result = '../../../assets/images/green-dot.p.png';
         break;
       }
     }
@@ -289,7 +289,7 @@ export class HomeComponent implements OnInit {
         break;
       }
       default: {
-        result = '../../../../assets/images/current-location.png';
+        result = '../../../assets/images/current-location.png';
         break;
       }
     }
