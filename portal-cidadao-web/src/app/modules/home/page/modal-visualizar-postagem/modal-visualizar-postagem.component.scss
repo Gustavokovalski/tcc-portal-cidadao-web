@@ -11,16 +11,19 @@
 }
 
 .dislike{
-  color : red;
+  color : lightcoral;
 }
 
+.none {
+  color: #666;
+}
 
 .resolvido{
   color: yellow;
 }
 
 .like{
-  color : blue;
+  color : #3f51b5;
 }
 
 .text-reclamacao {
@@ -55,4 +58,7 @@ img{
   cursor: default;
 }
 
-
+.arrow-back:hover {
+  background-color: #eee;
+  border-radius: 25%;
+}

@@ -1,8 +1,9 @@
 <ngx-spinner></ngx-spinner>
-<form style="padding: 0 2em" [formGroup]="form" #f="ngForm" (keydown.enter)="$event.preventDefault()">
-    <div style="background: white; height: 515px">
+<div style="display: flex; flex-direction: column;">
+  <form style="padding: 0 2em" [formGroup]="form" #f="ngForm" (keydown.enter)="$event.preventDefault()">
+    <div style="background: white; height: 515px; display: flex; flex-direction: column;">
       <div class="my-3 row">
-        <h2 class="col-md-1" style="color: #323232; cursor: pointer" mat-dialog-close>
+        <h2 class="col-md-1 arrow-back" style="color: #323232; cursor: pointer" mat-dialog-close>
           <mat-icon aria-hidden="false" aria-label="Voltar">arrow_back</mat-icon>
         </h2>
         <h3 class="col-md-11 text-center" style="color: #5B628F">{{model.titulo}}</h3>
@@ -19,7 +20,7 @@
       <div [ngClass]="{'text-reclamacao': model?.subcategoria?.codigo === 1, 'text-elogio': model?.subcategoria?.codigo === 2, 'text-sugestao': model?.subcategoria?.codigo === 3}">
         <h5 class="text-center my-1">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
       </div>-->
-      <div>
+      <div style="display: flex; flex-direction: column;">
         <img *ngIf="midiaPostagem === ''" mat-card-image src="assets/images/placeholder.png" alt="Postagem sem foto" style="width: 100%" />
         <img *ngIf="midiaPostagem !== ''" mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
         <br />
@@ -28,11 +29,18 @@
           {{model.descricao}}     
         </div>
 
+        <div style="text-align: right; font-family: Roboto, sans-serif; color: #444; font-size: 0.85em">
+          <mat-icon *ngIf="model.confiabilidade === 'Baixa'" style="color: 'lightcoral'">flag</mat-icon> 
+          <mat-icon *ngIf="model.confiabilidade === 'Média'" style="color: 'orange'">flag</mat-icon> 
+          <mat-icon *ngIf="model.confiabilidade === 'Alta'" style="color: 'lightgreen'">flag</mat-icon> 
+          <strong>Confiabilidade {{model.confiabilidade}}  </strong>   
+        </div>
+
         <div style="display: flex; flex-direction: row; justify-content: space-around;">
           <div style="flex: 0.2">
             <mat-dialog-actions>
               <button [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" style="cursor: pointer"
-              (click)="setClickedLike()" (click)="like()" [class.like]="clickedLike" mat-button>
+              (click)="setClickedLike()" (click)="like()" [class.none]="!clickedLike" [class.like]="clickedLike" mat-button>
                 <mat-icon>thumb_up</mat-icon>
               </button>
               <span class="mr-3">{{model?.curtidas}}</span>
@@ -42,19 +50,16 @@
           <div style="flex: 0.2">
             <mat-dialog-actions>
               <button [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" style="cursor: pointer"
-              (click)="setClickedDislike()" (click)="dislike()" [class.dislike]="clickedDislike" mat-button>
+              (click)="setClickedDislike()" (click)="dislike()" [class.none]="!clickedDislike" [class.dislike]="clickedDislike" mat-button>
                 <mat-icon>thumb_down</mat-icon>
               </button>
               <span class="mr-3">{{model?.descurtidas}}</span>
             </mat-dialog-actions>
           </div>
 
-          <div style="text-align: justify; font-family: Roboto, sans-serif; color: black; ">
-            Confiabilidade: {{model.confiabilidade}}     
-          </div>
-
           <div style="flex: 0.6; align-self:flex-end;" class="text-right">
-            <span><mat-icon>access_time</mat-icon> Por {{model?.usuario?.nome}} há {{obterTempoPost(model?.dataCadastro)}}</span>
+            <span><mat-icon [inline]="true" style="font-size: 1.35em; margin-top: 0.75em; color: #5B628F">access_time</mat-icon> 
+              Por {{model?.usuario?.nome}} há {{obterTempoPost(model?.dataCadastro)}}</span>
           </div>
         </div>
 
@@ -64,8 +69,7 @@
             </mat-dialog-actions>
         </div>
 
-
-        <div class="container">
+        <div style="display: flex; flex-direction: column">
           <hr />
           <div class="form-group">
             <br>
@@ -83,23 +87,29 @@
             <ul class="list-group">
               <li class="list-group-item" *ngFor="let c of comentarios"><strong>{{c.nomeUsuario}}</strong> - {{c.descricao}}
                 <mat-dialog-actions align="end">
-
                 <button *ngIf="admin" class="btnbtn-md pull-right" (click)="excluirComentario(c)"><mat-icon>delete_sweep</mat-icon></button>
                 </mat-dialog-actions>
               </li>
             </ul>
           </div>
-      
-          <mat-dialog-actions align="end">
-            <!-- <button type="submit" mat-raised-button>Salvar</button> -->
-            <button *ngIf="admin" (click)="excluirPostagem()" mat-button mat-dialog-close>Excluir Postagem</button>
-          </mat-dialog-actions>
-
-          <mat-dialog-actions align="end">
-              <!-- <button type="submit" mat-raised-button>Salvar</button> -->
-              <button mat-button mat-dialog-close>Voltar</button>
-          </mat-dialog-actions>
         </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <!-- <button type="submit" mat-raised-button>Salvar</button> -->
+          <button *ngIf="admin" (click)="excluirPostagem()" style="color: lightcoral;" mat-button mat-dialog-close>
+            Excluir Postagem</button>
+          <button mat-button mat-dialog-close>Voltar</button>
+        </div>
+
       </div>
     </div>
-  </form>
+</form>
+
+
+
+</div>
+
+
+
+
+

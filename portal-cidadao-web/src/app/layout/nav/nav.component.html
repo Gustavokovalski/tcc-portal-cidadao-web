@@ -164,13 +164,18 @@
                     </a>
                 </li> -->
                 <li class="nav-item">
-                    <a [routerLink]="['/alterar-dados']" class="nav-link" data-widget="control-sidebar" data-slide="true"
+                    <a *ngIf="this.authService.currentUserValue" [routerLink]="['/alterar-dados']" class="nav-link" data-widget="control-sidebar" data-slide="true"
                         role="button">Minha Conta
+                    </a>
+                    <a *ngIf="!this.authService.currentUserValue" [routerLink]="['/auth/login']" class="nav-link" data-widget="control-sidebar" data-slide="true"
+                    role="button">Fazer Login
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a (click)="logout()" class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"
+                    <a *ngIf="this.authService.currentUserValue" (click)="logout()" class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"
                         role="button">Sair
+                    </a>
+                    <a *ngIf="!this.authService.currentUserValue" href="/" class="nav-link">Sair
                     </a>
                 </li>
             </ul>

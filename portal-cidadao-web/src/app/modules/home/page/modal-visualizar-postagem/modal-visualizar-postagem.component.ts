@@ -327,8 +327,9 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   }
 
   public obterTempoPost(dataPostagem: any) {
-    const diferencaMinutos = ((new Date().getTime() - new Date(dataPostagem).getTime()) / 1000 ) / 60;
-  
+    const diferencaMinutos = (((new Date().getTime() - new Date(dataPostagem).getTime()) / 1000 ) / 60) + 180; // tirar fuso
+
+    console.log('diff minutos: ' + diferencaMinutos);
     if (diferencaMinutos > 59) {
       const diferencaEmHoras = diferencaMinutos / 60;
       if (diferencaEmHoras > 23) {
