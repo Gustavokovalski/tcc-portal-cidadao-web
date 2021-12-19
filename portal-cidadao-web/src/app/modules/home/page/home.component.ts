@@ -295,11 +295,11 @@ export class HomeComponent implements OnInit {
         break;
       }
       case 2: {
-        result =  this.obterIconePostAmarelo(confiabilidade);        
+        result = this.obterIconePostVerde(confiabilidade);      
         break;
       }
       case 3: {
-        result =  this.obterIconePostVerde(confiabilidade);        
+        result =  this.obterIconePostAmarelo(confiabilidade);           
         break;
       }
       default: {
