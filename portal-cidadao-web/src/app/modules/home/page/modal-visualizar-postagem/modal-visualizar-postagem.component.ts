@@ -65,7 +65,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
     private comentarioService: ComentarioService,
     private toastr: ToastrService,
     public dialog: MatDialog,
-    public authService: AuthService,
+    public authService: AuthService
   ) {
     this.buscarPostagem();
   }
@@ -108,7 +108,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       })
       .catch((err) => {
         this.toastr.error(err.mensagem.descricao, 'Atenção');
-      })
+      });
   }
   public listarComentarios(): void {
     this.comentarioService
@@ -118,7 +118,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       })
       .catch((err) => {
         this.toastr.error(err.mensagem.descricao, 'Atenção');
-      })
+      });
   }
 
   public like(): void {
@@ -150,7 +150,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       .catch((err) => {
         console.log(err);
         this.toastr.error(err.mensagem.descricao, 'Atenção');
-      })
+      });
   }
   public mostrarBotaoResolver(): void {
     if (this.authService.currentUserValue?.perfil?.nome === 'Especial') {
@@ -196,16 +196,17 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
     this.comentarioModel.dataCadastro = new Date(today);
     this.comentarioModel.usuarioId = this.authService.currentUserValue.id;
     this.comentarioModel.postagemId = this.model.id;
-    this.comentarioService.inserir(this.comentarioModel)
-    .then((res) => {
-      if (res.sucesso) {
-        this.toastr.success(res.mensagem.descricao);
-        this.listarComentarios();
-      } else {
-        this.toastr.error(res?.mensagem?.descricao);
-      }
-    })
-    .catch((err) => console.log(err))    
+    this.comentarioService
+      .inserir(this.comentarioModel)
+      .then((res) => {
+        if (res.sucesso) {
+          this.toastr.success(res.mensagem.descricao);
+          this.listarComentarios();
+        } else {
+          this.toastr.error(res?.mensagem?.descricao);
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   public dislike(): void {
@@ -235,7 +236,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       })
       .catch((err) => {
         this.toastr.error(err.mensagem.descricao, 'Atenção');
-      })
+      });
   }
 
   public buscarLike(): void {
@@ -258,12 +259,13 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       .catch((err) => {
         console.log(err);
         //this.toastr.error(err.mensagem.descricao, 'Atenção');
-      })
+      });
   }
   public buscarMidiaPostagem(nomeArquivo: string): void {
-    this.postagemService.buscarMidiaPostagem(nomeArquivo).then((res) => 
-      this.midiaPostagem = res.fileContents)
-    .catch((err) => null);
+    this.postagemService
+      .buscarMidiaPostagem(nomeArquivo)
+      .then((res) => (this.midiaPostagem = res.fileContents))
+      .catch((err) => null);
   }
 
   public listarCategorias(): void {
@@ -327,9 +329,10 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   }
 
   public obterTempoPost(dataPostagem: any) {
-    const diferencaMinutos = (((new Date().getTime() - new Date(dataPostagem).getTime()) / 1000 ) / 60) + 180; // tirar fuso
+    const diferencaMinutos =
+      (new Date().getTime() - new Date(dataPostagem).getTime()) / 1000 / 60 +
+      180; // tirar fuso
 
-    console.log('diff minutos: ' + diferencaMinutos);
     if (diferencaMinutos > 59) {
       const diferencaEmHoras = diferencaMinutos / 60;
       if (diferencaEmHoras > 23) {

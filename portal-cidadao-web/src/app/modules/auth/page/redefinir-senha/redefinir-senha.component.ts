@@ -4,34 +4,32 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { IRedefinicaoSenhaModel } from 'src/app/models/redefinicao-senha.model';
 import { UsuarioService } from 'src/app/service/usuario.service';
-import { Location } from '@angular/common'
+import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-redefinir-senha',
   templateUrl: './redefinir-senha.component.html',
-  styleUrls: ['./redefinir-senha.component.scss']
+  styleUrls: ['./redefinir-senha.component.scss'],
 })
 export class RedefinirSenhaComponent implements OnInit {
   public model: IRedefinicaoSenhaModel = {} as IRedefinicaoSenhaModel;
   public returnUrl: string = '';
 
   public form = new FormGroup({
-      senha: new FormControl('', Validators.required),
-      confirmarSenha: new FormControl('', Validators.required),
-    });
-    
+    senha: new FormControl('', Validators.required),
+    confirmarSenha: new FormControl('', Validators.required),
+  });
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private usuarioService: UsuarioService,
     private location: Location
-  ) {
+  ) {}
 
-  }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   redefinirSenha() {
     if (this.form.invalid) {
@@ -46,13 +44,14 @@ export class RedefinirSenhaComponent implements OnInit {
 
     this.model.novaSenha = this.form.value.senha;
     this.model.token = this.route.snapshot.queryParams['t'];
-    
-    this.usuarioService.redefinirSenha(this.model)
-    .then((res) => {
+
+    this.usuarioService.redefinirSenha(this.model).then((res) => {
       this.toastr.success('Senha redefinida com sucesso!', 'Sucesso');
-      this.router.navigate(["/"]);
-    })
+      this.router.navigate(['/']);
+    });
   }
 
-
+  public getLogoPath() {
+    return environment.baseAssetsPath + '/images/logo.png';
+  }
 }
