@@ -72,8 +72,8 @@ export class ModalCriarPostagemComponent implements OnInit {
     }
 
     this.atualizarModel(this.form.value);
-    this.model.latitude = this.objEnderecoAtual.geometry.location.lat();
-    this.model.longitude = this.objEnderecoAtual.geometry.location.lng();
+    this.model.latitude = this.objEnderecoAtual?.geometry.location.lat();
+    this.model.longitude = this.objEnderecoAtual?.geometry.location.lng();
     this.model.resolvido = false;
     this.model.bairro = this.bairroAtual;
     this.model.usuarioId = this.authService.currentUserValue.id;

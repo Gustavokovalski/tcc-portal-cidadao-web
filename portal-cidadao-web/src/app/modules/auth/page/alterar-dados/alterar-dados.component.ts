@@ -60,6 +60,8 @@ export class AlterarDadosComponent implements OnInit {
 
       if (res.sucesso) {
         this.toastr.success('Registro salvo com sucesso!', 'Sucesso');
+        this.authService.currentUserValue.email = res.dados.email;
+        this.authService.currentUserValue.nome = res.dados.nome;
         this.router.navigate(['/login']);
       } else {
         this.toastr.warning(res.mensagem.descricao, 'Atenção');
