@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/service/auth.service';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
+  public invisible = true;
 
   constructor(
     private router: Router,
@@ -15,7 +16,15 @@ export class NavComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+   this.dashboardVisivel(); 
   }
+
+  public dashboardVisivel(): void {
+    debugger
+   if(this.authService.currentUserValue?.perfil?.codigo === 1 || this.authService.currentUserValue?.perfil?.codigo === 3)
+      this.invisible = false;
+  }
+
 
   logout(){
     this.authService.logout();

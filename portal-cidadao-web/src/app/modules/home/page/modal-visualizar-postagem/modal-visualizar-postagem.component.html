@@ -70,7 +70,7 @@
             <br>
             <div>
               <div class="row" 
-              [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial' || this.authService.currentUserValue === undefined">
+              [hidden]="this.authService.currentUserValue?.perfil?.codigo !== 2">
                 <div class="col-11">
                   <mat-form-field class="form-full-width" appearance="fill" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'">
                     <input type="text" matInput 
