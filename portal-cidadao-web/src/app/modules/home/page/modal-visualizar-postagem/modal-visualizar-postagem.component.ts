@@ -114,7 +114,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   }
 
   public like(): void {
-    if (this.authService.currentUserValue?.perfil?.nome === 'Especial') return;
+    if (this.authService.currentUserValue?.perfil?.codigo === 3) return;
 
     this.curtidaModel.postagemId = this.model.id;
     this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
@@ -145,13 +145,16 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       });
   }
   public mostrarBotaoResolver(): void {
-    if (this.authService.currentUserValue?.perfil?.nome === 'Especial') {
+    debugger
+    //Especial
+    if (this.authService.currentUserValue?.perfil?.codigo === 3) {
       this.visible = true;
     }
   }
 
   public mostrarBotaoExcluirComentario(): void {
-    if (this.authService.currentUserValue?.perfil?.nome === 'Administrador') {
+    //Adminstrador
+    if (this.authService.currentUserValue?.perfil?.codigo === 1) {
       this.admin = true;
     }
   }
@@ -166,13 +169,13 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
     }
   }
   public setClickedLike() {
-    if (this.authService.currentUserValue?.perfil?.nome === 'Especial') return;
+    if (this.authService.currentUserValue?.perfil?.codigo === 3) return;
 
     this.clickedLike = !this.clickedLike;
   }
 
   public setClickedDislike() {
-    if (this.authService.currentUserValue?.perfil?.nome === 'Especial') return;
+    if (this.authService.currentUserValue?.perfil?.codigo === 3) return;
 
     this.clickedDislike = !this.clickedDislike;
   }
@@ -203,7 +206,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   }
 
   public dislike(): void {
-    if (this.authService.currentUserValue?.perfil?.nome === 'Especial') return;
+    if (this.authService.currentUserValue?.perfil?.codigo === 3) return;
 
     this.curtidaModel.postagemId = this.model.id;
     this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
