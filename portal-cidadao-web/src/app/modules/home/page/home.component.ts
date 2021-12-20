@@ -153,7 +153,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .listarTodos(bairro, categoriaId, subcategoriaId, 0, confiabilidade)
       .then((res) => {
         if (res.dados) {
-          console.log(res.dados);
           res.dados.forEach((postagem) => {
             this.novoMarcador(
               postagem.id,
@@ -177,7 +176,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .listarTodos(bairro, categoriaId, subcategoriaId, 0, confiabilidade, true)
       .then((res) => {
         if (res.dados) {
-          console.log(res.dados);
           // posts q estão no mapa mas API não retornou, então foi excluido ou resolvido e deve ser removido do mapa
           let markersParaRemover = [];
           this.markers.forEach((marker) => {

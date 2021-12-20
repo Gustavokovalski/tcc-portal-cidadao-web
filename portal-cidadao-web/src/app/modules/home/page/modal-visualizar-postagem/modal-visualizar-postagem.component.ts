@@ -89,7 +89,6 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
     this.postagemService
       .buscarPostagem(this.data)
       .then((res) => {
-        console.log(res.dados);
         this.model = res.dados;
         this.setarEnderecoAtual(this.model.latitude, this.model.longitude);
         if (this.model.resolvido == true) {

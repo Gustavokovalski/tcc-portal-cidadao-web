@@ -53,14 +53,12 @@ export class GraficoIncidentesAtrasoComponent {
         dataBase.setMonth(dataBase.getMonth() - 1);
       }
     }
-    console.log(meses);
     meses = meses.reverse();
 
     this.service
       .obterDashboardAtrasados(meses[0].numero, meses[5].numero)
       .then((res) => {
         if (res.sucesso && res.dados && res.dados.itens.length > 0) {
-          console.log('Atraso', res.dados);
           this.chartOptions = {
             series: [
               {

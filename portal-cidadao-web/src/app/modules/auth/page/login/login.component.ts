@@ -62,7 +62,6 @@ export class LoginComponent implements OnInit {
   }
 
   public irParaMapa() {
-    console.log('aaaaa');
     this.router.navigate(['/home']);
   }
 

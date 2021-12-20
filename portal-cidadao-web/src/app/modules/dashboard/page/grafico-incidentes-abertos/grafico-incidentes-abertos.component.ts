@@ -46,7 +46,6 @@ export class GraficoIncidentesAbertosComponent {
         numero: dataBase.getMonth() + 1,
         nome: dataBase.toLocaleString('default', { month: 'long' }),
       });
-      console.log(meses, 'meses');
       if (dataBase.getMonth() + 1 === 1) {
         dataBase.setMonth(12);
       } else {
@@ -54,14 +53,11 @@ export class GraficoIncidentesAbertosComponent {
       }
     }
     meses = meses.reverse();
-    console.log(meses, 'meses after change');
 
     this.service
       .obterDashboardAbertos(meses[0].numero, meses[5].numero)
       .then((res) => {
         if (res.sucesso && res.dados && res.dados.itens.length > 0) {
-          console.log('Aberto', res.dados);
-
           this.chartOptions = {
             series: [
               {

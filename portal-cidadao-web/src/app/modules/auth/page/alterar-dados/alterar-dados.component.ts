@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common'
+import { Location } from '@angular/common';
 import { AuthService } from 'src/app/service/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,7 @@ import { UsuarioService } from 'src/app/service/usuario.service';
 @Component({
   selector: 'app-alterar-dados',
   templateUrl: './alterar-dados.component.html',
-  styleUrls: ['./alterar-dados.component.scss']
+  styleUrls: ['./alterar-dados.component.scss'],
 })
 export class AlterarDadosComponent implements OnInit {
   public cpf = '';
@@ -27,25 +27,26 @@ export class AlterarDadosComponent implements OnInit {
     public authService: AuthService,
     private toastr: ToastrService,
     private usuarioService: UsuarioService
-  ) {
-    console.log(this.authService.currentUserValue);
-  }
+  ) {}
 
   ngOnInit() {
     this.cpf = this.authService.currentUserValue.cpf
-        .padStart(11, '0')                  // item 1
-        .substr(0, 11)                      // item 2
-        .replace(/[^0-9]/, '')              // item 3
-        .replace(                           // item 4
-            /(\d{3})(\d{3})(\d{3})(\d{2})/,
-            '$1.$2.$3-$4'
-        );;
+      .padStart(11, '0') // item 1
+      .substr(0, 11) // item 2
+      .replace(/[^0-9]/, '') // item 3
+      .replace(
+        // item 4
+        /(\d{3})(\d{3})(\d{3})(\d{2})/,
+        '$1.$2.$3-$4'
+      );
 
-      this.form.controls['nome'].setValue(this.authService.currentUserValue.nome);
-      this.form.controls['email'].setValue(this.authService.currentUserValue.email);
+    this.form.controls['nome'].setValue(this.authService.currentUserValue.nome);
+    this.form.controls['email'].setValue(
+      this.authService.currentUserValue.email
+    );
   }
 
-  async onSubmit(){
+  async onSubmit() {
     if (this.form.invalid) {
       this.toastr.warning('Formulário inválido!', 'Atenção');
       return;
@@ -55,7 +56,8 @@ export class AlterarDadosComponent implements OnInit {
     const id = this.authService.currentUserValue.id;
 
     try {
-      let res: IBaseModel<IUsuarioAlteracaoModel>  = {} as IBaseModel<IUsuarioAlteracaoModel>;
+      let res: IBaseModel<IUsuarioAlteracaoModel> =
+        {} as IBaseModel<IUsuarioAlteracaoModel>;
       res = await this.usuarioService.alterarDados(id, this.model);
 
       if (res.sucesso) {
@@ -74,24 +76,24 @@ export class AlterarDadosComponent implements OnInit {
   goBack() {
     this.location.back();
   }
-  
+
   redefinirSenha() {
     if (this.form.invalid) {
       this.toastr.warning('Formulário inválido!', 'Atenção');
       return;
     }
 
-    this.usuarioService.esqueciSenha(this.form.value.email)
-    .then(() => {
-      this.router.navigate(['/email-enviado-recuperacao']);
-    })
-    .catch((err) => {
-      console.log(err);
-    })    
+    this.usuarioService
+      .esqueciSenha(this.form.value.email)
+      .then(() => {
+        this.router.navigate(['/email-enviado-recuperacao']);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   private atualizarModel(values: any) {
     Object.assign(this.model, values);
   }
-
 }
