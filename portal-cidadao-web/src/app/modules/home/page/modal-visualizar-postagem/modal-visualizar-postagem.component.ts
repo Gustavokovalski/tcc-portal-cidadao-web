@@ -42,15 +42,8 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   public admin = false;
 
   public form = new FormGroup({
-    titulo: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(50),
-    ]),
-    descricao: new FormControl('', Validators.required),
-    endereco: new FormControl('', Validators.required),
-    categoriaId: new FormControl('', Validators.required),
-    subcategoria: new FormControl('', Validators.required),
     comentario: new FormControl('', [
+      Validators.required,
       Validators.maxLength(500),
       Validators.minLength(3),
     ]),
@@ -186,8 +179,8 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   }
 
   public comentar(): void {
-    if (!this.form.get('comentario').valid) {
-      this.toastr.warning('Comentário inválido!');
+    if (this.form.invalid) {
+      this.toastr.warning('Formulário inválido, o campo comentário é obrigatório!', 'Atenção');
       return;
     }
 
@@ -202,6 +195,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
         if (res.sucesso) {
           this.toastr.success(res.mensagem.descricao);
           this.listarComentarios();
+          this.form.get('comentario').setValue("");
         } else {
           this.toastr.error(res?.mensagem?.descricao);
         }
@@ -240,10 +234,10 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   }
 
   public buscarLike(): void {
-    this.curtidaModel.usuarioId = this.authService.currentUserValue.id;
+    this.curtidaModel.usuarioId = this.authService?.currentUserValue?.id;
     this.curtidaModel.postagemId = this.model.id;
     this.curtidaService
-      .obterLike(this.authService.currentUserValue.id, this.data)
+      .obterLike(this.authService?.currentUserValue?.id, this.data)
       .then((res) => {
         if (res.dados) {
           const curtida = res.dados;

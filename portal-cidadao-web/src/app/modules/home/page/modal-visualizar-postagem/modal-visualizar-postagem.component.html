@@ -8,32 +8,22 @@
         </h2>
         <h3 class="col-md-11 text-center" style="color: #5B628F">{{model.titulo}}</h3>
       </div>
-
-      <!--<mat-form-field class="local-form-field" appearance="fill">
-        <mat-label>Local</mat-label>
-        <input matInput type="text" [(ngModel)]="enderecoAtual" ngxAutocomPlace formControlName="endereco" readonly (selectedPlace)="onChangeLocalPostagem($event)" [ngClass]="{ 'is-invalid': f.submitted && form.controls['endereco'].invalid }">
-        <div *ngIf="f.submitted && form.controls['endereco'].invalid" class="invalid-feedback">
-          <div *ngIf="form.controls['endereco'].errors?.required">Campo obrigatório</div>
-        </div>
-      </mat-form-field>-->
-      <!--
-      <div [ngClass]="{'text-reclamacao': model?.subcategoria?.codigo === 1, 'text-elogio': model?.subcategoria?.codigo === 2, 'text-sugestao': model?.subcategoria?.codigo === 3}">
-        <h5 class="text-center my-1">{{model?.categoria?.nome }} - {{model?.subcategoria?.descricao}}</h5>
-      </div>-->
+      
       <div style="display: flex; flex-direction: column;">
-        <img *ngIf="midiaPostagem === ''" mat-card-image src="assets/images/placeholder.png" alt="Postagem sem foto" style="width: 100%" />
-        <img *ngIf="midiaPostagem !== ''" mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
-        <br />
-
-        <div style="text-align: justify; font-family: Roboto, sans-serif; color: black; ">
-          {{model.descricao}}     
-        </div>
-
-        <div style="text-align: right; font-family: Roboto, sans-serif; color: #444; font-size: 0.85em">
+        <div style="text-align: center; font-family: Roboto, sans-serif; color: #444; font-size: 0.85em">
           <mat-icon *ngIf="model.confiabilidade === 'Baixa'" style="color: 'lightcoral'">flag</mat-icon> 
           <mat-icon *ngIf="model.confiabilidade === 'Média'" style="color: 'orange'">flag</mat-icon> 
           <mat-icon *ngIf="model.confiabilidade === 'Alta'" style="color: 'lightgreen'">flag</mat-icon> 
           <strong>Confiabilidade {{model.confiabilidade}}  </strong>   
+        </div>
+        
+        <img *ngIf="midiaPostagem === ''" mat-card-image src="assets/images/placeholder.png" alt="Postagem sem foto" style="width: 100%" />
+        <img *ngIf="midiaPostagem !== ''" mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
+        <br />
+
+
+        <div style="text-align: justify; font-family: Roboto, sans-serif; color: black; ">
+          {{model.descricao}}     
         </div>
 
         <div style="display: flex; flex-direction: row; justify-content: space-around;">
@@ -59,13 +49,15 @@
 
           <div style="flex: 0.6; align-self:flex-end;" class="text-right">
             <span><mat-icon [inline]="true" style="font-size: 1.35em; margin-top: 0.75em; color: #5B628F">access_time</mat-icon> 
-              Por {{model?.usuario?.nome}} há {{obterTempoPost(model?.dataCadastro)}}</span>
+              por {{model?.usuario?.nome}} há {{obterTempoPost(model?.dataCadastro)}}</span>
           </div>
         </div>
 
         <div style="display: flex; flex-direction: column; align-items: center;">
           <mat-dialog-actions align="start">
-            <button *ngIf="visible" (click)= "clickedResolver = !clickedResolver" (click) = "resolver()" [class.resolvido]="clickedResolver"  mat-button><mat-icon>check</mat-icon> Resolver postagem</button>
+            <button mat-raised-button color="primary" *ngIf="visible" (click)= "clickedResolver = !clickedResolver" (click) = "resolver()" [class.resolvido]="clickedResolver">
+              <img src="../../../../../assets/icons/progress-check-s.png"> Resolver Postagem
+            </button>
             </mat-dialog-actions>
         </div>
 
@@ -73,17 +65,35 @@
           <hr />
           <div class="form-group">
             <br>
-            <h6 class="text-left my-3" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" >Deixe um comentário</h6>
-            <mat-form-field class="local-form-field" appearance="fill" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" >
-              <textarea matInput formControlName="comentario" rows="2" ng-model="cmtName" placeholder="Seu comentário" [ngClass]="{ 'is-invalid': f.submitted && form.controls['comentario'].invalid }" maxlength="500"></textarea>
-              <div *ngIf="f.submitted && form.controls['comentario'].invalid" class="invalid-feedback"></div>
-              <br />
-              <button class="btn btn-success btn-md pull-right" (click)="comentar()">
-                <mat-icon>send</mat-icon>
-              </button>
-              <br />
-              <hr />
-            </mat-form-field>
+            <div>
+              <div class="row" 
+              [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial' || this.authService.currentUserValue === undefined">
+                <div class="col-11">
+                  <mat-form-field class="form-full-width" appearance="fill" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'">
+                    <input type="text" matInput 
+                    formControlName="comentario" rows="2"
+                     ng-model="cmtName" 
+                     placeholder="Digite aqui seu comentário..." 
+                     [ngClass]="{ 'is-invalid': f.submitted && form.controls['comentario'].invalid }" maxlength="500"/>
+                  </mat-form-field>
+                  <div *ngIf="f.submitted && form.controls['comentario'].invalid" class="invalid-feedback">
+                    <div *ngIf="form.controls['comentario'].errors?.required">Campo obrigatório</div>
+                  </div>
+                </div>
+                  
+                <a style="cursor:pointer;">
+                  <mat-icon style="transform: scale(2); padding: 8px !important; color:#5B628F" (click)="comentar()">send</mat-icon>
+                </a>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+              <button mat-raised-button color="warn" *ngIf="admin" (click)="excluirPostagem()" mat-button mat-dialog-close>
+                <img src="../../../../../assets/icons/delete-s.png"> Excluir Postagem</button>
+              <button mat-button mat-dialog-close>Voltar</button>
+            </div>
+    
+            <h6 class="text-left my-3" [hidden]="comentarios.length <= 0" >Comentários</h6>
             <ul class="list-group">
               <li class="list-group-item" *ngFor="let c of comentarios"><strong>{{c.nomeUsuario}}</strong> - {{c.descricao}}
                 <mat-dialog-actions align="end">
@@ -93,20 +103,9 @@
             </ul>
           </div>
         </div>
-
-        <div style="display: flex; flex-direction: column;">
-          <!-- <button type="submit" mat-raised-button>Salvar</button> -->
-          <button *ngIf="admin" (click)="excluirPostagem()" style="color: lightcoral;" mat-button mat-dialog-close>
-            Excluir Postagem</button>
-          <button mat-button mat-dialog-close>Voltar</button>
-        </div>
-
       </div>
     </div>
-</form>
-
-
-
+  </form>
 </div>
 
 

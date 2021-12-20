@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://portalcidadao.tk/api',
+  apiUrl: 'http://localhost:5001/api',
   baseAssetsPath: '../../../assets',
 };
 
