@@ -3,10 +3,11 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor, HttpResponse
+  HttpInterceptor,
+  HttpResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {catchError, map} from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 /**
@@ -17,23 +18,30 @@ import { NgxSpinnerService } from 'ngx-spinner';
  */
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
+  constructor(private spinner: NgxSpinnerService) {}
 
-  constructor(
-    private spinner: NgxSpinnerService
-  ) { }
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    const isPolling = request.params.get('polling');
+    if (!isPolling) this.spinner.show();
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.spinner.show();
-    return next.handle(request)
-      .pipe(catchError((err) => {
-        this.spinner.hide();
-        return err;
-      }))
-      .pipe(map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
-        if (evt instanceof HttpResponse) {
+    return next
+      .handle(request)
+      .pipe(
+        catchError((err) => {
           this.spinner.hide();
-        }
-        return evt;
-      }));
+          return err;
+        })
+      )
+      .pipe(
+        map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
+          if (evt instanceof HttpResponse) {
+            this.spinner.hide();
+          }
+          return evt;
+        })
+      );
   }
 }

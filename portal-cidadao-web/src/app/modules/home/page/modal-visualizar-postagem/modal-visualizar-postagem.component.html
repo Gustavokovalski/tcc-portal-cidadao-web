@@ -29,7 +29,9 @@
         <div style="display: flex; flex-direction: row; justify-content: space-around;">
           <div style="flex: 0.2">
             <mat-dialog-actions>
-              <button [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" style="cursor: pointer"
+              <button 
+              [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial' || this.authService.currentUserValue?.perfil?.nome === 'Administrador'" 
+              style="cursor: pointer"
               (click)="setClickedLike()" (click)="like()" [class.none]="!clickedLike" [class.like]="clickedLike" mat-button>
                 <mat-icon>thumb_up</mat-icon>
               </button>
@@ -39,7 +41,8 @@
 
           <div style="flex: 0.2">
             <mat-dialog-actions>
-              <button [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial'" style="cursor: pointer"
+              <button [class.likeDislike-readonly]="this.authService.currentUserValue?.perfil?.nome === 'Especial' || this.authService.currentUserValue?.perfil?.nome === 'Administrador'"
+               style="cursor: pointer"
               (click)="setClickedDislike()" (click)="dislike()" [class.none]="!clickedDislike" [class.dislike]="clickedDislike" mat-button>
                 <mat-icon>thumb_down</mat-icon>
               </button>

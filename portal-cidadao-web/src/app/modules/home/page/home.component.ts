@@ -1,4 +1,10 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
@@ -7,14 +13,20 @@ import { ModalCriarPostagemComponent } from './modal-criar-postagem/modal-criar-
 import { ModalFiltrarPostagemComponent } from './modal-filtrar-postagem/modal-filtrar-postagem.component';
 import { ModalVisualizarPostagemComponent } from './modal-visualizar-postagem/modal-visualizar-postagem.component';
 import { environment } from 'src/environments/environment';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('usuarioVisitanteModal') usuarioVisitanteModal: TemplateRef<any>;
+  subscription: Subscription;
+  public filtroAtualBairro = '';
+  public filtroAtualCategoria = 0;
+  public filtroAtualSubcategoria = 0;
+  public filtroAtualConfiabilidade = '';
 
   private maxDistance = 200;
   public position: object | undefined;
@@ -46,6 +58,20 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.preencheMarcadorPosicaoAtual();
     this.iniciarPagina('');
+
+    const source = interval(5000);
+    this.subscription = source.subscribe((val) =>
+      this.atualizarMapa(
+        this.filtroAtualBairro,
+        this.filtroAtualCategoria,
+        this.filtroAtualSubcategoria,
+        this.filtroAtualConfiabilidade
+      )
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   preencheMarcadorPosicaoAtual(): void {
@@ -110,7 +136,6 @@ export class HomeComponent implements OnInit {
       options: {
         store_id: id,
         cursor: 'pointer',
-        animation: google.maps.Animation.DROP,
       },
     };
     this.markers.push(marker);
@@ -130,6 +155,55 @@ export class HomeComponent implements OnInit {
         if (res.dados) {
           console.log(res.dados);
           res.dados.forEach((postagem) => {
+            this.novoMarcador(
+              postagem.id,
+              postagem.subcategoria.codigo,
+              postagem.latitude,
+              postagem.longitude,
+              postagem.confiabilidade
+            );
+          });
+        }
+      });
+  }
+
+  private atualizarMapa(
+    bairro = '',
+    categoriaId = 0,
+    subcategoriaId = 0,
+    confiabilidade = ''
+  ) {
+    this.postagemService
+      .listarTodos(bairro, categoriaId, subcategoriaId, 0, confiabilidade, true)
+      .then((res) => {
+        if (res.dados) {
+          console.log(res.dados);
+          // posts q estão no mapa mas API não retornou, então foi excluido ou resolvido e deve ser removido do mapa
+          let markersParaRemover = [];
+          this.markers.forEach((marker) => {
+            if (
+              marker.options.store_id !== 0 &&
+              !res.dados.find((x) => x.id === marker.options.store_id)
+            )
+              markersParaRemover.push(marker);
+          });
+
+          this.markers = this.markers.filter(
+            (marker) =>
+              !markersParaRemover.find(
+                (x) => x.options.store_id === marker.options.store_id
+              )
+          );
+
+          res.dados.forEach((postagem) => {
+            const markerExistente =
+              this.markers.filter((x) => x.options.store_id === postagem.id)
+                .length > 0;
+
+            // post já está no mapa e foi retornado pela API, não fazer nada
+            if (markerExistente) return;
+
+            // post foi retornado pela API mas não estava no mapa, adiciona novo marker
             this.novoMarcador(
               postagem.id,
               postagem.subcategoria.codigo,
@@ -211,6 +285,11 @@ export class HomeComponent implements OnInit {
       const subcategoriaIdParam = result.subcategoriaId;
       const confiabilidadeParam =
         result.confiabilidade === 'todas' ? '' : result.confiabilidade;
+
+      this.filtroAtualBairro = bairroParam;
+      this.filtroAtualCategoria = categoriaIdParam;
+      this.filtroAtualSubcategoria = subcategoriaIdParam;
+      this.filtroAtualConfiabilidade = confiabilidadeParam;
 
       this.iniciarPagina(
         bairroParam,
