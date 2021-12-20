@@ -1,4 +1,15 @@
+.container,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl {
+  max-width: 1366px;
+}
 
-.container, .container-sm, .container-md, .container-lg, .container-xl {
-    max-width: 1366px;
+.dashboard-container {
+  width: 100%;
+  padding-right: 7.5px;
+  padding-left: 7.5px;
+  /* margin-right: auto; */
+  /* margin-left: auto; */
 }

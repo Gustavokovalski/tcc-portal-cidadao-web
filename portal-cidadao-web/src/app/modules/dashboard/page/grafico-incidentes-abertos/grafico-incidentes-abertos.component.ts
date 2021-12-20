@@ -11,8 +11,8 @@ import {
   ApexTitleSubtitle,
   ApexStroke,
   ApexGrid,
-  ApexYAxis
-} from "ng-apexcharts";
+  ApexYAxis,
+} from 'ng-apexcharts';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -29,95 +29,90 @@ export type ChartOptions = {
 @Component({
   selector: 'app-grafico-incidentes-abertos',
   templateUrl: './grafico-incidentes-abertos.component.html',
-  styleUrls: ['./grafico-incidentes-abertos.component.scss']
+  styleUrls: ['./grafico-incidentes-abertos.component.scss'],
 })
 export class GraficoIncidentesAbertosComponent {
-  @ViewChild("chart") chart = new ChartComponent();
+  @ViewChild('chart') chart = new ChartComponent();
   public chartOptions = {} as ChartOptions;
   public chartLoaded = false;
 
-  constructor(
-    public matDialog: MatDialog,
-    private service: DashboardService,
-    
-  ) {
+  constructor(public matDialog: MatDialog, private service: DashboardService) {}
+  ngOnInit(): void {
+    var dataBase = new Date();
+    var meses = [];
 
+    while (meses.length < 6) {
+      meses.push({
+        numero: dataBase.getMonth() + 1,
+        nome: dataBase.toLocaleString('default', { month: 'long' }),
+      });
+      console.log(meses, 'meses');
+      if (dataBase.getMonth() + 1 === 1) {
+        dataBase.setMonth(12);
+      } else {
+        dataBase.setMonth(dataBase.getMonth() - 1);
+      }
     }
-    ngOnInit(): void {
-     var dataBase = new Date();
-     var meses = [];
+    meses = meses.reverse();
+    console.log(meses, 'meses after change');
 
-     var mesBase = dataBase.getMonth();
-     while (meses.length < 6) {
-       meses.push({
-         numero: dataBase.getMonth()+1,
-         nome: dataBase.toLocaleString('default', { month: 'long' })
-       });
-       if (dataBase.getMonth() + 1 === 1) {
-         dataBase.setMonth(12);
-       } else {
-         dataBase.setMonth(dataBase.getMonth()-1);
-       }
-     }
-     console.log(meses);
-     meses = meses.reverse();
-      
-      this.service.obterDashboardAbertos(meses[0].numero, meses[5].numero)
+    this.service
+      .obterDashboardAbertos(meses[0].numero, meses[5].numero)
       .then((res) => {
-        if (res.sucesso && res.dados && res.dados.itens.length > 0) { 
-          console.log("Aberto", res.dados);
+        if (res.sucesso && res.dados && res.dados.itens.length > 0) {
+          console.log('Aberto', res.dados);
 
           this.chartOptions = {
             series: [
               {
                 name: 'Incidentes em aberto',
                 data: res.dados.itens.map((item) => item.qtdPostagens),
-              }
+              },
             ],
             chart: {
-              height: 280,
-              type: "line",
+              height: 360,
+              type: 'line',
               zoom: {
-                enabled: false
-              }
+                enabled: false,
+              },
             },
             dataLabels: {
-              enabled: false
+              enabled: false,
             },
             stroke: {
-              curve: "straight"
+              curve: 'straight',
             },
             title: {
-              text: 'Incidentes em aberto: ' + res.dados.totalAbertos.toString(),
-              align: "center",
+              text:
+                'Incidentes em aberto: ' + res.dados.totalAbertos.toString(),
+              align: 'center',
               style: {
                 fontSize: '18px',
-              }
+              },
             },
             subtitle: {
-                text: "Número de incidentes em aberto, por mês",
-                align: "center"
+              text: 'Número de postagens em aberto, nos últimos 6 meses',
+              align: 'center',
             },
             grid: {
               row: {
-                colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-                opacity: 0.5
-              }
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5,
+              },
             },
             xaxis: {
-              categories: res.dados.itens.map(x => x.mes)
+              categories: res.dados.itens.map((x) => x.mes),
             },
             yaxis: {
               labels: {
-                formatter: function(val) {
-                  return Math.floor(val).toString()
-                }
-              }
-            }
+                formatter: function (val) {
+                  return Math.floor(val).toString();
+                },
+              },
+            },
           };
           this.chartLoaded = true;
-      }
+        }
       });
-    }
- }
-    
+  }
+}
