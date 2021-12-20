@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '30vw';
+    dialogConfig.width = '40vw';
     dialogConfig.height = '75vh';
     dialogConfig.hasBackdrop = true;
     dialogConfig.disableClose = true;
@@ -225,7 +225,7 @@ export class HomeComponent implements OnInit {
     if (id !== 0) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.id = 'modal-component';
-      dialogConfig.width = '30vw';
+      dialogConfig.width = '40vw';
       dialogConfig.hasBackdrop = false;
       dialogConfig.disableClose = true;
       dialogConfig.panelClass = 'custom-dialog-container';
@@ -303,7 +303,6 @@ export class HomeComponent implements OnInit {
     confiabilidade: string
   ): string {
     var result = '';
-
     switch (subcategoriaId) {
       case 1: {
         result = this.obterIconePostVermelho(confiabilidade);
