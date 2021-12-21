@@ -70,9 +70,9 @@
             <br>
             <div>
               <div class="row" 
-              [hidden]="this.authService.currentUserValue?.perfil?.codigo !== 2">
+              [hidden]="this.authService.currentUserValue?.perfil?.codigo !== 2 && this.authService.currentUserValue?.perfil?.codigo !== 3">
                 <div class="col-11">
-                  <mat-form-field class="form-full-width" appearance="fill" [hidden]="this.authService.currentUserValue?.perfil?.nome === 'Especial'">
+                  <mat-form-field class="form-full-width" appearance="fill">
                     <input type="text" matInput 
                     formControlName="comentario" rows="2"
                      ng-model="cmtName" 
@@ -98,7 +98,14 @@
     
             <h6 class="text-left my-3" [hidden]="comentarios.length <= 0" >Comentários</h6>
             <ul class="list-group">
-              <li class="list-group-item" *ngFor="let c of comentarios"><strong>{{c.nomeUsuario}}</strong> - {{c.descricao}}
+              <li class="list-group-item" *ngFor="let c of comentarios">
+                <strong>
+                  <span [ngClass]="{ 'cor-perfil-especial': c.perfil === 3 }">
+                    {{c.nomeUsuario}}
+                  </span>
+                </strong> 
+                
+                - {{c.descricao}}
                 <mat-dialog-actions align="end">
                 <button *ngIf="admin" class="btnbtn-md pull-right" (click)="excluirComentario(c)"><mat-icon>delete_sweep</mat-icon></button>
                 </mat-dialog-actions>

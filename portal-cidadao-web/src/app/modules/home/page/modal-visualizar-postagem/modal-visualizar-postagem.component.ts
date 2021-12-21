@@ -159,14 +159,22 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
   }
 
   public resolver(): void {
+    let resolver = true;
     if (this.model.resolvido == true) {
-      this.postagemService.resolverPostagem(this.model.id, false);
-      this.clickedResolver = false;
-    } else if (this.model.resolvido == false) {
-      this.postagemService.resolverPostagem(this.model.id, true);
-      this.clickedResolver = true;
-    }
+      resolver = false;
+    } 
+    this.postagemService.resolverPostagem(this.model.id, resolver)
+      .then((res) => {
+        if (res.sucesso) {
+          this.toastr.success(res.mensagem.descricao);
+          this.dialog.closeAll();
+        } else {
+          this.toastr.error(res?.mensagem?.descricao);
+      }
+    })
+    .catch((err) => console.log(err));
   }
+
   public setClickedLike() {
     if (this.authService.currentUserValue?.perfil?.codigo === 3) return;
 
@@ -276,14 +284,34 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
         this.toastr.error(err.mensagem.descricao, 'Atenção');
       });
   }
+
   public excluirPostagem(): void {
-    this.postagemService.excluirPostagem(this.model.id, true);
-    this.router.navigate(['/home']);
+    this.postagemService.excluirPostagem(this.model.id, true)
+      .then((res) => {
+        if (res.sucesso) {
+          this.toastr.success(res.mensagem.descricao);
+          this.router.navigate(['/home']);
+          this.dialog.closeAll();
+        } else {
+          this.toastr.error(res?.mensagem?.descricao);
+      }
+    })
+    .catch((err) => console.log(err));
+    
   }
   public excluirComentario(c): void {
-    this.comentarioService.excluirComentario(c.id);
-    this.data;
+    this.comentarioService.excluirComentario(c.id)
+      .then((res) => {
+        if (res.sucesso) {
+          this.toastr.success(res.mensagem.descricao);
+          this.router.navigate(['/home']);
+          this.comentarios =  this.comentarios.filter(comentario => comentario.id !== c.id)
+        } else {
+          this.toastr.error(res?.mensagem?.descricao);
+        }   
+    }).catch((err) => console.log(err));
   }
+
   public listarSubcategorias(): void {
     this.postagemService
       .listarSubcategorias()
