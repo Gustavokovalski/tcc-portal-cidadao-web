@@ -21,7 +21,10 @@
         <img *ngIf="midiaPostagem !== ''" mat-card-image class="my-3" width="100%" [src]="'data:image/jpg;base64,'+midiaPostagem" alt="Mídia da Postagem">
         <br />
 
-
+        <div style="text-align: center; font-family: Roboto, sans-serif; color: rgba(110, 98, 98, 0.63); ">
+          {{objEnderecoAtual?.formatted_address}}
+        </div>
+        <br/>
         <div style="text-align: justify; font-family: Roboto, sans-serif; color: black; ">
           {{model.descricao}}     
         </div>
