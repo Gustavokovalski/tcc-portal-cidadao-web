@@ -313,7 +313,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         dialogConfig
       );
       modal.afterClosed().subscribe(() => {
-        this.iniciarPagina();
+        this.iniciarPagina(
+          this.filtroAtualBairro,
+          this.filtroAtualCategoria,
+          this.filtroAtualSubcategoria,
+          this.filtroAtualConfiabilidade
+        );
       });
     }
   }

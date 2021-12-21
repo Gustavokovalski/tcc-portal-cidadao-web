@@ -13,6 +13,7 @@ import {
   ApexGrid,
   ApexYAxis,
 } from 'ng-apexcharts';
+import { interval, Subscription } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -35,28 +36,37 @@ export class GraficoIncidentesAtrasoComponent {
   @ViewChild('chart') chart = new ChartComponent();
   public chartOptions = {} as ChartOptions;
   public chartLoaded = false;
+  subscription: Subscription;
+  public dataBase: Date;
+  public meses = [];
 
   constructor(public matDialog: MatDialog, private service: DashboardService) {}
   ngOnInit(): void {
-    var dataBase = new Date();
-    var meses = [];
+    this.iniciarPagina();
 
-    var mesBase = dataBase.getMonth();
-    while (meses.length < 6) {
-      meses.push({
-        numero: dataBase.getMonth() + 1,
-        nome: dataBase.toLocaleString('default', { month: 'long' }),
+    const source = interval(5000);
+    this.subscription = source.subscribe(() => this.atualizarGrafico());
+  }
+
+  private iniciarPagina() {
+    this.dataBase = new Date();
+    this.meses = [];
+
+    while (this.meses.length < 6) {
+      this.meses.push({
+        numero: this.dataBase.getMonth() + 1,
+        nome: this.dataBase.toLocaleString('default', { month: 'long' }),
       });
-      if (dataBase.getMonth() + 1 === 1) {
-        dataBase.setMonth(12);
+      if (this.dataBase.getMonth() + 1 === 1) {
+        this.dataBase.setMonth(12);
       } else {
-        dataBase.setMonth(dataBase.getMonth() - 1);
+        this.dataBase.setMonth(this.dataBase.getMonth() - 1);
       }
     }
-    meses = meses.reverse();
+    this.meses = this.meses.reverse();
 
     this.service
-      .obterDashboardAtrasados(meses[0].numero, meses[5].numero)
+      .obterDashboardAtrasados(this.meses[0].numero, this.meses[5].numero)
       .then((res) => {
         if (res.sucesso && res.dados && res.dados.itens.length > 0) {
           this.chartOptions = {
@@ -109,6 +119,66 @@ export class GraficoIncidentesAtrasoComponent {
             },
           };
           this.chartLoaded = true;
+        }
+      });
+  }
+
+  private atualizarGrafico() {
+    this.service
+      .obterDashboardAtrasados(this.meses[0].numero, this.meses[5].numero, true)
+      .then((res) => {
+        if (res.sucesso && res.dados && res.dados.itens.length > 0) {
+          const options = {
+            series: [
+              {
+                name: 'Incidentes em atraso',
+                data: res.dados.itens.map((item) => item.qtdPostagens),
+              },
+            ],
+            chart: {
+              height: 360,
+              type: 'line',
+              zoom: {
+                enabled: false,
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+              curve: 'straight',
+            },
+            title: {
+              text:
+                'Incidentes em atraso: ' + res.dados.totalAtrasados.toString(),
+              align: 'center',
+              style: {
+                fontSize: '18px',
+              },
+            },
+            subtitle: {
+              text: 'Postagens com mais de 15 dias sem resolução, nos últimos 6 meses',
+              align: 'center',
+            },
+            grid: {
+              row: {
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5,
+              },
+            },
+            xaxis: {
+              categories: res.dados.itens.map((x) => x.mes),
+            },
+            yaxis: {
+              labels: {
+                formatter: function (val) {
+                  return Math.floor(val).toString();
+                },
+              },
+            },
+          };
+          this.chart.updateOptions(options);
+          this.chart.updateSeries(options.series);
         }
       });
   }

@@ -145,7 +145,6 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
       });
   }
   public mostrarBotaoResolver(): void {
-    debugger
     //Especial
     if (this.authService.currentUserValue?.perfil?.codigo === 3) {
       this.visible = true;
@@ -182,7 +181,10 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
 
   public comentar(): void {
     if (this.form.invalid) {
-      this.toastr.warning('Formulário inválido, o campo comentário é obrigatório!', 'Atenção');
+      this.toastr.warning(
+        'Formulário inválido, o campo comentário é obrigatório!',
+        'Atenção'
+      );
       return;
     }
 
@@ -197,7 +199,7 @@ export class ModalVisualizarPostagemComponent implements OnInit, OnDestroy {
         if (res.sucesso) {
           this.toastr.success(res.mensagem.descricao);
           this.listarComentarios();
-          this.form.get('comentario').setValue("");
+          this.form.get('comentario').setValue('');
         } else {
           this.toastr.error(res?.mensagem?.descricao);
         }
