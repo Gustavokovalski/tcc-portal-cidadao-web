@@ -1,5 +1,6 @@
 <div *ngIf="chartLoaded">
     <apx-chart
+    #chart
     [series]="chartOptions.series"
     [chart]="chartOptions.chart"
     [dataLabels]="chartOptions.dataLabels"

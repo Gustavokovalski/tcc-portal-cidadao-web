@@ -13,6 +13,7 @@ import {
   ApexFill,
   ApexYAxis,
 } from 'ng-apexcharts';
+import { interval, Subscription } from 'rxjs';
 import { DashboardService } from 'src/app/service/dashboard.service';
 
 export type ChartOptions = {
@@ -36,6 +37,7 @@ export type ChartOptions = {
 export class GraficoIncidentesBairrosComponent implements OnInit {
   @ViewChild('chart') chart = new ChartComponent();
   public chartOptions = {} as ChartOptions;
+  subscription: Subscription;
 
   constructor(public matDialog: MatDialog, private service: DashboardService) {
     this.chartOptions = {
@@ -80,6 +82,35 @@ export class GraficoIncidentesBairrosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.iniciarPagina();
+
+    const source = interval(5000);
+    this.subscription = source.subscribe(() => this.atualizarGrafico());
+  }
+
+  private atualizarGrafico() {
+    this.service.obterDashboardBairros(true).then((res) => {
+      if (res.sucesso && res.dados && res.dados.length > 0) {
+        const dadosGrafico = res.dados.map(function (item) {
+          return {
+            name: item.bairro,
+            data: [item.qtdPostagens],
+          };
+        });
+
+        this.chartOptions.series = dadosGrafico;
+      }
+    });
+
+    const date = new Date();
+    const mes = this.capitalizeFirstLetter(
+      date.toLocaleString('pt-BR', { month: 'long' })
+    );
+    const mesAno = `${mes}/${date.getFullYear()}`;
+    this.chartOptions.xaxis.categories = [mesAno];
+  }
+
+  private iniciarPagina() {
     this.service.obterDashboardBairros().then((res) => {
       if (res.sucesso && res.dados && res.dados.length > 0) {
         const dadosGrafico = res.dados.map(function (item) {
